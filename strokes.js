@@ -11,7 +11,42 @@ function createLine(x1, y1, x2, y2, stroke) {
     return line;
 }
 
-export async function zhSVG(character) {
+function validateOptions(options) {
+    const defaultOptions = {
+        totalStrokeDuration: 1,
+        pauseRatio: 0.2,
+    };
+    options = { ...defaultOptions, ...options, };
+
+    const totalStrokeDuration = parseFloat(options.totalStrokeDuration);
+    if (isNaN(totalStrokeDuration)) {
+        throw new RangeError("totalStrokeDuration is NaN!");
+    }
+    if (totalStrokeDuration <= 0) {
+        throw new RangeError("totalStrokeDuration cannnot be <= 0!");
+    }
+    if (!isFinite(totalStrokeDuration)) {
+        throw new RangeError("totalStrokeDuration must be finite!");
+    }
+    options.totalStrokeDuration = totalStrokeDuration;
+
+    const pauseRatio = parseFloat(options.pauseRatio);
+    if (pauseRatio < 0) {
+        throw new RangeError("pauseRatio cannot be < 0!");
+    }
+    if (pauseRatio >= 1) {
+        throw new RangeError("pauseRatio cannot be >= 1!");
+    }
+    if (isNaN(pauseRatio)) {
+        throw new RangeError("pauseRatio is NaN!");
+    }
+    options.pauseRatio = pauseRatio;
+
+    return options;
+}
+
+export async function zhSVG(character, options) {
+    options = validateOptions(options);
     const url = `https://cdn.jsdelivr.net/npm/hanzi-writer-data/${character}.json`;
     const response = await fetch(url);
     const data = await response.json();
@@ -59,8 +94,7 @@ export async function zhSVG(character) {
 
     const style = document.createElementNS(svgNS, "style");
     const parts = [];
-    const totalStrokeDuration = 1;
-    const pauseRatio = 0.2;
+    const { totalStrokeDuration, pauseRatio, } = options;
     const totalDuration = totalStrokeDuration * numberOfStrokes;
     const strokeWidth = 128;
     for (let strokeNum = 0; strokeNum < numberOfStrokes; strokeNum++) {
@@ -76,7 +110,9 @@ export async function zhSVG(character) {
         }
         parts.push(`${startPercent}% { stroke-dasharray: 0 ${medianPathLength}; animation-timing-function: linear; }`);
         parts.push(`${endPercent}% { stroke-dasharray: ${medianPathLength} 0; }`);
-        parts.push(`100% { stroke-dasharray: ${medianPathLength} 0; }`);
+        if (endPercent < 100) {
+            parts.push(`100% { stroke-dasharray: ${medianPathLength} 0; }`);
+        }
         parts.push("}");
 
         parts.push(`@keyframes width-${strokeNum}`);
@@ -86,7 +122,9 @@ export async function zhSVG(character) {
         }
         parts.push(`${startPercent}% { stroke-width: ${strokeWidth}; }`);
         parts.push(`${endPercent}% { stroke-width: ${strokeWidth}; }`);
-        parts.push(`100% { stroke-width: ${strokeWidth}; }`);
+        if (endPercent < 100) {
+            parts.push(`100% { stroke-width: ${strokeWidth}; }`);
+        }
         parts.push("}");
 
         parts.push(`#animation-${strokeNum} { animation: dash-${strokeNum} ${totalDuration}s infinite, width-${strokeNum} ${totalDuration}s infinite; }`);
