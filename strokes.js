@@ -109,10 +109,10 @@ export async function zhSVG(character, options) {
             parts.push(`0% { stroke-dasharray: 0 ${medianPathLength}; }`);
         }
         parts.push(`${startPercent}% { stroke-dasharray: 0 ${medianPathLength}; animation-timing-function: linear; }`);
-        parts.push(`${endPercent}% { stroke-dasharray: ${medianPathLength} 0; }`);
         if (endPercent < 100) {
-            parts.push(`100% { stroke-dasharray: ${medianPathLength} 0; }`);
+            parts.push(`${endPercent}% { stroke-dasharray: ${medianPathLength} 0; }`);
         }
+        parts.push(`100% { stroke-dasharray: ${medianPathLength} 0; }`);
         parts.push("}");
 
         parts.push(`@keyframes width-${strokeNum}`);
@@ -121,10 +121,10 @@ export async function zhSVG(character, options) {
             parts.push(`0% { stroke-width: 0; animation-timing-function: steps(1, end); }`);
         }
         parts.push(`${startPercent}% { stroke-width: ${strokeWidth}; }`);
-        parts.push(`${endPercent}% { stroke-width: ${strokeWidth}; }`);
         if (endPercent < 100) {
-            parts.push(`100% { stroke-width: ${strokeWidth}; }`);
+            parts.push(`${endPercent}% { stroke-width: ${strokeWidth}; }`);
         }
+        parts.push(`100% { stroke-width: ${strokeWidth}; }`);
         parts.push("}");
 
         parts.push(`#animation-${strokeNum} { animation: dash-${strokeNum} ${totalDuration}s infinite, width-${strokeNum} ${totalDuration}s infinite; }`);
