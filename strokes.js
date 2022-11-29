@@ -63,7 +63,7 @@ function createStyle(strokePathLengths, strokeIds, strokeWidth, totalStrokeDurat
 
 async function zhSVG(character, options) {
     const url = `https://cdn.jsdelivr.net/npm/hanzi-writer-data/${character}.json`;
-    const response = await fetch(url);
+    const response = await fetch(url, { cache: "no-store" });
     const data = await response.json();
 
     const viewBox = "0 0 1024 1024";
@@ -118,7 +118,7 @@ async function zhSVG(character, options) {
 async function jaSVG(character, options) {
     const characterFile = `${character.codePointAt(0).toString(16).padStart(5, "0")}.svg`;
     const url = `https://cdn.jsdelivr.net/gh/KanjiVG/kanjivg/kanji/${characterFile}`;
-    const response = await fetch(url);
+    const response = await fetch(url, { cache: "no-store" });
     const data = await response.text();
     const xmlDocument = new DOMParser().parseFromString(data, "image/svg+xml");
     const viewBox = xmlDocument.querySelector("svg").getAttribute("viewBox");
