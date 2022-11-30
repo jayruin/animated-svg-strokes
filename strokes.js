@@ -198,7 +198,7 @@ function validateOptions(options) {
     }
     options.pauseRatio = pauseRatio;
 
-    return options;
+    return Object.freeze(options);
 }
 
 export function strokes(lang, output, options) {
