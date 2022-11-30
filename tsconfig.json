@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "lib": [
+            "DOM",
+            "ES2017"
+        ],
+        "rootDir": "src",
+        "outDir": "dist"
+    }
+}

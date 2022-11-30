@@ -1,0 +1,26 @@
+{
+  "devDependencies": {
+    "typescript": "latest",
+    "parcel": "latest",
+    "eslint": "latest",
+    "@typescript-eslint/parser": "latest",
+    "@typescript-eslint/eslint-plugin": "latest",
+    "eslint-config-prettier": "latest"
+  },
+  "scripts": {
+    "check": "tsc --noEmit",
+    "lint": "eslint src",
+    "build": "parcel build"
+  },
+  "targets": {
+    "strokes": {
+      "context": "browser",
+      "distDir": "dist",
+      "isLibrary": true,
+      "optimize": true,
+      "outputFormat": "esmodule",
+      "source": "src/index.ts",
+      "sourceMap": false
+    }
+  }
+}
