@@ -1,0 +1,28 @@
+name: Create Release
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "**.ts"
+      - "**.json"
+      - "**.yml"
+  workflow_dispatch:
+env:
+  TAG: "latest"
+jobs:
+  release-executables:
+    runs-on: linux-x64
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "lts/*"
+      - run: npm run build
+      - run: git push --delete origin tag ${{ env.TAG }} || true
+      - run: gh release delete ${{ env.TAG }} --yes || true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: gh release create ${{ env.TAG }} ./dist/index.js --title ${{ env.TAG }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
