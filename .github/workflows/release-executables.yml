@@ -18,6 +18,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "lts/*"
+      - run: npm i
       - run: npm run build
       - run: git push --delete origin tag ${{ env.TAG }} || true
       - run: gh release delete ${{ env.TAG }} --yes || true
