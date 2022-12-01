@@ -1,7 +1,7 @@
 import type { Strokes, UserAnimationOptions } from "./interfaces";
-import { jaLoad, zhLoad, } from "./loading";
-import { validateOptions, } from "./options";
-import { svgStrokes, } from "./svg";
+import { jaLoad, zhLoad } from "./loading";
+import { validateOptions } from "./options";
+import { svgStrokes } from "./svg";
 
 export const strokes: Strokes = (lang: string, output: string, userOptions: UserAnimationOptions) => {
     const options = {
@@ -23,4 +23,4 @@ export const strokes: Strokes = (lang: string, output: string, userOptions: User
         };
     }
     throw new Error("Unsupported lang or output!");
-}
+};

@@ -1,4 +1,4 @@
-import type { AnimationOptions, } from "./interfaces";
+import type { AnimationOptions } from "./interfaces";
 
 export const validateOptions = (options: AnimationOptions): void => {
     const { pauseRatio, totalStrokeDuration } = options;
@@ -22,4 +22,4 @@ export const validateOptions = (options: AnimationOptions): void => {
     if (!isFinite(totalStrokeDuration)) {
         throw new RangeError("totalStrokeDuration must be finite!");
     }
-}
+};

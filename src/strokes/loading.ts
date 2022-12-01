@@ -1,19 +1,19 @@
-import type { CharacterInfo, StrokeInfo, } from "./interfaces";
+import type { CharacterInfo, StrokeInfo } from "./interfaces";
 
 interface HanziWriterData {
     strokes: string[];
     medians: number[][][];
 }
 
-export const zhLoad = async(character: string): Promise<CharacterInfo> => {
+export const zhLoad = async (character: string): Promise<CharacterInfo> => {
     const url = `https://cdn.jsdelivr.net/npm/hanzi-writer-data/${character}.json`;
     const response = await fetch(url, { cache: "no-store" });
-    const data = await response.json() as HanziWriterData;
+    const data = (await response.json()) as HanziWriterData;
     const strokes: StrokeInfo[] = [];
     for (let strokeNumber = 0; strokeNumber < Math.min(data.strokes.length, data.medians.length); strokeNumber += 1) {
         strokes.push({
             clipPath: data.strokes[strokeNumber],
-            strokePath: data.medians[strokeNumber].map((m, i) => [i === 0 ? "M" : "L", m[0].toString(), m[1].toString(),].join(" ")).join(" "),
+            strokePath: data.medians[strokeNumber].map((m, i) => [i === 0 ? "M" : "L", m[0].toString(), m[1].toString()].join(" ")).join(" "),
         });
     }
     return {
@@ -24,7 +24,7 @@ export const zhLoad = async(character: string): Promise<CharacterInfo> => {
         type: "zh",
         viewBox: "0 0 1024 1024",
     };
-}
+};
 
 export const jaLoad = async (character: string): Promise<CharacterInfo> => {
     const characterCode = character.codePointAt(0)?.toString(16).padStart(5, "0");
@@ -76,4 +76,4 @@ export const jaLoad = async (character: string): Promise<CharacterInfo> => {
         type: "ja",
         viewBox,
     };
-}
+};

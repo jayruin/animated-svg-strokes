@@ -5,11 +5,13 @@
     "eslint": "latest",
     "@typescript-eslint/parser": "latest",
     "@typescript-eslint/eslint-plugin": "latest",
-    "eslint-config-prettier": "latest"
+    "eslint-config-prettier": "latest",
+    "prettier": "latest"
   },
   "scripts": {
     "check": "tsc --noEmit",
     "lint": "eslint src",
+    "pretty": "prettier src --write",
     "build": "parcel build"
   },
   "targets": {
