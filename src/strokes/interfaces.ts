@@ -7,6 +7,7 @@ export interface AnimationOptions {
 export interface StrokeInfo {
     readonly clipPath: string | null;
     readonly strokePath: string;
+    readonly strokePathLength: number;
 }
 
 export interface CharacterInfo {

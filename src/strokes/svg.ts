@@ -1,6 +1,5 @@
+import { svgNS } from "./constants";
 import type { AnimationOptions, CharacterInfo, Point } from "./interfaces";
-
-const svgNS = "http://www.w3.org/2000/svg";
 
 const createLine = (startPoint: Point, endPoint: Point, stroke: string): SVGLineElement => {
     const line = document.createElementNS(svgNS, "line");
@@ -23,14 +22,15 @@ const drawGrid = (svg: SVGSVGElement): void => {
     svg.appendChild(createLine({ x: 0, y: height / 2 }, { x: width, y: height / 2 }, "#DDD"));
 };
 
-const createStyle = (strokePathLengths: number[], strokePathIds: string[], strokeWidth: number, options: AnimationOptions): SVGStyleElement => {
+const createStyle = (characterInfo: CharacterInfo, strokePathIds: string[], options: AnimationOptions): SVGStyleElement => {
+    const { strokeWidth, strokes } = characterInfo;
     const { pauseRatio, totalStrokeDuration } = options;
-    const numberOfStrokes = Math.min(strokePathLengths.length, strokePathIds.length);
+    const numberOfStrokes = Math.min(strokes.length, strokePathIds.length);
     const style = document.createElementNS(svgNS, "style");
     const parts: string[] = [];
     const totalDuration = totalStrokeDuration * numberOfStrokes;
     for (let strokeNum = 0; strokeNum < numberOfStrokes; strokeNum += 1) {
-        const strokePathLength = strokePathLengths[strokeNum];
+        const { strokePathLength } = strokes[strokeNum];
         const strokePathId = strokePathIds[strokeNum];
         const startPercent = (strokeNum / numberOfStrokes) * 100;
         const endPercent = ((strokeNum + (1 - pauseRatio)) / numberOfStrokes) * 100;
@@ -82,14 +82,12 @@ export const svgStrokes = (characterInfo: CharacterInfo, options: AnimationOptio
     }
     svg.appendChild(group);
 
-    const strokePathLengths: number[] = [];
     const strokePathIds: string[] = [];
     for (let strokeNumber = 0; strokeNumber < characterInfo.strokes.length; strokeNumber += 1) {
         const strokeInfo = characterInfo.strokes[strokeNumber];
 
         const strokePath = document.createElementNS(svgNS, "path");
         strokePath.setAttributeNS(null, "d", strokeInfo.strokePath);
-        strokePathLengths.push(Math.ceil(strokePath.getTotalLength()));
 
         if (strokeInfo.clipPath !== null) {
             const clipPathElement = document.createElementNS(svgNS, "clipPath");
@@ -113,7 +111,7 @@ export const svgStrokes = (characterInfo: CharacterInfo, options: AnimationOptio
         group.appendChild(strokePath);
     }
 
-    const style = createStyle(strokePathLengths, strokePathIds, characterInfo.strokeWidth, options);
+    const style = createStyle(characterInfo, strokePathIds, options);
     group.appendChild(style);
 
     return svg;

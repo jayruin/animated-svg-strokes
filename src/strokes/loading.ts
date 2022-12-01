@@ -1,4 +1,11 @@
+import { svgNS } from "./constants";
 import type { CharacterInfo, StrokeInfo } from "./interfaces";
+
+const getPathLength = (pathD: string): number => {
+    const path = document.createElementNS(svgNS, "path");
+    path.setAttributeNS(null, "d", pathD);
+    return Math.ceil(path.getTotalLength());
+};
 
 interface HanziWriterData {
     strokes: string[];
@@ -11,9 +18,11 @@ export const zhLoad = async (character: string): Promise<CharacterInfo> => {
     const data = (await response.json()) as HanziWriterData;
     const strokes: StrokeInfo[] = [];
     for (let strokeNumber = 0; strokeNumber < Math.min(data.strokes.length, data.medians.length); strokeNumber += 1) {
+        const strokePath = data.medians[strokeNumber].map((m, i) => [i === 0 ? "M" : "L", m[0].toString(), m[1].toString()].join(" ")).join(" ");
         strokes.push({
             clipPath: data.strokes[strokeNumber],
-            strokePath: data.medians[strokeNumber].map((m, i) => [i === 0 ? "M" : "L", m[0].toString(), m[1].toString()].join(" ")).join(" "),
+            strokePath,
+            strokePathLength: getPathLength(strokePath),
         });
     }
     return {
@@ -61,6 +70,7 @@ export const jaLoad = async (character: string): Promise<CharacterInfo> => {
         .map(d => ({
             clipPath: null,
             strokePath: d,
+            strokePathLength: getPathLength(d),
         }));
     const strokeWidth = Array.from(xmlDocument.querySelectorAll<SVGGElement>("g[style]"))
         .map(element => parseFloat(element.style.getPropertyValue("stroke-width")))
