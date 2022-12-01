@@ -23,7 +23,8 @@ const drawGrid = (svg: SVGSVGElement): void => {
     svg.appendChild(createLine({ x: 0, y: height / 2 }, { x: width, y: height / 2 }, "#DDD"));
 };
 
-const createStyle = (strokePathLengths: number[], strokePathIds: string[], strokeWidth: number, totalStrokeDuration: number, pauseRatio: number): SVGStyleElement => {
+const createStyle = (strokePathLengths: number[], strokePathIds: string[], strokeWidth: number, options: AnimationOptions): SVGStyleElement => {
+    const { pauseRatio, totalStrokeDuration } = options;
     const numberOfStrokes = Math.min(strokePathLengths.length, strokePathIds.length);
     const style = document.createElementNS(svgNS, "style");
     const parts: string[] = [];
@@ -112,7 +113,7 @@ export const svgStrokes = (characterInfo: CharacterInfo, options: AnimationOptio
         group.appendChild(strokePath);
     }
 
-    const style = createStyle(strokePathLengths, strokePathIds, characterInfo.strokeWidth, options.totalStrokeDuration, options.pauseRatio);
+    const style = createStyle(strokePathLengths, strokePathIds, characterInfo.strokeWidth, options);
     group.appendChild(style);
 
     return svg;
