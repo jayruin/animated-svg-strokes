@@ -27,12 +27,12 @@ const animateStrokeDasharray = (characterInfo: CharacterInfo, options: Animation
     values.push(`${strokePathLength} 0`);
 
     const animate = document.createElementNS(svgNS, "animate");
-    animate.setAttribute("attributeName", "stroke-dasharray");
-    animate.setAttribute("repeatCount", "indefinite");
-    animate.setAttribute("dur", totalDuration.toString());
-    animate.setAttribute("calcMode", "linear");
-    animate.setAttribute("keyTimes", keyTimes.join(";"));
-    animate.setAttribute("values", values.join(";"));
+    animate.setAttributeNS(null, "attributeName", "stroke-dasharray");
+    animate.setAttributeNS(null, "repeatCount", "indefinite");
+    animate.setAttributeNS(null, "dur", totalDuration.toString());
+    animate.setAttributeNS(null, "calcMode", "linear");
+    animate.setAttributeNS(null, "keyTimes", keyTimes.join(";"));
+    animate.setAttributeNS(null, "values", values.join(";"));
 
     return animate;
 };
@@ -62,12 +62,12 @@ const animateStrokeWidth = (characterInfo: CharacterInfo, options: AnimationOpti
     values.push(strokeWidth.toString());
 
     const animate = document.createElementNS(svgNS, "animate");
-    animate.setAttribute("attributeName", "stroke-width");
-    animate.setAttribute("repeatCount", "indefinite");
-    animate.setAttribute("dur", totalDuration.toString());
-    animate.setAttribute("calcMode", "discrete");
-    animate.setAttribute("keyTimes", keyTimes.join(";"));
-    animate.setAttribute("values", values.join(";"));
+    animate.setAttributeNS(null, "attributeName", "stroke-width");
+    animate.setAttributeNS(null, "repeatCount", "indefinite");
+    animate.setAttributeNS(null, "dur", totalDuration.toString());
+    animate.setAttributeNS(null, "calcMode", "discrete");
+    animate.setAttributeNS(null, "keyTimes", keyTimes.join(";"));
+    animate.setAttributeNS(null, "values", values.join(";"));
 
     return animate;
 };

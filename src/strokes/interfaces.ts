@@ -30,14 +30,38 @@ export interface UserAnimationOptions {
     readonly totalStrokeDuration: number | undefined;
 }
 
+export interface CanvasStrokeInfo {
+    readonly clipPath: Path2D | null;
+    readonly strokePath: Path2D;
+    readonly strokePathLength: number;
+}
+
+export interface CanvasContextAction {
+    (context: CanvasRenderingContext2D): void;
+}
+
 export interface CharacterLoader {
     (character: string): Promise<CharacterInfo>;
 }
+
+export type StrokesType = "ja" | "zh";
+
+export type CanvasOutputFormat = "canvas";
+
+export type SVGOutputFormat = "svg-css" | "svg-smil" | "svg";
+
+export type StrokesOutput = CanvasOutputFormat | SVGOutputFormat;
 
 export interface SVGFactory {
     (character: string): Promise<SVGElement>;
 }
 
-export interface Strokes {
-    (type: "ja" | "zh", output: "svg-css" | "svg-smil" | "svg", userOptions: UserAnimationOptions): SVGFactory;
+export interface CanvasFactory {
+    (character: string): Promise<HTMLCanvasElement>;
 }
+
+export interface Strokes {
+    (type: StrokesType, output: StrokesOutput, userOptions: UserAnimationOptions): StrokesFactory<StrokesOutput>;
+}
+
+export type StrokesFactory<T> = T extends SVGOutputFormat ? SVGFactory : T extends CanvasOutputFormat ? CanvasFactory : never;

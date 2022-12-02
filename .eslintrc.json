@@ -18,10 +18,10 @@
         "no-ternary": "off",
         "one-var": "off",
         "sort-imports": "off",
-        "@typescript-eslint/prefer-function-type": "off",
         "@typescript-eslint/explicit-module-boundary-types": "off",
-        "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-magic-numbers": "off",
+        "@typescript-eslint/no-type-alias": "off",
+        "@typescript-eslint/prefer-function-type": "off",
         "@typescript-eslint/prefer-readonly-parameter-types": "off"
     }
 }

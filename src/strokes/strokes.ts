@@ -1,4 +1,5 @@
-import type { CharacterLoader, Strokes, UserAnimationOptions } from "./interfaces";
+import { canvasStrokes } from "./canvas";
+import type { CharacterLoader, Strokes, StrokesOutput, StrokesType, UserAnimationOptions } from "./interfaces";
 import { jaLoad, zhLoad } from "./loading";
 import { validateOptions } from "./options";
 import { svgStrokes as svgStrokesCss } from "./svg-css";
@@ -15,7 +16,13 @@ const getLoader = (type: string): CharacterLoader => {
     }
 };
 
-export const strokes: Strokes = (type: string, output: string, userOptions: UserAnimationOptions) => {
+const validateCharacter = (character: string): void => {
+    if (character.length !== 1) {
+        throw new Error("Must be a single character!");
+    }
+};
+
+export const strokes: Strokes = (type: StrokesType, output: StrokesOutput, userOptions: UserAnimationOptions) => {
     const options = {
         includeGrid: typeof userOptions.includeGrid === "undefined" ? true : userOptions.includeGrid,
         pauseRatio: typeof userOptions.pauseRatio === "undefined" ? 0.2 : userOptions.pauseRatio,
@@ -26,14 +33,22 @@ export const strokes: Strokes = (type: string, output: string, userOptions: User
     switch (output) {
         case "svg-css":
             return async (character: string): Promise<SVGElement> => {
+                validateCharacter(character);
                 const characterInfo = await loader(character);
                 return svgStrokesCss(characterInfo, options);
             };
         case "svg-smil":
         case "svg":
             return async (character: string): Promise<SVGElement> => {
+                validateCharacter(character);
                 const characterInfo = await loader(character);
                 return svgStrokesSmil(characterInfo, options);
+            };
+        case "canvas":
+            return async (character: string): Promise<HTMLCanvasElement> => {
+                validateCharacter(character);
+                const characterInfo = await loader(character);
+                return canvasStrokes(characterInfo, options);
             };
         default:
             throw new Error("Unsupported output!");
