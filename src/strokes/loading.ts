@@ -1,5 +1,5 @@
-import { svgNS } from "./constants";
 import type { CharacterInfo, StrokeInfo } from "./interfaces";
+import { svgNS } from "./svg";
 
 const getPathLength = (pathD: string): number => {
     const path = document.createElementNS(svgNS, "path");

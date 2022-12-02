@@ -30,10 +30,14 @@ export interface UserAnimationOptions {
     readonly totalStrokeDuration: number | undefined;
 }
 
+export interface CharacterLoader {
+    (character: string): Promise<CharacterInfo>;
+}
+
 export interface SVGFactory {
-    (char: string): Promise<SVGElement>;
+    (character: string): Promise<SVGElement>;
 }
 
 export interface Strokes {
-    (lang: "ja" | "zh", output: "svg", userOptions: UserAnimationOptions): SVGFactory;
+    (type: "ja" | "zh", output: "svg-css" | "svg-smil" | "svg", userOptions: UserAnimationOptions): SVGFactory;
 }
