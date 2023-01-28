@@ -12,7 +12,8 @@
   "scripts": {
     "check": "tsc --noEmit",
     "lint": "eslint src",
-    "pretty": "prettier src --write",
+    "pretty": "prettier src --check",
+    "prettify": "prettier src --write",
     "build": "parcel build"
   },
   "targets": {

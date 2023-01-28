@@ -7,6 +7,8 @@ on:
       - "**.ts"
       - "**.json"
       - "**.yml"
+  schedule:
+    - cron: "9 9 * * *"
   workflow_dispatch:
 env:
   TAG: "latest"
@@ -19,6 +21,9 @@ jobs:
         with:
           node-version: "lts/*"
       - run: npm i
+      - run: npm run check
+      - run: npm run lint
+      - run: npm run pretty
       - run: npm run build
       - run: git push --delete origin tag ${{ env.TAG }} || true
       - run: gh release delete ${{ env.TAG }} --yes || true
