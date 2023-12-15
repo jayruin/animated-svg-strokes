@@ -1,4 +1,4 @@
-import type { AnimationOptions, CanvasContextAction, CanvasStrokeInfo, CharacterInfo, Point, StrokeInfo } from "./interfaces";
+import type { AnimationOptions, CanvasContextAction, CanvasStrokeInfo, CharacterInfo, Line, StrokeInfo } from "./interfaces";
 import { svgNS } from "./svg";
 
 const convertStrokeInfo = (strokeInfo: StrokeInfo): CanvasStrokeInfo => {
@@ -23,21 +23,21 @@ const getContextTransform = (transform: string): CanvasContextAction => {
     };
 };
 
-const drawLine = (context: CanvasRenderingContext2D, startPoint: Point, endPoint: Point, lineWidth: number): void => {
+const drawLine = (context: CanvasRenderingContext2D, line: Line): void => {
     context.save();
-    context.lineWidth = lineWidth;
+    context.lineWidth = line.width;
     context.strokeStyle = "#DDD";
     context.beginPath();
-    context.moveTo(startPoint.x, startPoint.y);
-    context.lineTo(endPoint.x, endPoint.y);
+    context.moveTo(line.startPoint.x, line.startPoint.y);
+    context.lineTo(line.endPoint.x, line.endPoint.y);
     context.stroke();
     context.restore();
 };
 
 const drawGrid = (context: CanvasRenderingContext2D): void => {
     const { width, height } = context.canvas;
-    drawLine(context, { x: width / 2, y: 0 }, { x: width / 2, y: height }, Math.ceil(width / 100));
-    drawLine(context, { x: 0, y: height / 2 }, { x: width, y: height / 2 }, Math.ceil(height / 100));
+    drawLine(context, { endPoint: { x: width / 2, y: height }, startPoint: { x: width / 2, y: 0 }, width: Math.ceil(width / 100) });
+    drawLine(context, { endPoint: { x: width, y: height / 2 }, startPoint: { x: 0, y: height / 2 }, width: Math.ceil(height / 100) });
 };
 
 export const canvasStrokes = (characterInfo: CharacterInfo, options: AnimationOptions): HTMLCanvasElement => {

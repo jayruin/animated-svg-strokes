@@ -24,6 +24,12 @@ export interface Point {
     readonly y: number;
 }
 
+export interface Line {
+    readonly endPoint: Point;
+    readonly startPoint: Point;
+    readonly width: number;
+}
+
 export interface UserAnimationOptions {
     readonly includeGrid: boolean | undefined;
     readonly pauseRatio: number | undefined;
