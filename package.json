@@ -14,7 +14,8 @@
     "lint": "eslint src",
     "pretty": "prettier src --check",
     "prettify": "prettier src --write",
-    "build": "parcel build"
+    "build": "parcel build",
+    "reset": "git clean -fdx"
   },
   "targets": {
     "strokes": {

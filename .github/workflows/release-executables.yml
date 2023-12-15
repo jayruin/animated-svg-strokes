@@ -16,8 +16,8 @@ jobs:
   release-executables:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: "lts/*"
       - run: npm i
@@ -25,10 +25,20 @@ jobs:
       - run: npm run lint
       - run: npm run pretty
       - run: npm run build
-      - run: git push --delete origin tag ${{ env.TAG }} || true
-      - run: gh release delete ${{ env.TAG }} --yes || true
+      - run: gh release delete ${{ env.TAG }} --yes --cleanup-tag || true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: sleep 5
       - run: gh release create ${{ env.TAG }} ./dist/index.js --title ${{ env.TAG }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: npm run reset
+      - run: git config user.name github-actions[bot]
+      - run: git config user.email github-actions[bot]@users.noreply.github.com
+      - run: git switch --orphan dist
+      - run: gh release download ${{ env.TAG }}
+        env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: git add .
+      - run: git commit -m "Release"
+      - run: git push --set-upstream origin dist -f
