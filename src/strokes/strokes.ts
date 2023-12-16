@@ -2,7 +2,7 @@ import { canvasStrokes } from "./canvas";
 import type { CharacterLoader, Strokes, StrokesOutput, StrokesType, UserAnimationOptions } from "./interfaces";
 import { jaLoad, zhLoad } from "./loading";
 import { validateOptions } from "./options";
-import { svgStrokes as svgStrokesCss } from "./svg-css";
+import { svgStrokesCss } from "./svg-css";
 import { svgStrokesSmil } from "./svg-smil";
 
 const getLoader = (type: string): CharacterLoader => {

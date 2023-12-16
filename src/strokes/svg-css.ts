@@ -46,7 +46,7 @@ const createStyle = (characterInfo: CharacterInfo, strokePathIds: string[], opti
     return style;
 };
 
-export const svgStrokes = (characterInfo: CharacterInfo, options: AnimationOptions): SVGSVGElement => {
+export const svgStrokesCss = (characterInfo: CharacterInfo, options: AnimationOptions): SVGSVGElement => {
     const svg = document.createElementNS(svgNS, "svg");
     svg.setAttribute("xmlns", svgNS);
     svg.setAttributeNS(null, "viewBox", characterInfo.viewBox);
@@ -62,6 +62,7 @@ export const svgStrokes = (characterInfo: CharacterInfo, options: AnimationOptio
     svg.appendChild(group);
 
     const strokePathIds: string[] = [];
+    const animatedElements: SVGElement[] = [];
     for (let strokeNumber = 0; strokeNumber < characterInfo.strokes.length; strokeNumber += 1) {
         const strokeInfo = characterInfo.strokes[strokeNumber];
 
@@ -89,10 +90,19 @@ export const svgStrokes = (characterInfo: CharacterInfo, options: AnimationOptio
         strokePath.setAttributeNS(null, "stroke-linecap", "round");
         strokePath.setAttributeNS(null, "stroke-linejoin", "round");
         group.appendChild(strokePath);
+        animatedElements.push(strokePath);
     }
 
     const style = createStyle(characterInfo, strokePathIds, options);
     group.appendChild(style);
+
+    const togglePause = (): void => {
+        animatedElements.forEach(e => {
+            const paused = e.style.animationPlayState === "paused";
+            e.style.animationPlayState = paused ? "running" : "paused";
+        });
+    };
+    svg.addEventListener("click", togglePause);
 
     return svg;
 };
