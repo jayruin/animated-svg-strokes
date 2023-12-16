@@ -13,7 +13,7 @@ export interface StrokeInfo {
 export interface CharacterInfo {
     readonly character: string;
     readonly strokeWidth: number;
-    readonly strokes: StrokeInfo[];
+    readonly strokes: readonly StrokeInfo[];
     readonly transform: string | null;
     readonly type: string;
     readonly viewBox: string;
@@ -48,6 +48,12 @@ export interface SvgStrokeComponents {
     readonly clipPathPath: SVGPathElement | null;
 }
 
+export interface WebAnimationsInfo {
+    readonly dashKeyframes: Keyframe[];
+    readonly widthKeyframes: Keyframe[];
+    readonly keyframeOptions: KeyframeAnimationOptions;
+}
+
 export interface CanvasStrokeInfo {
     readonly clipPath: Path2D | null;
     readonly strokePath: Path2D;
@@ -66,7 +72,7 @@ export type StrokesType = "ja" | "zh";
 
 export type CanvasOutputFormat = "canvas";
 
-export type SvgOutputFormat = "svg-css" | "svg-smil" | "svg";
+export type SvgOutputFormat = "svg-css" | "svg-smil" | "svg-wa" | "svg";
 
 export type StrokesOutput = CanvasOutputFormat | SvgOutputFormat;
 

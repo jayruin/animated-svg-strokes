@@ -4,6 +4,7 @@ import { jaLoad, zhLoad } from "./loading";
 import { validateOptions } from "./options";
 import { svgStrokesCss } from "./svg-css";
 import { svgStrokesSmil } from "./svg-smil";
+import { svgStrokesWa } from "./svg-wa";
 
 const getLoader = (type: string): CharacterLoader => {
     switch (type) {
@@ -36,6 +37,12 @@ export const strokes: Strokes = (type: StrokesType, output: StrokesOutput, userO
                 validateCharacter(character);
                 const characterInfo = await loader(character);
                 return svgStrokesCss(characterInfo, options);
+            };
+        case "svg-wa":
+            return async (character: string): Promise<SVGElement> => {
+                validateCharacter(character);
+                const characterInfo = await loader(character);
+                return svgStrokesWa(characterInfo, options);
             };
         case "svg-smil":
         case "svg":
