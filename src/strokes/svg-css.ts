@@ -1,5 +1,5 @@
 import type { AnimationOptions, CharacterInfo } from "./interfaces";
-import { drawGrid, svgNS } from "./svg";
+import { svgNS, svgStrokesBase } from "./svg";
 
 const createStyle = (characterInfo: CharacterInfo, strokePathIds: string[], options: AnimationOptions): SVGStyleElement => {
     const { strokeWidth, strokes } = characterInfo;
@@ -47,50 +47,17 @@ const createStyle = (characterInfo: CharacterInfo, strokePathIds: string[], opti
 };
 
 export const svgStrokesCss = (characterInfo: CharacterInfo, options: AnimationOptions): SVGSVGElement => {
-    const svg = document.createElementNS(svgNS, "svg");
-    svg.setAttribute("xmlns", svgNS);
-    svg.setAttributeNS(null, "viewBox", characterInfo.viewBox);
-
-    if (options.includeGrid) {
-        drawGrid(svg);
-    }
-
-    const group = document.createElementNS(svgNS, "g");
-    if (characterInfo.transform !== null) {
-        group.setAttributeNS(null, "transform", characterInfo.transform);
-    }
-    svg.appendChild(group);
+    const { svg, group, strokesComponents } = svgStrokesBase(characterInfo, options);
 
     const strokePathIds: string[] = [];
     const animatedElements: SVGElement[] = [];
     for (let strokeNumber = 0; strokeNumber < characterInfo.strokes.length; strokeNumber += 1) {
-        const strokeInfo = characterInfo.strokes[strokeNumber];
-
-        const strokePath = document.createElementNS(svgNS, "path");
-        strokePath.setAttributeNS(null, "d", strokeInfo.strokePath);
-
-        if (strokeInfo.clipPath !== null) {
-            const clipPathId = `${characterInfo.character}-${characterInfo.type}-clipPath-${strokeNumber}`;
-            const clipPathElement = document.createElementNS(svgNS, "clipPath");
-            clipPathElement.setAttributeNS(null, "id", clipPathId);
-            group.appendChild(clipPathElement);
-
-            const clipPath = document.createElementNS(svgNS, "path");
-            clipPath.setAttributeNS(null, "d", strokeInfo.clipPath);
-            clipPathElement.appendChild(clipPath);
-
-            strokePath.setAttributeNS(null, "clip-path", `url(#${clipPathId})`);
-        }
+        const strokeComponents = strokesComponents[strokeNumber];
 
         const strokePathId = `${characterInfo.character}-${characterInfo.type}-strokePath-${strokeNumber}`;
         strokePathIds.push(strokePathId);
-        strokePath.setAttributeNS(null, "id", strokePathId);
-        strokePath.setAttributeNS(null, "fill", "none");
-        strokePath.setAttributeNS(null, "stroke", "#000");
-        strokePath.setAttributeNS(null, "stroke-linecap", "round");
-        strokePath.setAttributeNS(null, "stroke-linejoin", "round");
-        group.appendChild(strokePath);
-        animatedElements.push(strokePath);
+        strokeComponents.strokePath.setAttributeNS(null, "id", strokePathId);
+        animatedElements.push(strokeComponents.strokePath);
     }
 
     const style = createStyle(characterInfo, strokePathIds, options);

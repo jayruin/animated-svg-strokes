@@ -18,6 +18,7 @@
         "no-ternary": "off",
         "one-var": "off",
         "sort-imports": "off",
+        "sort-keys": "off",
         "@typescript-eslint/explicit-module-boundary-types": "off",
         "@typescript-eslint/no-magic-numbers": "off",
         "@typescript-eslint/no-type-alias": "off",

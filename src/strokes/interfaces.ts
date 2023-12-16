@@ -25,8 +25,8 @@ export interface Point {
 }
 
 export interface Line {
-    readonly endPoint: Point;
     readonly startPoint: Point;
+    readonly endPoint: Point;
     readonly width: number;
 }
 
@@ -34,6 +34,18 @@ export interface UserAnimationOptions {
     readonly includeGrid: boolean | undefined;
     readonly pauseRatio: number | undefined;
     readonly totalStrokeDuration: number | undefined;
+}
+
+export interface SvgComponents {
+    readonly svg: SVGSVGElement;
+    readonly group: SVGGElement;
+    readonly strokesComponents: readonly SvgStrokeComponents[];
+}
+
+export interface SvgStrokeComponents {
+    readonly strokePath: SVGPathElement;
+    readonly clipPath: SVGClipPathElement | null;
+    readonly clipPathPath: SVGPathElement | null;
 }
 
 export interface CanvasStrokeInfo {
@@ -54,11 +66,11 @@ export type StrokesType = "ja" | "zh";
 
 export type CanvasOutputFormat = "canvas";
 
-export type SVGOutputFormat = "svg-css" | "svg-smil" | "svg";
+export type SvgOutputFormat = "svg-css" | "svg-smil" | "svg";
 
-export type StrokesOutput = CanvasOutputFormat | SVGOutputFormat;
+export type StrokesOutput = CanvasOutputFormat | SvgOutputFormat;
 
-export interface SVGFactory {
+export interface SvgFactory {
     (character: string): Promise<SVGElement>;
 }
 
@@ -70,4 +82,4 @@ export interface Strokes {
     (type: StrokesType, output: StrokesOutput, userOptions: UserAnimationOptions): StrokesFactory<StrokesOutput>;
 }
 
-export type StrokesFactory<T> = T extends SVGOutputFormat ? SVGFactory : T extends CanvasOutputFormat ? CanvasFactory : never;
+export type StrokesFactory<T> = T extends SvgOutputFormat ? SvgFactory : T extends CanvasOutputFormat ? CanvasFactory : never;

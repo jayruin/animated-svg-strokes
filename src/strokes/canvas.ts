@@ -36,8 +36,8 @@ const drawLine = (context: CanvasRenderingContext2D, line: Line): void => {
 
 const drawGrid = (context: CanvasRenderingContext2D): void => {
     const { width, height } = context.canvas;
-    drawLine(context, { endPoint: { x: width / 2, y: height }, startPoint: { x: width / 2, y: 0 }, width: Math.ceil(width / 100) });
-    drawLine(context, { endPoint: { x: width, y: height / 2 }, startPoint: { x: 0, y: height / 2 }, width: Math.ceil(height / 100) });
+    drawLine(context, { startPoint: { x: width / 2, y: 0 }, endPoint: { x: width / 2, y: height }, width: Math.ceil(width / 100) });
+    drawLine(context, { startPoint: { x: 0, y: height / 2 }, endPoint: { x: width, y: height / 2 }, width: Math.ceil(height / 100) });
 };
 
 export const canvasStrokes = (characterInfo: CharacterInfo, options: AnimationOptions): HTMLCanvasElement => {
