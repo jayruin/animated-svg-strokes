@@ -58,10 +58,6 @@ export const canvasStrokes = (characterInfo: CharacterInfo, options: AnimationOp
     const totalDurationMs = totalStrokeDurationMs * numberOfStrokes;
     const draw = (timestamp: number): void => {
         context.save();
-        const isCanvasEmpty = !context.getImageData(0, 0, canvas.width, canvas.height).data.some(channel => channel !== 0);
-        if (isCanvasEmpty) {
-            start = null;
-        }
         if (start === null || timestamp - start > totalDurationMs) {
             start = timestamp;
         }
