@@ -3,7 +3,7 @@ import type { CharacterLoader, Strokes, StrokesOutput, StrokesType, UserAnimatio
 import { jaLoad, zhLoad } from "./loading";
 import { validateOptions } from "./options";
 import { svgStrokes as svgStrokesCss } from "./svg-css";
-import { svgStrokes as svgStrokesSmil } from "./svg-smil";
+import { svgStrokesSmil } from "./svg-smil";
 
 const getLoader = (type: string): CharacterLoader => {
     switch (type) {

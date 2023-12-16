@@ -72,7 +72,7 @@ const animateStrokeWidth = (characterInfo: CharacterInfo, options: AnimationOpti
     return animate;
 };
 
-export const svgStrokes = (characterInfo: CharacterInfo, options: AnimationOptions): SVGSVGElement => {
+export const svgStrokesSmil = (characterInfo: CharacterInfo, options: AnimationOptions): SVGSVGElement => {
     const { character, strokes, transform, type, viewBox } = characterInfo;
     const svg = document.createElementNS(svgNS, "svg");
     svg.setAttribute("xmlns", svgNS);
@@ -115,6 +115,16 @@ export const svgStrokes = (characterInfo: CharacterInfo, options: AnimationOptio
 
         group.appendChild(path);
     }
+
+    const togglePause = (): void => {
+        const paused = svg.animationsPaused();
+        if (paused) {
+            svg.unpauseAnimations();
+        } else {
+            svg.pauseAnimations();
+        }
+    };
+    svg.addEventListener("click", togglePause);
 
     return svg;
 };
