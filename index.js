@@ -1,5 +1,6 @@
-// import { strokes } from "https://cdn.jsdelivr.net/gh/jayruin/strokes@dist/index.js";
-import { strokes } from "https://raw.githubusercontent.com/jayruin/strokes/dist/index.js";
+// Importing from github directly will fail due to incorrect mimetype of text/plain
+// import { strokes } from "https://raw.githubusercontent.com/jayruin/strokes/dist/index.js";
+import { strokes } from "https://cdn.jsdelivr.net/gh/jayruin/strokes@dist/index.js";
 
 const characterInput = document.getElementById("character-input");
 const strokesType = document.getElementById("strokes-type");
