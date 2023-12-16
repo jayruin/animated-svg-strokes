@@ -52,16 +52,26 @@ export const canvasStrokes = (characterInfo: CharacterInfo, options: AnimationOp
     if (context === null) {
         throw new Error("Could not get context from canvas!");
     }
-    let start: number | null = null;
+    let previousTimestamp: number | null = null;
+    let elapsed = 0;
+    let paused = false;
     const totalStrokeDurationMs = totalStrokeDuration * 1000;
     const numberOfStrokes = strokes.length;
     const totalDurationMs = totalStrokeDurationMs * numberOfStrokes;
     const draw = (timestamp: number): void => {
-        context.save();
-        if (start === null || timestamp - start > totalDurationMs) {
-            start = timestamp;
+        if (paused) {
+            previousTimestamp = timestamp;
+            window.requestAnimationFrame(draw);
+            return;
         }
-        const elapsed = timestamp - start;
+        if (previousTimestamp === null) {
+            previousTimestamp = timestamp;
+        }
+        elapsed += timestamp - previousTimestamp;
+        if (elapsed > totalDurationMs) {
+            elapsed = 0;
+        }
+        context.save();
         if (elapsed === 0) {
             context.clearRect(0, 0, canvas.width, canvas.height);
             if (includeGrid) {
@@ -87,12 +97,20 @@ export const canvasStrokes = (characterInfo: CharacterInfo, options: AnimationOp
         }
         context.stroke(strokePath);
         context.restore();
+        previousTimestamp = timestamp;
         window.requestAnimationFrame(draw);
     };
     window.requestAnimationFrame(draw);
     const reset = (): void => {
-        start = null;
+        if (!paused) {
+            previousTimestamp = null;
+            elapsed = 0;
+        }
+    };
+    const togglePause = (): void => {
+        paused = !paused;
     };
     document.addEventListener("visibilitychange", reset);
+    canvas.addEventListener("click", togglePause);
     return canvas;
 };
