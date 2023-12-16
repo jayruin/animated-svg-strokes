@@ -1,0 +1,37 @@
+.flex-column,
+.flex-row {
+    display: flex;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.flex-row {
+    flex-direction: row;
+}
+
+.flex-item {
+    flex: 1;
+}
+
+#character-input,
+#generate-button,
+#strokes-type,
+#strokes-output-format,
+#clear-button {
+    text-align: center;
+    width: 100%;
+}
+
+.flex-center {
+    align-items: center;
+    justify-items: center;
+}
+
+div.strokes>.stroke {
+    margin: 10px;
+    width: 300px;
+    height: 300px;
+    border: 1px solid rgb(0, 0, 0);
+}
