@@ -13,12 +13,6 @@
         <div class="flex-none">
             <input type="text" id="character-input" minlength="1" maxlength="1" class="options" />
         </div>
-        <div class="flex-none">
-            <select id="strokes-type" class="options">
-                <option value="zh">zh</option>
-                <option value="ja">ja</option>
-            </select>
-        </div>
         <div class="flex-item">
             <select id="strokes-output-format" class="options">
                 <option value="svg-smil">SVG SMIL</option>
@@ -26,6 +20,21 @@
                 <option value="svg-wa">SVG Web Animations</option>
                 <option value="canvas">Canvas</option>
             </select>
+        </div>
+    </div>
+
+    <div class="flex-row">
+        <div class="flex-item">
+            <label class="options">
+                <input type="checkbox" id="zh-checked" checked />
+                <div>zh</div>
+            </label>
+        </div>
+        <div class="flex-item">
+            <label class="options">
+                <input type="checkbox" id="ja-checked" checked />
+                <div>ja</div>
+            </label>
         </div>
     </div>
 

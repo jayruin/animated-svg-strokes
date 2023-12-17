@@ -3,7 +3,8 @@
 import { strokes } from "https://cdn.jsdelivr.net/gh/jayruin/strokes@dist/index.js";
 
 const characterInput = document.getElementById("character-input");
-const strokesType = document.getElementById("strokes-type");
+const zhChecked = document.getElementById("zh-checked");
+const jaChecked = document.getElementById("ja-checked");
 const strokesOutputFormat = document.getElementById("strokes-output-format");
 
 const zhTarget = document.getElementById("target-zh");
@@ -18,36 +19,24 @@ function clear(element) {
     }
 }
 
-function getExistingCharacters() {
-    switch (strokesType.value) {
-        case "zh":
-            return zhExistingCharacters;
-        case "ja":
-            return jaExistingCharacters;
-    }
-}
-
-function getTarget() {
-    switch (strokesType.value) {
-        case "zh":
-            return zhTarget;
-        case "ja":
-            return jaTarget;
-    }
-}
-
 document.getElementById("render-button").addEventListener("click", async function () {
     const character = characterInput.value;
-    const existingCharacters = getExistingCharacters();
-    if (existingCharacters.has(character)) {
-        return;
-    } else {
-        existingCharacters.add(character);
+    const zhRender = zhChecked.checked && !zhExistingCharacters.has(character);
+    const jaRender = jaChecked.checked && !jaExistingCharacters.has(character);
+    const promises = [];
+    promises.push(zhRender ? strokes("zh", strokesOutputFormat.value, { totalStrokeDuration: 0.5 })(character) : Promise.resolve(null));
+    promises.push(jaRender ? strokes("ja", strokesOutputFormat.value, { totalStrokeDuration: 0.5 })(character) : Promise.resolve(null));
+    const [zhElement, jaElement] = await Promise.all(promises);
+    if (zhElement !== null) {
+        zhElement.classList.add("stroke");
+        zhTarget.appendChild(zhElement);
+        zhExistingCharacters.add(character);
     }
-    const strokesElement = await strokes(strokesType.value, strokesOutputFormat.value, { totalStrokeDuration: 0.5 })(character);
-    strokesElement.classList.add("stroke");
-    const target = getTarget();
-    target.appendChild(strokesElement);
+    if (jaElement !== null) {
+        jaElement.classList.add("stroke");
+        jaExistingCharacters.add(character);
+        jaTarget.appendChild(jaElement);
+    }
 });
 
 document.getElementById("clear-button").addEventListener("click", async function () {
