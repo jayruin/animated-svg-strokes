@@ -36,7 +36,7 @@ function getTarget() {
     }
 }
 
-document.getElementById("generate-button").addEventListener("click", async function () {
+document.getElementById("render-button").addEventListener("click", async function () {
     const character = characterInput.value;
     const existingCharacters = getExistingCharacters();
     if (existingCharacters.has(character)) {

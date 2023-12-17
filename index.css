@@ -15,13 +15,19 @@
     flex: 1;
 }
 
-#character-input,
-#generate-button,
-#strokes-type,
-#strokes-output-format,
-#clear-button {
+.flex-none {
+    flex: none;
+}
+
+.controls {
     text-align: center;
+    font-size: 5rem;
     width: 100%;
+}
+
+#character-input {
+    box-sizing: border-box;
+    width: 12rem;
 }
 
 .flex-center {
@@ -31,7 +37,7 @@
 
 div.strokes>.stroke {
     margin: 10px;
-    width: 300px;
-    height: 300px;
+    width: 360px;
+    height: 360px;
     border: 1px solid rgb(0, 0, 0);
 }

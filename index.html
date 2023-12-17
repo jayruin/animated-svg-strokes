@@ -10,28 +10,31 @@
 
 <body>
     <div class="flex-row">
-        <div class="flex-item">
-            <input type="text" id="character-input" minlength="1" maxlength="1" />
+        <div class="flex-none">
+            <input type="text" id="character-input" minlength="1" maxlength="1" class="controls" />
         </div>
-        <div class="flex-item">
-            <button id="generate-button">Generate</button>
-        </div>
-        <div class="flex-item">
-            <select id="strokes-type">
+        <div class="flex-none">
+            <select id="strokes-type" class="controls">
                 <option value="zh">zh</option>
                 <option value="ja">ja</option>
             </select>
         </div>
         <div class="flex-item">
-            <select id="strokes-output-format">
+            <select id="strokes-output-format" class="controls">
                 <option value="svg-smil">SVG SMIL</option>
                 <option value="svg-css">SVG CSS</option>
                 <option value="svg-wa">SVG Web Animations</option>
                 <option value="canvas">Canvas</option>
             </select>
         </div>
+    </div>
+
+    <div class="flex-row">
         <div class="flex-item">
-            <button id="clear-button">Clear</button>
+            <button id="render-button" class="controls">Render</button>
+        </div>
+        <div class="flex-item">
+            <button id="clear-button" class="controls">Clear</button>
         </div>
     </div>
 
