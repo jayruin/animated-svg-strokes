@@ -1,6 +1,7 @@
 import { animateStrokesCanvas } from "./canvas";
 import type { CharacterLoader, StrokesAnimatorFactory, StrokesOutputFormat, StrokesRendererFactory, StrokesType, UserAnimationOptions } from "./interfaces";
-import { jaLoad, zhLoad } from "./loading";
+import { zhLoad } from "./loading-zh";
+import { jaLoad } from "./loading-ja";
 import { validateOptions } from "./options";
 import { animateStrokesSvgCss } from "./svg-css";
 import { animateStrokesSvgSmil } from "./svg-smil";
