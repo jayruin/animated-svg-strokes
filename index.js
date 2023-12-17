@@ -57,3 +57,36 @@ document.getElementById("clear-button").addEventListener("click", async function
     jaExistingCharacters.clear();
     characterInput.value = characterInput.defaultValue;
 });
+
+let isDark = false;
+function renderTheme() {
+    const root = document.documentElement;
+    if (isDark) {
+        root.style.setProperty("--color", "white");
+        root.style.setProperty("--background-color", "black");
+        zhTarget.style.filter = "invert(100%)";
+        jaTarget.style.filter = "invert(100%)";
+    } else {
+        root.style.setProperty("--color", "black");
+        root.style.setProperty("--background-color", "white");
+        zhTarget.style.filter = "";
+        jaTarget.style.filter = "";
+    }
+}
+function prefersDarkSchemeQuery() {
+    return window.matchMedia("(prefers-color-scheme: dark)");
+}
+function renderPreferredTheme() {
+    if (prefersDarkSchemeQuery().matches) {
+        isDark = true;
+    } else {
+        isDark = false;
+    }
+    renderTheme();
+}
+document.getElementById("toggle-theme-button").addEventListener("click", async function () {
+    isDark = !isDark;
+    renderTheme();
+});
+prefersDarkSchemeQuery().addEventListener("change", renderPreferredTheme);
+renderPreferredTheme();
