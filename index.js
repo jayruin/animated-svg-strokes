@@ -2,6 +2,8 @@
 // import { strokes } from "https://raw.githubusercontent.com/jayruin/strokes/dist/index.js";
 import { strokes } from "https://cdn.jsdelivr.net/gh/jayruin/strokes@dist/index.js";
 
+const animationOptions = { totalStrokeDuration: 0.5 };
+
 const characterInput = document.getElementById("character-input");
 const zhChecked = document.getElementById("zh-checked");
 const jaChecked = document.getElementById("ja-checked");
@@ -24,8 +26,8 @@ document.getElementById("render-button").addEventListener("click", async functio
     const zhRender = zhChecked.checked && !zhExistingCharacters.has(character);
     const jaRender = jaChecked.checked && !jaExistingCharacters.has(character);
     const promises = [];
-    promises.push(zhRender ? strokes("zh", strokesOutputFormat.value, { totalStrokeDuration: 0.5 })(character) : Promise.resolve(null));
-    promises.push(jaRender ? strokes("ja", strokesOutputFormat.value, { totalStrokeDuration: 0.5 })(character) : Promise.resolve(null));
+    promises.push(zhRender ? strokes("zh", strokesOutputFormat.value, animationOptions)(character) : Promise.resolve(null));
+    promises.push(jaRender ? strokes("ja", strokesOutputFormat.value, animationOptions)(character) : Promise.resolve(null));
     const [zhElement, jaElement] = await Promise.all(promises);
     if (zhElement !== null) {
         zhElement.classList.add("stroke");
