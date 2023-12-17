@@ -72,7 +72,7 @@ const animateStrokeWidth = (characterInfo: CharacterInfo, options: AnimationOpti
     return animate;
 };
 
-export const svgStrokesSmil = (characterInfo: CharacterInfo, options: AnimationOptions): SVGSVGElement => {
+export const animateStrokesSvgSmil = (characterInfo: CharacterInfo, options: AnimationOptions): SVGSVGElement => {
     const { svg, strokesComponents } = svgStrokesBase(characterInfo, options);
 
     for (let strokeNumber = 0; strokeNumber < characterInfo.strokes.length; strokeNumber += 1) {

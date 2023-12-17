@@ -1,10 +1,16 @@
-import { canvasStrokes } from "./canvas";
-import type { CharacterLoader, Strokes, StrokesOutput, StrokesType, UserAnimationOptions } from "./interfaces";
+import { animateStrokesCanvas } from "./canvas";
+import type { CharacterLoader, StrokesAnimatorFactory, StrokesOutputFormat, StrokesRendererFactory, StrokesType, UserAnimationOptions } from "./interfaces";
 import { jaLoad, zhLoad } from "./loading";
 import { validateOptions } from "./options";
-import { svgStrokesCss } from "./svg-css";
-import { svgStrokesSmil } from "./svg-smil";
-import { svgStrokesWa } from "./svg-wa";
+import { animateStrokesSvgCss } from "./svg-css";
+import { animateStrokesSvgSmil } from "./svg-smil";
+import { animateStrokesSvgWa } from "./svg-wa";
+
+const validateCharacter = (character: string): void => {
+    if (character.length !== 1) {
+        throw new Error("Must be a single character!");
+    }
+};
 
 const getLoader = (type: string): CharacterLoader => {
     switch (type) {
@@ -17,47 +23,39 @@ const getLoader = (type: string): CharacterLoader => {
     }
 };
 
-const validateCharacter = (character: string): void => {
-    if (character.length !== 1) {
-        throw new Error("Must be a single character!");
-    }
-};
+// Remove any return types when typescript supports overloading for arrow functions
 
-export const strokes: Strokes = (type: StrokesType, output: StrokesOutput, userOptions: UserAnimationOptions) => {
-    const options = {
-        includeGrid: typeof userOptions.includeGrid === "undefined" ? true : userOptions.includeGrid,
-        pauseRatio: typeof userOptions.pauseRatio === "undefined" ? 0.2 : userOptions.pauseRatio,
-        totalStrokeDuration: typeof userOptions.totalStrokeDuration === "undefined" ? 1 : userOptions.totalStrokeDuration,
-    };
-    validateOptions(options);
-    const loader = getLoader(type);
-    switch (output) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const getAnimator: StrokesAnimatorFactory = (outputFormat: StrokesOutputFormat): any => {
+    switch (outputFormat) {
         case "svg-css":
-            return async (character: string): Promise<SVGElement> => {
-                validateCharacter(character);
-                const characterInfo = await loader(character);
-                return svgStrokesCss(characterInfo, options);
-            };
+            return animateStrokesSvgCss;
         case "svg-wa":
-            return async (character: string): Promise<SVGElement> => {
-                validateCharacter(character);
-                const characterInfo = await loader(character);
-                return svgStrokesWa(characterInfo, options);
-            };
+            return animateStrokesSvgWa;
         case "svg-smil":
         case "svg":
-            return async (character: string): Promise<SVGElement> => {
-                validateCharacter(character);
-                const characterInfo = await loader(character);
-                return svgStrokesSmil(characterInfo, options);
-            };
+            return animateStrokesSvgSmil;
         case "canvas":
-            return async (character: string): Promise<HTMLCanvasElement> => {
-                validateCharacter(character);
-                const characterInfo = await loader(character);
-                return canvasStrokes(characterInfo, options);
-            };
+            return animateStrokesCanvas;
         default:
             throw new Error("Unsupported output!");
     }
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const strokes: StrokesRendererFactory = (type: StrokesType, outputFormat: StrokesOutputFormat, userOptions?: UserAnimationOptions): any => {
+    const options = {
+        includeGrid: typeof userOptions?.includeGrid === "undefined" ? true : userOptions.includeGrid,
+        pauseRatio: typeof userOptions?.pauseRatio === "undefined" ? 0.2 : userOptions.pauseRatio,
+        totalStrokeDuration: typeof userOptions?.totalStrokeDuration === "undefined" ? 1 : userOptions.totalStrokeDuration,
+    };
+    validateOptions(options);
+    const loader = getLoader(type);
+    const animator = getAnimator(outputFormat);
+    const renderer = async (character: string): Promise<Element> => {
+        validateCharacter(character);
+        const characterInfo = await loader(character);
+        return animator(characterInfo, options);
+    };
+    return renderer;
 };

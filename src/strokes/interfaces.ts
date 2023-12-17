@@ -31,9 +31,9 @@ export interface Line {
 }
 
 export interface UserAnimationOptions {
-    readonly includeGrid: boolean | undefined;
-    readonly pauseRatio: number | undefined;
-    readonly totalStrokeDuration: number | undefined;
+    readonly includeGrid?: boolean;
+    readonly pauseRatio?: number;
+    readonly totalStrokeDuration?: number;
 }
 
 export interface SvgComponents {
@@ -74,18 +74,40 @@ export type CanvasOutputFormat = "canvas";
 
 export type SvgOutputFormat = "svg-css" | "svg-smil" | "svg-wa" | "svg";
 
-export type StrokesOutput = CanvasOutputFormat | SvgOutputFormat;
+export type StrokesOutputFormat = CanvasOutputFormat | SvgOutputFormat;
 
-export interface SvgFactory {
-    (character: string): Promise<SVGElement>;
+export interface CanvasAnimator {
+    (characterInfo: CharacterInfo, options: AnimationOptions): HTMLCanvasElement;
 }
 
-export interface CanvasFactory {
+export interface SvgAnimator {
+    (characterInfo: CharacterInfo, options: AnimationOptions): SVGSVGElement;
+}
+
+export interface StrokesAnimator {
+    (characterInfo: CharacterInfo, options: AnimationOptions): Element;
+}
+
+export interface StrokesAnimatorFactory {
+    (outputFormat: CanvasOutputFormat): CanvasAnimator;
+    (outputFormat: SvgOutputFormat): SvgAnimator;
+    (outputFormat: StrokesOutputFormat): StrokesAnimator;
+}
+
+export interface CanvasRenderer {
     (character: string): Promise<HTMLCanvasElement>;
 }
 
-export interface Strokes {
-    (type: StrokesType, output: StrokesOutput, userOptions: UserAnimationOptions): StrokesFactory<StrokesOutput>;
+export interface SvgRenderer {
+    (character: string): Promise<SVGElement>;
 }
 
-export type StrokesFactory<T> = T extends SvgOutputFormat ? SvgFactory : T extends CanvasOutputFormat ? CanvasFactory : never;
+export interface StrokesRenderer {
+    (character: string): Promise<Element>;
+}
+
+export interface StrokesRendererFactory {
+    (type: StrokesType, outputFormat: CanvasOutputFormat, userOptions?: UserAnimationOptions): CanvasRenderer;
+    (type: StrokesType, outputFormat: SvgOutputFormat, userOptions?: UserAnimationOptions): SvgRenderer;
+    (type: StrokesType, outputFormat: StrokesOutputFormat, userOptions?: UserAnimationOptions): StrokesRenderer;
+}

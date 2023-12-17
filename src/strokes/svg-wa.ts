@@ -28,7 +28,7 @@ const getWebAnimationsInfo = (characterInfo: CharacterInfo, options: AnimationOp
     return { dashKeyframes, widthKeyframes, keyframeOptions };
 };
 
-export const svgStrokesWa = (characterInfo: CharacterInfo, options: AnimationOptions): SVGSVGElement => {
+export const animateStrokesSvgWa = (characterInfo: CharacterInfo, options: AnimationOptions): SVGSVGElement => {
     const { svg, strokesComponents } = svgStrokesBase(characterInfo, options);
 
     const animations: Animation[] = [];

@@ -40,7 +40,7 @@ const drawGrid = (context: CanvasRenderingContext2D): void => {
     drawLine(context, { startPoint: { x: 0, y: height / 2 }, endPoint: { x: width, y: height / 2 }, width: Math.ceil(height / 100) });
 };
 
-export const canvasStrokes = (characterInfo: CharacterInfo, options: AnimationOptions): HTMLCanvasElement => {
+export const animateStrokesCanvas = (characterInfo: CharacterInfo, options: AnimationOptions): HTMLCanvasElement => {
     const { strokes, transform, viewBox } = characterInfo;
     const { includeGrid, pauseRatio, totalStrokeDuration } = options;
     const canvasStrokeInfos = strokes.map(strokeInfo => convertStrokeInfo(strokeInfo));
