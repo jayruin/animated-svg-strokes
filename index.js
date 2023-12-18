@@ -31,13 +31,13 @@ document.getElementById("render-button").addEventListener("click", async functio
     const [zhElement, jaElement] = await Promise.all(promises);
     if (zhElement !== null) {
         zhElement.classList.add("stroke");
-        zhTarget.appendChild(zhElement);
+        zhTarget.prepend(zhElement);
         zhExistingCharacters.add(character);
     }
     if (jaElement !== null) {
         jaElement.classList.add("stroke");
         jaExistingCharacters.add(character);
-        jaTarget.appendChild(jaElement);
+        jaTarget.prepend(jaElement);
     }
 });
 
