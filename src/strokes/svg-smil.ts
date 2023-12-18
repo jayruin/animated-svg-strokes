@@ -78,8 +78,8 @@ export const animateStrokesSvgSmil = (characterInfo: CharacterInfo, options: Ani
     for (let strokeNumber = 0; strokeNumber < characterInfo.strokes.length; strokeNumber += 1) {
         const strokeComponents = strokesComponents[strokeNumber];
 
-        strokeComponents.strokePath.appendChild(animateStrokeDasharray(characterInfo, options, strokeNumber));
-        strokeComponents.strokePath.appendChild(animateStrokeWidth(characterInfo, options, strokeNumber));
+        strokeComponents.strokePath.append(animateStrokeDasharray(characterInfo, options, strokeNumber));
+        strokeComponents.strokePath.append(animateStrokeWidth(characterInfo, options, strokeNumber));
     }
 
     const togglePause = (): void => {

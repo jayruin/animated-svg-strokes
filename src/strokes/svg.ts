@@ -19,8 +19,8 @@ export const drawGrid = (svg: SVGSVGElement): void => {
         throw new Error("svg element has no viewBox");
     }
     const [, , width, height] = viewBox.split(" ").map(value => parseInt(value, 10));
-    svg.appendChild(createLine({ x: width / 2, y: 0 }, { x: width / 2, y: height }, "#DDD"));
-    svg.appendChild(createLine({ x: 0, y: height / 2 }, { x: width, y: height / 2 }, "#DDD"));
+    svg.append(createLine({ x: width / 2, y: 0 }, { x: width / 2, y: height }, "#DDD"));
+    svg.append(createLine({ x: 0, y: height / 2 }, { x: width, y: height / 2 }, "#DDD"));
 };
 
 export const svgStrokesBase = (characterInfo: CharacterInfo, options: AnimationOptions): SvgComponents => {
@@ -36,7 +36,7 @@ export const svgStrokesBase = (characterInfo: CharacterInfo, options: AnimationO
     if (characterInfo.transform !== null) {
         group.setAttributeNS(null, "transform", characterInfo.transform);
     }
-    svg.appendChild(group);
+    svg.append(group);
 
     const strokesComponents: SvgStrokeComponents[] = [];
 
@@ -52,12 +52,12 @@ export const svgStrokesBase = (characterInfo: CharacterInfo, options: AnimationO
             const clipPathId = `${characterInfo.character}-${characterInfo.type}-clipPath-${strokeNumber}`;
             clipPathElement = document.createElementNS(svgNS, "clipPath");
             clipPathElement.setAttributeNS(null, "id", clipPathId);
-            group.appendChild(clipPathElement);
+            group.append(clipPathElement);
             strokePath.setAttributeNS(null, "clip-path", `url(#${clipPathId})`);
 
             clipPathPathElement = document.createElementNS(svgNS, "path");
             clipPathPathElement.setAttributeNS(null, "d", strokeInfo.clipPath);
-            clipPathElement.appendChild(clipPathPathElement);
+            clipPathElement.append(clipPathPathElement);
         }
 
         strokePath.setAttributeNS(null, "fill", "none");
@@ -65,7 +65,7 @@ export const svgStrokesBase = (characterInfo: CharacterInfo, options: AnimationO
         strokePath.setAttributeNS(null, "stroke-linecap", "round");
         strokePath.setAttributeNS(null, "stroke-linejoin", "round");
 
-        group.appendChild(strokePath);
+        group.append(strokePath);
 
         strokesComponents.push({ clipPath: clipPathElement, clipPathPath: clipPathPathElement, strokePath });
     }

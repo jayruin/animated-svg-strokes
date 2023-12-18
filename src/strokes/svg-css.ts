@@ -41,7 +41,7 @@ const createStyle = (characterInfo: CharacterInfo, strokePathIds: string[], opti
 
         parts.push(`#${strokePathId} { animation: dash-${strokePathId} ${totalDuration}s infinite, width-${strokePathId} ${totalDuration}s infinite; }`);
     }
-    style.appendChild(document.createTextNode(parts.join(" ")));
+    style.append(parts.join(" "));
 
     return style;
 };
@@ -61,7 +61,7 @@ export const animateStrokesSvgCss = (characterInfo: CharacterInfo, options: Anim
     }
 
     const style = createStyle(characterInfo, strokePathIds, options);
-    group.appendChild(style);
+    group.append(style);
 
     const togglePause = (): void => {
         animatedElements.forEach(e => {
