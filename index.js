@@ -15,38 +15,98 @@ const jaTarget = document.getElementById("target-ja");
 const zhExistingCharacters = new Set();
 const jaExistingCharacters = new Set();
 
+const renderButton = document.getElementById("render-button");
+const clearButton = document.getElementById("clear-button");
+
 function clear(element) {
     while (element.firstChild) {
         element.removeChild(element.lastChild);
     }
 }
 
-document.getElementById("render-button").addEventListener("click", async function () {
+let draggedElement = null;
+function renderCharacter(character, characterType, characterStrokes, target, existingCharacters) {
+    if (characterStrokes === null) {
+        return;
+    }
+    characterStrokes.classList.add("character-strokes");
+    const characterStrokesContainer = document.createElement("div");
+    characterStrokesContainer.draggable = true;
+    characterStrokesContainer.id = `character-strokes-${characterType}-${character}`;
+    characterStrokesContainer.classList.add("character-strokes-container");
+    characterStrokesContainer.append(characterStrokes);
+    characterStrokesContainer.addEventListener("dragstart", event => draggedElement = event.target);
+    characterStrokesContainer.addEventListener("dragover", event => {
+        const draggedIdParts = draggedElement.id.split('-');
+        const targetIdParts = event.target.id.split('-');
+        const draggedIdValid = draggedIdParts.length === 4 && draggedIdParts[0] === "character" && draggedIdParts[1] === "strokes";
+        const targetIdValid = targetIdParts.length === 4 && targetIdParts[0] === "character" && targetIdParts[1] === "strokes";
+        const draggedCharacterType = draggedIdParts[2];
+        const draggedCharacter = draggedIdParts[3];
+        const targetCharacterType = targetIdParts[2];
+        const targetCharacter = targetIdParts[3];
+        if (!draggedIdValid || !targetIdValid || draggedCharacterType !== targetCharacterType || draggedCharacter === targetCharacter) {
+            return;
+        }
+        event.preventDefault();
+        const ratio = event.offsetY / event.target.offsetHeight;
+        if (ratio <= 0.5) {
+            event.target.before(draggedElement);
+        } else {
+            event.target.after(draggedElement);
+        }
+    });
+    characterStrokesContainer.addEventListener("dragend", () => draggedElement = null);
+    target.prepend(characterStrokesContainer);
+    existingCharacters.add(character);
+}
+
+renderButton.addEventListener("click", async function () {
     const character = characterInput.value;
     const zhRender = zhChecked.checked && !zhExistingCharacters.has(character);
     const jaRender = jaChecked.checked && !jaExistingCharacters.has(character);
     const promises = [];
     promises.push(zhRender ? strokes("zh", strokesOutputFormat.value, animationOptions)(character) : Promise.resolve(null));
     promises.push(jaRender ? strokes("ja", strokesOutputFormat.value, animationOptions)(character) : Promise.resolve(null));
-    const [zhElement, jaElement] = await Promise.all(promises);
-    if (zhElement !== null) {
-        zhElement.classList.add("stroke");
-        zhTarget.prepend(zhElement);
-        zhExistingCharacters.add(character);
+    const [zhCharacterStrokes, jaCharacterStrokes] = await Promise.all(promises);
+    renderCharacter(character, "zh", zhCharacterStrokes, zhTarget, zhExistingCharacters);
+    renderCharacter(character, "ja", jaCharacterStrokes, jaTarget, jaExistingCharacters);
+});
+
+clearButton.addEventListener("click", async function () {
+    if (zhChecked.checked) {
+        clear(zhTarget);
+        zhExistingCharacters.clear();
     }
-    if (jaElement !== null) {
-        jaElement.classList.add("stroke");
-        jaExistingCharacters.add(character);
-        jaTarget.prepend(jaElement);
+    if (jaChecked.checked) {
+        clear(jaTarget);
+        jaExistingCharacters.clear();
     }
 });
 
-document.getElementById("clear-button").addEventListener("click", async function () {
-    clear(zhTarget);
-    clear(jaTarget);
-    zhExistingCharacters.clear();
-    jaExistingCharacters.clear();
-    characterInput.value = characterInput.defaultValue;
+clearButton.addEventListener("dragover", event => event.preventDefault());
+
+clearButton.addEventListener("drop", event => {
+    event.preventDefault();
+    if (draggedElement === null) {
+        return;
+    }
+    const idParts = draggedElement.id.split('-');
+    const idValid = idParts.length === 4 && idParts[0] === "character" && idParts[1] === "strokes";
+    if (!idValid) {
+        return;
+    }
+    const characterType = idParts[2];
+    const character = idParts[3];
+    switch (characterType) {
+        case "zh":
+            zhExistingCharacters.delete(character);
+            break;
+        case "ja":
+            jaExistingCharacters.delete(character);
+            break;
+    }
+    draggedElement.remove();
 });
 
 let isDark = false;
