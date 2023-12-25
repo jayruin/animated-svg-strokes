@@ -29,7 +29,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: sleep 5
-      - run: gh release create ${{ env.TAG }} ./dist/index.js --title ${{ env.TAG }}
+      - run: gh release create ${{ env.TAG }} ./dist/strokes.js --title ${{ env.TAG }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: npm run reset
