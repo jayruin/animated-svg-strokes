@@ -1,7 +1,8 @@
-import type { CharacterInfo, StrokeInfo } from "./interfaces";
-import { getPathLength } from "./loading";
+import type { CharacterLoader } from "./types";
+import type { StrokeInfo } from "../characters/types";
+import { getPathLength } from "../svg/path";
 
-export const jaLoad = async (character: string): Promise<CharacterInfo> => {
+export const jaLoad: CharacterLoader = async character => {
     const characterCode = character.codePointAt(0)?.toString(16).padStart(5, "0");
     if (typeof characterCode === "undefined") {
         throw new Error("characterCode is undefined!");

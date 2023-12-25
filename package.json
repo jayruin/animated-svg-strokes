@@ -24,7 +24,7 @@
       "isLibrary": true,
       "optimize": true,
       "outputFormat": "esmodule",
-      "source": "src/index.ts",
+      "source": "src/strokes.ts",
       "sourceMap": false
     }
   }

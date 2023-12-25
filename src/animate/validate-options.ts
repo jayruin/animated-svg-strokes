@@ -1,4 +1,4 @@
-import type { AnimationOptions } from "./interfaces";
+import type { AnimationOptions } from "./types";
 
 export const validateOptions = (options: AnimationOptions): void => {
     const { pauseRatio, totalStrokeDuration } = options;

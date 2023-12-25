@@ -1,5 +1,6 @@
-import type { AnimationOptions, CharacterInfo, WebAnimationsInfo } from "./interfaces";
-import { svgStrokesBase } from "./svg";
+import type { AnimationOptions, SvgAnimator, WebAnimationsInfo } from "./types";
+import type { CharacterInfo } from "../characters/types";
+import { animateStrokesSvgBase } from "./svg-base";
 
 const getWebAnimationsInfo = (characterInfo: CharacterInfo, options: AnimationOptions, strokeNumber: number): WebAnimationsInfo => {
     const dashKeyframes: Keyframe[] = [];
@@ -28,8 +29,8 @@ const getWebAnimationsInfo = (characterInfo: CharacterInfo, options: AnimationOp
     return { dashKeyframes, widthKeyframes, keyframeOptions };
 };
 
-export const animateStrokesSvgWa = (characterInfo: CharacterInfo, options: AnimationOptions): SVGSVGElement => {
-    const { svg, strokesComponents } = svgStrokesBase(characterInfo, options);
+export const animateStrokesSvgWa: SvgAnimator = (characterInfo, options) => {
+    const { svg, strokesComponents } = animateStrokesSvgBase(characterInfo, options);
 
     const animations: Animation[] = [];
     for (let strokeNumber = 0; strokeNumber < characterInfo.strokes.length; strokeNumber += 1) {

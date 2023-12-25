@@ -1,29 +1,30 @@
-import type { AnimationOptions, CharacterInfo, Point, SvgComponents, SvgStrokeComponents } from "./interfaces";
+import type { AnimationOptions, SvgComponents, SvgStrokeComponents } from "./types";
+import type { CharacterInfo } from "../characters/types";
+import type { Line } from "../geometry/types";
+import { svgNS } from "../svg/constants";
 
-export const svgNS = "http://www.w3.org/2000/svg";
-
-const createLine = (startPoint: Point, endPoint: Point, stroke: string): SVGLineElement => {
-    const line = document.createElementNS(svgNS, "line");
-    line.setAttributeNS(null, "x1", startPoint.x.toString());
-    line.setAttributeNS(null, "y1", startPoint.y.toString());
-    line.setAttributeNS(null, "x2", endPoint.x.toString());
-    line.setAttributeNS(null, "y2", endPoint.y.toString());
-    line.setAttributeNS(null, "stroke", stroke);
-    line.setAttributeNS(null, "stroke-width", "1%");
-    return line;
+const createSvgLine = (line: Line, stroke: string): SVGLineElement => {
+    const svgLine = document.createElementNS(svgNS, "line");
+    svgLine.setAttributeNS(null, "x1", line.startPoint.x.toString());
+    svgLine.setAttributeNS(null, "y1", line.startPoint.y.toString());
+    svgLine.setAttributeNS(null, "x2", line.endPoint.x.toString());
+    svgLine.setAttributeNS(null, "y2", line.endPoint.y.toString());
+    svgLine.setAttributeNS(null, "stroke", stroke);
+    svgLine.setAttributeNS(null, "stroke-width", "1%");
+    return svgLine;
 };
 
-export const drawGrid = (svg: SVGSVGElement): void => {
+const drawGrid = (svg: SVGSVGElement): void => {
     const viewBox = svg.getAttribute("viewBox");
     if (viewBox === null) {
         throw new Error("svg element has no viewBox");
     }
     const [, , width, height] = viewBox.split(" ").map(value => parseInt(value, 10));
-    svg.append(createLine({ x: width / 2, y: 0 }, { x: width / 2, y: height }, "#DDD"));
-    svg.append(createLine({ x: 0, y: height / 2 }, { x: width, y: height / 2 }, "#DDD"));
+    svg.append(createSvgLine({ startPoint: { x: width / 2, y: 0 }, endPoint: { x: width / 2, y: height } }, "#DDD"));
+    svg.append(createSvgLine({ startPoint: { x: 0, y: height / 2 }, endPoint: { x: width, y: height / 2 } }, "#DDD"));
 };
 
-export const svgStrokesBase = (characterInfo: CharacterInfo, options: AnimationOptions): SvgComponents => {
+export const animateStrokesSvgBase = (characterInfo: CharacterInfo, options: AnimationOptions): SvgComponents => {
     const svg = document.createElementNS(svgNS, "svg");
     svg.setAttribute("xmlns", svgNS);
     svg.setAttributeNS(null, "viewBox", characterInfo.viewBox);

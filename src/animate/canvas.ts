@@ -1,5 +1,7 @@
-import type { AnimationOptions, CanvasContextAction, CanvasStrokeInfo, CharacterInfo, Line, StrokeInfo } from "./interfaces";
-import { svgNS } from "./svg";
+import type { CanvasAnimator, CanvasContextAction, CanvasStrokeInfo } from "./types";
+import type { StrokeInfo } from "../characters/types";
+import type { Line } from "../geometry/types";
+import { svgNS } from "../svg/constants";
 
 const convertStrokeInfo = (strokeInfo: StrokeInfo): CanvasStrokeInfo => {
     const { clipPath, strokePath, strokePathLength } = strokeInfo;
@@ -23,9 +25,9 @@ const getContextTransform = (transform: string): CanvasContextAction => {
     };
 };
 
-const drawLine = (context: CanvasRenderingContext2D, line: Line): void => {
+const drawLine = (context: CanvasRenderingContext2D, line: Line, width: number): void => {
     context.save();
-    context.lineWidth = line.width;
+    context.lineWidth = width;
     context.strokeStyle = "#DDD";
     context.beginPath();
     context.moveTo(line.startPoint.x, line.startPoint.y);
@@ -36,11 +38,11 @@ const drawLine = (context: CanvasRenderingContext2D, line: Line): void => {
 
 const drawGrid = (context: CanvasRenderingContext2D): void => {
     const { width, height } = context.canvas;
-    drawLine(context, { startPoint: { x: width / 2, y: 0 }, endPoint: { x: width / 2, y: height }, width: Math.ceil(width / 100) });
-    drawLine(context, { startPoint: { x: 0, y: height / 2 }, endPoint: { x: width, y: height / 2 }, width: Math.ceil(height / 100) });
+    drawLine(context, { startPoint: { x: width / 2, y: 0 }, endPoint: { x: width / 2, y: height } }, Math.ceil(width / 100));
+    drawLine(context, { startPoint: { x: 0, y: height / 2 }, endPoint: { x: width, y: height / 2 } }, Math.ceil(height / 100));
 };
 
-export const animateStrokesCanvas = (characterInfo: CharacterInfo, options: AnimationOptions): HTMLCanvasElement => {
+export const animateStrokesCanvas: CanvasAnimator = (characterInfo, options) => {
     const { strokes, transform, viewBox } = characterInfo;
     const { includeGrid, pauseRatio, totalStrokeDuration } = options;
     const canvasStrokeInfos = strokes.map(strokeInfo => convertStrokeInfo(strokeInfo));

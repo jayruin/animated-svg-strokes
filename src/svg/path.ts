@@ -1,4 +1,4 @@
-import { svgNS } from "./svg";
+import { svgNS } from "./constants";
 
 export const getPathLength = (pathD: string): number => {
     const path = document.createElementNS(svgNS, "path");

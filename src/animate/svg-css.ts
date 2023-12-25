@@ -1,5 +1,7 @@
-import type { AnimationOptions, CharacterInfo } from "./interfaces";
-import { svgNS, svgStrokesBase } from "./svg";
+import type { AnimationOptions, SvgAnimator } from "./types";
+import type { CharacterInfo } from "../characters/types";
+import { animateStrokesSvgBase } from "./svg-base";
+import { svgNS } from "../svg/constants";
 
 const createStyle = (characterInfo: CharacterInfo, strokePathIds: string[], options: AnimationOptions): SVGStyleElement => {
     const { strokeWidth, strokes } = characterInfo;
@@ -46,8 +48,8 @@ const createStyle = (characterInfo: CharacterInfo, strokePathIds: string[], opti
     return style;
 };
 
-export const animateStrokesSvgCss = (characterInfo: CharacterInfo, options: AnimationOptions): SVGSVGElement => {
-    const { svg, group, strokesComponents } = svgStrokesBase(characterInfo, options);
+export const animateStrokesSvgCss: SvgAnimator = (characterInfo, options) => {
+    const { svg, group, strokesComponents } = animateStrokesSvgBase(characterInfo, options);
 
     const strokePathIds: string[] = [];
     const animatedElements: SVGElement[] = [];
