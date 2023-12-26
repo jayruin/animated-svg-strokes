@@ -35,6 +35,10 @@ function renderCharacter(character, characterType, characterStrokes, target, exi
     characterStrokesContainer.id = `character-strokes-${characterType}-${character}`;
     characterStrokesContainer.classList.add("character-strokes-container");
     characterStrokesContainer.append(characterStrokes);
+    characterStrokesContainer.addEventListener("click", event => {
+        event.preventDefault();
+        characterStrokes.dispatchEvent(new Event("click"));
+    });
     characterStrokesContainer.addEventListener("dragstart", event => draggedElement = event.target);
     characterStrokesContainer.addEventListener("dragover", event => {
         const draggedIdParts = draggedElement.id.split('-');
