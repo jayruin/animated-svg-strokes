@@ -65,13 +65,15 @@ export const animateStrokesSvgCss: SvgAnimator = (characterInfo, options) => {
     const style = createStyle(characterInfo, strokePathIds, options);
     group.append(style);
 
-    const togglePause = (): void => {
-        animatedElements.forEach(e => {
-            const paused = e.style.animationPlayState === "paused";
-            e.style.animationPlayState = paused ? "running" : "paused";
-        });
-    };
-    svg.addEventListener("click", togglePause);
+    if (options.interactive) {
+        const togglePause = (): void => {
+            animatedElements.forEach(e => {
+                const paused = e.style.animationPlayState === "paused";
+                e.style.animationPlayState = paused ? "running" : "paused";
+            });
+        };
+        svg.addEventListener("click", togglePause);
+    }
 
     return svg;
 };

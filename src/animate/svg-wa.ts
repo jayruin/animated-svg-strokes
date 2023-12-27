@@ -42,17 +42,19 @@ export const animateStrokesSvgWa: SvgAnimator = (characterInfo, options) => {
         animations.push(strokeAnimation);
     }
 
-    const togglePause = (): void => {
-        animations.forEach(a => {
-            const paused = a.playState === "paused";
-            if (paused) {
-                a.play();
-            } else {
-                a.pause();
-            }
-        });
-    };
-    svg.addEventListener("click", togglePause);
+    if (options.interactive) {
+        const togglePause = (): void => {
+            animations.forEach(a => {
+                const paused = a.playState === "paused";
+                if (paused) {
+                    a.play();
+                } else {
+                    a.pause();
+                }
+            });
+        };
+        svg.addEventListener("click", togglePause);
+    }
 
     return svg;
 };

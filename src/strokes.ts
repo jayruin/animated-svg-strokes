@@ -16,6 +16,7 @@ interface UserAnimationOptions {
     readonly gridColumns?: number;
     readonly pauseRatio?: number;
     readonly totalStrokeDuration?: number;
+    readonly interactive?: boolean;
 }
 
 type StrokesType = "ja" | "zh";
@@ -58,6 +59,7 @@ const parseUserOptions = (userOptions?: UserAnimationOptions): AnimationOptions 
         gridColumns: userOptions?.gridColumns ?? 2,
         pauseRatio: userOptions?.pauseRatio ?? 0.2,
         totalStrokeDuration: userOptions?.totalStrokeDuration ?? 1,
+        interactive: userOptions?.interactive ?? true,
     };
     validateOptions(options);
     return options;

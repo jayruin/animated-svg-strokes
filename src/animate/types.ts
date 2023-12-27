@@ -19,6 +19,7 @@ export interface AnimationOptions {
     readonly gridColumns: number;
     readonly pauseRatio: number;
     readonly totalStrokeDuration: number;
+    readonly interactive: boolean;
 }
 
 export interface SvgComponents {

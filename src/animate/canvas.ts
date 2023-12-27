@@ -109,10 +109,12 @@ export const animateStrokesCanvas: CanvasAnimator = (characterInfo, options) => 
             elapsed = 0;
         }
     };
-    const togglePause = (): void => {
-        paused = !paused;
-    };
     document.addEventListener("visibilitychange", reset);
-    canvas.addEventListener("click", togglePause);
+    if (options.interactive) {
+        const togglePause = (): void => {
+            paused = !paused;
+        };
+        canvas.addEventListener("click", togglePause);
+    }
     return canvas;
 };

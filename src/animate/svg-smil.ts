@@ -84,15 +84,17 @@ export const animateStrokesSvgSmil: SvgAnimator = (characterInfo, options) => {
         strokeComponents.strokePath.append(animateStrokeWidth(characterInfo, options, strokeNumber));
     }
 
-    const togglePause = (): void => {
-        const paused = svg.animationsPaused();
-        if (paused) {
-            svg.unpauseAnimations();
-        } else {
-            svg.pauseAnimations();
-        }
-    };
-    svg.addEventListener("click", togglePause);
+    if (options.interactive) {
+        const togglePause = (): void => {
+            const paused = svg.animationsPaused();
+            if (paused) {
+                svg.unpauseAnimations();
+            } else {
+                svg.pauseAnimations();
+            }
+        };
+        svg.addEventListener("click", togglePause);
+    }
 
     return svg;
 };
