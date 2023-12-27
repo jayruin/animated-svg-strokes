@@ -25,11 +25,19 @@ const drawGrid = (svg: SVGSVGElement, options: AnimationOptions): void => {
     const [, , width, height] = viewBox.split(" ").map(value => parseInt(value, 10));
     for (let xCount = 1; xCount < options.gridColumns; xCount += 1) {
         const x = width * (xCount / options.gridColumns);
-        svg.append(createSvgLine({ startPoint: { x, y: 0 }, endPoint: { x, y: height } }, options.gridColor));
+        const line = {
+            startPoint: { x, y: 0 },
+            endPoint: { x, y: height },
+        };
+        svg.append(createSvgLine(line, options.gridColor));
     }
     for (let yCount = 1; yCount < options.gridRows; yCount += 1) {
         const y = height * (yCount / options.gridRows);
-        svg.append(createSvgLine({ startPoint: { x: 0, y }, endPoint: { x: width, y } }, options.gridColor));
+        const line = {
+            startPoint: { x: 0, y },
+            endPoint: { x: width, y },
+        };
+        svg.append(createSvgLine(line, options.gridColor));
     }
 };
 

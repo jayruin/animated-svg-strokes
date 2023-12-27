@@ -1,6 +1,5 @@
-import type { CanvasAnimator, CanvasContextAction, CanvasStrokeInfo } from "./types";
+import type { AnimationOptions, CanvasAnimator, CanvasContextAction, CanvasLineInfo, CanvasStrokeInfo } from "./types";
 import type { StrokeInfo } from "../characters/types";
-import type { Line } from "../geometry/types";
 import { svgNS } from "../svg/constants";
 
 const convertStrokeInfo = (strokeInfo: StrokeInfo): CanvasStrokeInfo => {
@@ -25,26 +24,43 @@ const getContextTransform = (transform: string): CanvasContextAction => {
     };
 };
 
-const drawLine = (context: CanvasRenderingContext2D, line: Line, width: number): void => {
+const drawLine = (context: CanvasRenderingContext2D, lineInfo: CanvasLineInfo): void => {
     context.save();
-    context.lineWidth = width;
-    context.strokeStyle = "#DDD";
+    context.lineWidth = lineInfo.width;
+    context.strokeStyle = lineInfo.color;
     context.beginPath();
-    context.moveTo(line.startPoint.x, line.startPoint.y);
-    context.lineTo(line.endPoint.x, line.endPoint.y);
+    context.moveTo(lineInfo.line.startPoint.x, lineInfo.line.startPoint.y);
+    context.lineTo(lineInfo.line.endPoint.x, lineInfo.line.endPoint.y);
     context.stroke();
     context.restore();
 };
 
-const drawGrid = (context: CanvasRenderingContext2D): void => {
+const drawGrid = (context: CanvasRenderingContext2D, options: AnimationOptions): void => {
+    if (!options.includeGrid) {
+        return;
+    }
     const { width, height } = context.canvas;
-    drawLine(context, { startPoint: { x: width / 2, y: 0 }, endPoint: { x: width / 2, y: height } }, Math.ceil(width / 100));
-    drawLine(context, { startPoint: { x: 0, y: height / 2 }, endPoint: { x: width, y: height / 2 } }, Math.ceil(height / 100));
+    for (let xCount = 1; xCount < options.gridColumns; xCount += 1) {
+        const x = width * (xCount / options.gridColumns);
+        drawLine(context, {
+            line: { startPoint: { x, y: 0 }, endPoint: { x, y: height } },
+            width: Math.ceil(width / 100),
+            color: options.gridColor,
+        });
+    }
+    for (let yCount = 1; yCount < options.gridRows; yCount += 1) {
+        const y = height * (yCount / options.gridRows);
+        drawLine(context, {
+            line: { startPoint: { x: 0, y }, endPoint: { x: width, y } },
+            width: Math.ceil(height / 100),
+            color: options.gridColor,
+        });
+    }
 };
 
 export const animateStrokesCanvas: CanvasAnimator = (characterInfo, options) => {
     const { strokes, transform, viewBox } = characterInfo;
-    const { includeGrid, pauseRatio, totalStrokeDuration } = options;
+    const { pauseRatio, totalStrokeDuration } = options;
     const canvasStrokeInfos = strokes.map(strokeInfo => convertStrokeInfo(strokeInfo));
     const canvas = document.createElement("canvas");
     const [, , width, height] = viewBox.split(" ").map(value => parseInt(value, 10));
@@ -76,9 +92,7 @@ export const animateStrokesCanvas: CanvasAnimator = (characterInfo, options) => 
         context.save();
         if (elapsed === 0) {
             context.clearRect(0, 0, canvas.width, canvas.height);
-            if (includeGrid) {
-                drawGrid(context);
-            }
+            drawGrid(context, options);
         }
         const strokeIndex = Math.trunc(elapsed / totalStrokeDurationMs);
         const progress = Math.min(1, (elapsed % totalStrokeDurationMs) / totalStrokeDurationMs / (1 - pauseRatio));

@@ -1,4 +1,5 @@
 import type { CharacterInfo } from "../characters/types";
+import type { Line } from "../geometry/types";
 
 export interface CanvasAnimator {
     (characterInfo: CharacterInfo, options: AnimationOptions): HTMLCanvasElement;
@@ -44,6 +45,12 @@ export interface CanvasStrokeInfo {
     readonly clipPath: Path2D | null;
     readonly strokePath: Path2D;
     readonly strokePathLength: number;
+}
+
+export interface CanvasLineInfo {
+    readonly line: Line;
+    readonly width: number;
+    readonly color: string;
 }
 
 export interface CanvasContextAction {
