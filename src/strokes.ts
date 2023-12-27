@@ -11,6 +11,9 @@ import { jaLoad } from "./load/ja";
 
 interface UserAnimationOptions {
     readonly includeGrid?: boolean;
+    readonly gridColor?: string;
+    readonly gridRows?: number;
+    readonly gridColumns?: number;
     readonly pauseRatio?: number;
     readonly totalStrokeDuration?: number;
 }
@@ -49,9 +52,12 @@ interface StrokesRendererFactory {
 
 const parseUserOptions = (userOptions?: UserAnimationOptions): AnimationOptions => {
     const options = {
-        includeGrid: typeof userOptions?.includeGrid === "undefined" ? true : userOptions.includeGrid,
-        pauseRatio: typeof userOptions?.pauseRatio === "undefined" ? 0.2 : userOptions.pauseRatio,
-        totalStrokeDuration: typeof userOptions?.totalStrokeDuration === "undefined" ? 1 : userOptions.totalStrokeDuration,
+        includeGrid: userOptions?.includeGrid ?? true,
+        gridColor: userOptions?.gridColor ?? "#dddddd",
+        gridRows: userOptions?.gridRows ?? 2,
+        gridColumns: userOptions?.gridColumns ?? 2,
+        pauseRatio: userOptions?.pauseRatio ?? 0.2,
+        totalStrokeDuration: userOptions?.totalStrokeDuration ?? 1,
     };
     validateOptions(options);
     return options;

@@ -14,14 +14,23 @@ const createSvgLine = (line: Line, stroke: string): SVGLineElement => {
     return svgLine;
 };
 
-const drawGrid = (svg: SVGSVGElement): void => {
+const drawGrid = (svg: SVGSVGElement, options: AnimationOptions): void => {
+    if (!options.includeGrid) {
+        return;
+    }
     const viewBox = svg.getAttribute("viewBox");
     if (viewBox === null) {
         throw new Error("svg element has no viewBox");
     }
     const [, , width, height] = viewBox.split(" ").map(value => parseInt(value, 10));
-    svg.append(createSvgLine({ startPoint: { x: width / 2, y: 0 }, endPoint: { x: width / 2, y: height } }, "#DDD"));
-    svg.append(createSvgLine({ startPoint: { x: 0, y: height / 2 }, endPoint: { x: width, y: height / 2 } }, "#DDD"));
+    for (let xCount = 1; xCount < options.gridColumns; xCount += 1) {
+        const x = width * (xCount / options.gridColumns);
+        svg.append(createSvgLine({ startPoint: { x, y: 0 }, endPoint: { x, y: height } }, options.gridColor));
+    }
+    for (let yCount = 1; yCount < options.gridRows; yCount += 1) {
+        const y = height * (yCount / options.gridRows);
+        svg.append(createSvgLine({ startPoint: { x: 0, y }, endPoint: { x: width, y } }, options.gridColor));
+    }
 };
 
 export const animateStrokesSvgBase = (characterInfo: CharacterInfo, options: AnimationOptions): SvgComponents => {
@@ -29,9 +38,7 @@ export const animateStrokesSvgBase = (characterInfo: CharacterInfo, options: Ani
     svg.setAttribute("xmlns", svgNS);
     svg.setAttributeNS(null, "viewBox", characterInfo.viewBox);
 
-    if (options.includeGrid) {
-        drawGrid(svg);
-    }
+    drawGrid(svg, options);
 
     const group = document.createElementNS(svgNS, "g");
     if (characterInfo.transform !== null) {

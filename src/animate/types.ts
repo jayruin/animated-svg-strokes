@@ -14,6 +14,9 @@ export interface StrokesAnimator {
 
 export interface AnimationOptions {
     readonly includeGrid: boolean;
+    readonly gridColor: string;
+    readonly gridRows: number;
+    readonly gridColumns: number;
     readonly pauseRatio: number;
     readonly totalStrokeDuration: number;
 }
