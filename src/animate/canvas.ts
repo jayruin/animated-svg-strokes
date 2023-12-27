@@ -1,6 +1,7 @@
 import type { AnimationOptions, CanvasAnimator, CanvasContextAction, CanvasLineInfo, CanvasStrokeInfo } from "./types";
 import type { StrokeInfo } from "../characters/types";
 import { svgNS } from "../svg/constants";
+import { parseViewBox } from "../svg/view-box";
 
 const convertStrokeInfo = (strokeInfo: StrokeInfo): CanvasStrokeInfo => {
     const { clipPath, strokePath, strokePathLength } = strokeInfo;
@@ -58,12 +59,25 @@ const drawGrid = (context: CanvasRenderingContext2D, options: AnimationOptions):
     }
 };
 
+const resetCanvas = (context: CanvasRenderingContext2D, options: AnimationOptions): void => {
+    const { backgroundColor } = options;
+    context.save();
+    if (backgroundColor === null) {
+        context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+    } else {
+        context.fillStyle = backgroundColor;
+        context.fillRect(0, 0, context.canvas.width, context.canvas.height);
+    }
+    context.restore();
+    drawGrid(context, options);
+};
+
 export const animateStrokesCanvas: CanvasAnimator = (characterInfo, options) => {
-    const { strokes, transform, viewBox } = characterInfo;
-    const { pauseRatio, totalStrokeDuration } = options;
+    const { strokeWidth, strokes, transform, viewBox } = characterInfo;
+    const { strokeColor, pauseRatio, totalStrokeDuration } = options;
     const canvasStrokeInfos = strokes.map(strokeInfo => convertStrokeInfo(strokeInfo));
     const canvas = document.createElement("canvas");
-    const [, , width, height] = viewBox.split(" ").map(value => parseInt(value, 10));
+    const { width, height } = parseViewBox(viewBox);
     canvas.width = width;
     canvas.height = height;
     const context = canvas.getContext("2d", { willReadFrequently: true });
@@ -89,11 +103,10 @@ export const animateStrokesCanvas: CanvasAnimator = (characterInfo, options) => 
         if (elapsed > totalDurationMs) {
             elapsed = 0;
         }
-        context.save();
         if (elapsed === 0) {
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            drawGrid(context, options);
+            resetCanvas(context, options);
         }
+        context.save();
         const strokeIndex = Math.trunc(elapsed / totalStrokeDurationMs);
         const progress = Math.min(1, (elapsed % totalStrokeDurationMs) / totalStrokeDurationMs / (1 - pauseRatio));
         const { clipPath, strokePath, strokePathLength } = canvasStrokeInfos[strokeIndex];
@@ -103,10 +116,10 @@ export const animateStrokesCanvas: CanvasAnimator = (characterInfo, options) => 
             contextTransform(context);
         }
         context.fillStyle = "none";
-        context.strokeStyle = "#000";
+        context.strokeStyle = strokeColor;
         context.lineCap = "round";
         context.lineJoin = "round";
-        context.lineWidth = characterInfo.strokeWidth;
+        context.lineWidth = strokeWidth;
         context.setLineDash([strokePathLength * progress, strokePathLength * (1 - progress)]);
         if (clipPath !== null) {
             context.clip(clipPath);

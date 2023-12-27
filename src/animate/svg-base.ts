@@ -1,7 +1,21 @@
 import type { AnimationOptions, SvgComponents, SvgStrokeComponents } from "./types";
 import type { CharacterInfo } from "../characters/types";
 import type { Line } from "../geometry/types";
+import type { ViewBox } from "../svg/types";
 import { svgNS } from "../svg/constants";
+import { parseViewBox } from "../svg/view-box";
+
+const fillBackground = (svg: SVGSVGElement, options: AnimationOptions, viewBox: ViewBox): void => {
+    const { backgroundColor } = options;
+    if (backgroundColor === null) {
+        return;
+    }
+    const rect = document.createElementNS(svgNS, "rect");
+    rect.setAttributeNS(null, "width", viewBox.width.toString());
+    rect.setAttributeNS(null, "height", viewBox.height.toString());
+    rect.setAttributeNS(null, "fill", backgroundColor);
+    svg.append(rect);
+};
 
 const createSvgLine = (line: Line, stroke: string): SVGLineElement => {
     const svgLine = document.createElementNS(svgNS, "line");
@@ -14,15 +28,11 @@ const createSvgLine = (line: Line, stroke: string): SVGLineElement => {
     return svgLine;
 };
 
-const drawGrid = (svg: SVGSVGElement, options: AnimationOptions): void => {
+const drawGrid = (svg: SVGSVGElement, options: AnimationOptions, viewBox: ViewBox): void => {
     if (!options.includeGrid) {
         return;
     }
-    const viewBox = svg.getAttribute("viewBox");
-    if (viewBox === null) {
-        throw new Error("svg element has no viewBox");
-    }
-    const [, , width, height] = viewBox.split(" ").map(value => parseInt(value, 10));
+    const { width, height } = viewBox;
     for (let xCount = 1; xCount < options.gridColumns; xCount += 1) {
         const x = width * (xCount / options.gridColumns);
         const line = {
@@ -46,7 +56,11 @@ export const animateStrokesSvgBase = (characterInfo: CharacterInfo, options: Ani
     svg.setAttribute("xmlns", svgNS);
     svg.setAttributeNS(null, "viewBox", characterInfo.viewBox);
 
-    drawGrid(svg, options);
+    const viewBox = parseViewBox(characterInfo.viewBox);
+
+    fillBackground(svg, options, viewBox);
+
+    drawGrid(svg, options, viewBox);
 
     const group = document.createElementNS(svgNS, "g");
     if (characterInfo.transform !== null) {
@@ -77,7 +91,7 @@ export const animateStrokesSvgBase = (characterInfo: CharacterInfo, options: Ani
         }
 
         strokePath.setAttributeNS(null, "fill", "none");
-        strokePath.setAttributeNS(null, "stroke", "#000");
+        strokePath.setAttributeNS(null, "stroke", options.strokeColor);
         strokePath.setAttributeNS(null, "stroke-linecap", "round");
         strokePath.setAttributeNS(null, "stroke-linejoin", "round");
 

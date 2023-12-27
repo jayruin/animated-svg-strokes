@@ -14,6 +14,8 @@ interface UserAnimationOptions {
     readonly gridColor?: string;
     readonly gridRows?: number;
     readonly gridColumns?: number;
+    readonly strokeColor?: string;
+    readonly backgroundColor?: string;
     readonly pauseRatio?: number;
     readonly totalStrokeDuration?: number;
     readonly interactive?: boolean;
@@ -57,6 +59,8 @@ const parseUserOptions = (userOptions?: UserAnimationOptions): AnimationOptions 
         gridColor: userOptions?.gridColor ?? "#dddddd",
         gridRows: userOptions?.gridRows ?? 2,
         gridColumns: userOptions?.gridColumns ?? 2,
+        strokeColor: userOptions?.strokeColor ?? "#000000",
+        backgroundColor: userOptions?.backgroundColor ?? null,
         pauseRatio: userOptions?.pauseRatio ?? 0.2,
         totalStrokeDuration: userOptions?.totalStrokeDuration ?? 1,
         interactive: userOptions?.interactive ?? true,

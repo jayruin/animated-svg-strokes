@@ -18,6 +18,8 @@ export interface AnimationOptions {
     readonly gridColor: string;
     readonly gridRows: number;
     readonly gridColumns: number;
+    readonly strokeColor: string;
+    readonly backgroundColor: string | null;
     readonly pauseRatio: number;
     readonly totalStrokeDuration: number;
     readonly interactive: boolean;

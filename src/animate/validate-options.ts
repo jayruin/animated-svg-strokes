@@ -3,7 +3,7 @@ import type { AnimationOptions } from "./types";
 const isValidColor = (color: string): boolean => CSS.supports("color", color);
 
 export const validateOptions = (options: AnimationOptions): void => {
-    const { gridColor, gridRows, gridColumns, pauseRatio, totalStrokeDuration } = options;
+    const { gridColor, gridRows, gridColumns, strokeColor, backgroundColor, pauseRatio, totalStrokeDuration } = options;
 
     if (!isValidColor(gridColor)) throw new RangeError(`${gridColor} is not a valid color!`);
 
@@ -12,6 +12,10 @@ export const validateOptions = (options: AnimationOptions): void => {
 
     if (isNaN(gridColumns)) throw new RangeError("gridColumns is NaN!");
     if (gridColumns < 1) throw new RangeError("gridColumns cannot be < 1!");
+
+    if (!isValidColor(strokeColor)) throw new RangeError(`${strokeColor} is not a valid color!`);
+
+    if (backgroundColor !== null && !isValidColor(backgroundColor)) throw new RangeError(`${backgroundColor} is not a valid color!`);
 
     if (isNaN(pauseRatio)) throw new RangeError("pauseRatio cannot be NaN!");
     if (pauseRatio < 0) throw new RangeError("pauseRatio cannot be < 0!");
