@@ -21,18 +21,26 @@ interface UserAnimationOptions {
     readonly interactive?: boolean;
 }
 
-type StrokesType = "ja" | "zh";
+const SOURCE_JA = "ja";
+const SOURCE_ZH = "zh";
 
-type CanvasOutputFormat = "canvas";
+const FORMAT_SVG_SMIL = "svg-smil";
+const FORMAT_SVG_CSS = "svg-css";
+const FORMAT_SVG_WA = "svg-wa";
+const FORMAT_CANVAS = "canvas";
 
-type SvgOutputFormat = "svg-css" | "svg-smil" | "svg-wa" | "svg";
+type StrokesSource = typeof SOURCE_JA | typeof SOURCE_ZH;
 
-type StrokesOutputFormat = CanvasOutputFormat | SvgOutputFormat;
+type CanvasFormat = typeof FORMAT_CANVAS;
+
+type SvgFormat = typeof FORMAT_SVG_CSS | typeof FORMAT_SVG_SMIL | typeof FORMAT_SVG_WA;
+
+type StrokesFormat = CanvasFormat | SvgFormat;
 
 interface StrokesAnimatorFactory {
-    (outputFormat: CanvasOutputFormat): CanvasAnimator;
-    (outputFormat: SvgOutputFormat): SvgAnimator;
-    (outputFormat: StrokesOutputFormat): StrokesAnimator;
+    (format: CanvasFormat): CanvasAnimator;
+    (format: SvgFormat): SvgAnimator;
+    (format: StrokesFormat): StrokesAnimator;
 }
 
 interface CanvasRenderer {
@@ -48,9 +56,9 @@ interface StrokesRenderer {
 }
 
 interface StrokesRendererFactory {
-    (type: StrokesType, outputFormat: CanvasOutputFormat, userOptions?: UserAnimationOptions): CanvasRenderer;
-    (type: StrokesType, outputFormat: SvgOutputFormat, userOptions?: UserAnimationOptions): SvgRenderer;
-    (type: StrokesType, outputFormat: StrokesOutputFormat, userOptions?: UserAnimationOptions): StrokesRenderer;
+    (source: StrokesSource, format: CanvasFormat, userOptions?: UserAnimationOptions): CanvasRenderer;
+    (source: StrokesSource, format: SvgFormat, userOptions?: UserAnimationOptions): SvgRenderer;
+    (source: StrokesSource, format: StrokesFormat, userOptions?: UserAnimationOptions): StrokesRenderer;
 }
 
 const parseUserOptions = (userOptions?: UserAnimationOptions): AnimationOptions => {
@@ -69,41 +77,40 @@ const parseUserOptions = (userOptions?: UserAnimationOptions): AnimationOptions 
     return options;
 };
 
-const getLoader = (type: string): CharacterLoader => {
-    switch (type) {
-        case "zh":
-            return zhLoad;
-        case "ja":
+const getLoader = (source: StrokesSource): CharacterLoader => {
+    switch (source) {
+        case SOURCE_JA:
             return jaLoad;
+        case SOURCE_ZH:
+            return zhLoad;
         default:
-            throw new Error("Unsupported type!");
+            throw new Error("Unsupported source!");
     }
 };
 
 // Remove any return types when typescript supports overloading for arrow functions
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const getAnimator: StrokesAnimatorFactory = (outputFormat: StrokesOutputFormat): any => {
-    switch (outputFormat) {
-        case "svg-css":
-            return animateStrokesSvgCss;
-        case "svg-wa":
-            return animateStrokesSvgWa;
-        case "svg-smil":
-        case "svg":
+const getAnimator: StrokesAnimatorFactory = (format: StrokesFormat): any => {
+    switch (format) {
+        case FORMAT_SVG_SMIL:
             return animateStrokesSvgSmil;
-        case "canvas":
+        case FORMAT_SVG_CSS:
+            return animateStrokesSvgCss;
+        case FORMAT_SVG_WA:
+            return animateStrokesSvgWa;
+        case FORMAT_CANVAS:
             return animateStrokesCanvas;
         default:
-            throw new Error("Unsupported output!");
+            throw new Error("Unsupported format!");
     }
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const strokes: StrokesRendererFactory = (type: StrokesType, outputFormat: StrokesOutputFormat, userOptions?: UserAnimationOptions): any => {
+export const strokes: StrokesRendererFactory = (source: StrokesSource, format: StrokesFormat, userOptions?: UserAnimationOptions): any => {
     const options = parseUserOptions(userOptions);
-    const load = getLoader(type);
-    const animate = getAnimator(outputFormat);
+    const load = getLoader(source);
+    const animate = getAnimator(format);
     const render = async (character: string): Promise<Element> => {
         validateCharacter(character);
         const characterInfo = await load(character);
@@ -111,3 +118,7 @@ export const strokes: StrokesRendererFactory = (type: StrokesType, outputFormat:
     };
     return render;
 };
+
+export const getSources = (): ReadonlySet<StrokesSource> => Object.freeze(new Set<StrokesSource>([SOURCE_JA, SOURCE_ZH]));
+
+export const getFormats = (): ReadonlySet<StrokesFormat> => Object.freeze(new Set<StrokesFormat>([FORMAT_CANVAS, FORMAT_SVG_CSS, FORMAT_SVG_SMIL, FORMAT_SVG_WA]));
