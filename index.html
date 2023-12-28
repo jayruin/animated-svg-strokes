@@ -14,28 +14,12 @@
             <input type="text" id="character-input" minlength="1" maxlength="1" class="options" />
         </div>
         <div class="flex-item">
-            <select id="strokes-output-format" class="options">
-                <option value="svg-smil">SVG SMIL</option>
-                <option value="svg-css">SVG CSS</option>
-                <option value="svg-wa">SVG Web Animations</option>
-                <option value="canvas">Canvas</option>
+            <select id="strokes-format" class="options">
             </select>
         </div>
     </div>
 
-    <div class="flex-row">
-        <div class="flex-item">
-            <label class="options">
-                <input type="checkbox" id="zh-checked" checked />
-                <div>zh</div>
-            </label>
-        </div>
-        <div class="flex-item">
-            <label class="options">
-                <input type="checkbox" id="ja-checked" checked />
-                <div>ja</div>
-            </label>
-        </div>
+    <div class="flex-row" id="sources-checkboxes">
     </div>
 
     <div class="flex-row">
@@ -50,13 +34,7 @@
         </div>
     </div>
 
-    <div class="flex-row">
-        <div class="flex-item">
-            <div id="target-zh" class="strokes-container flex-column flex-center"></div>
-        </div>
-        <div class="flex-item">
-            <div id="target-ja" class="strokes-container flex-column flex-center"></div>
-        </div>
+    <div class="flex-row" id="sources-outputs">
     </div>
 </body>
 
