@@ -72,7 +72,7 @@ const resetCanvas = (context: CanvasRenderingContext2D, options: AnimationOption
     drawGrid(context, options);
 };
 
-export const animateStrokesCanvas: CanvasAnimator = (characterInfo, options) => {
+export const animateStrokesCanvas2d: CanvasAnimator = (characterInfo, options) => {
     const { strokeWidth, strokes, transform, viewBox } = characterInfo;
     const { strokeColor, pauseRatio, totalStrokeDuration } = options;
     const canvasStrokeInfos = strokes.map(strokeInfo => convertStrokeInfo(strokeInfo));

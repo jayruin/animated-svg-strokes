@@ -1,6 +1,6 @@
 import type { CanvasAnimator, SvgAnimator, StrokesAnimator, AnimationOptions } from "./animate/types";
 import type { CharacterLoader } from "./load/types";
-import { animateStrokesCanvas } from "./animate/canvas";
+import { animateStrokesCanvas2d } from "./animate/canvas-2d";
 import { animateStrokesSvgCss } from "./animate/svg-css";
 import { animateStrokesSvgSmil } from "./animate/svg-smil";
 import { animateStrokesSvgWa } from "./animate/svg-wa";
@@ -15,11 +15,11 @@ const SOURCE_ZH = "zh";
 const FORMAT_SVG_SMIL = "svg-smil";
 const FORMAT_SVG_CSS = "svg-css";
 const FORMAT_SVG_WA = "svg-wa";
-const FORMAT_CANVAS = "canvas";
+const FORMAT_CANVAS_2D = "canvas-2d";
 
 type StrokesSource = typeof SOURCE_JA | typeof SOURCE_ZH;
 
-type CanvasFormat = typeof FORMAT_CANVAS;
+type CanvasFormat = typeof FORMAT_CANVAS_2D;
 
 type SvgFormat = typeof FORMAT_SVG_CSS | typeof FORMAT_SVG_SMIL | typeof FORMAT_SVG_WA;
 
@@ -89,8 +89,8 @@ const getAnimator: StrokesAnimatorFactory = (format: StrokesFormat): any => {
             return animateStrokesSvgCss;
         case FORMAT_SVG_WA:
             return animateStrokesSvgWa;
-        case FORMAT_CANVAS:
-            return animateStrokesCanvas;
+        case FORMAT_CANVAS_2D:
+            return animateStrokesCanvas2d;
         default:
             throw new Error("Unsupported format!");
     }
@@ -111,4 +111,4 @@ export const strokes: StrokesRendererFactory = (source: StrokesSource, format: S
 
 export const getSources = (): ReadonlySet<StrokesSource> => Object.freeze(new Set<StrokesSource>([SOURCE_JA, SOURCE_ZH]));
 
-export const getFormats = (): ReadonlySet<StrokesFormat> => Object.freeze(new Set<StrokesFormat>([FORMAT_CANVAS, FORMAT_SVG_CSS, FORMAT_SVG_SMIL, FORMAT_SVG_WA]));
+export const getFormats = (): ReadonlySet<StrokesFormat> => Object.freeze(new Set<StrokesFormat>([FORMAT_CANVAS_2D, FORMAT_SVG_CSS, FORMAT_SVG_SMIL, FORMAT_SVG_WA]));
