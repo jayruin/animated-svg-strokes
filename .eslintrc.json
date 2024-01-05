@@ -13,7 +13,6 @@
     "rules": {
         "id-length": "off",
         "max-lines-per-function": "off",
-        "max-params": "off",
         "max-statements": "off",
         "no-ternary": "off",
         "one-var": "off",
