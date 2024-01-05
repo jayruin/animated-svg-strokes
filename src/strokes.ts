@@ -9,18 +9,6 @@ import { validateCharacter } from "./characters/validate-character";
 import { zhLoad } from "./load/zh";
 import { jaLoad } from "./load/ja";
 
-interface UserAnimationOptions {
-    readonly includeGrid?: boolean;
-    readonly gridColor?: string;
-    readonly gridRows?: number;
-    readonly gridColumns?: number;
-    readonly strokeColor?: string;
-    readonly backgroundColor?: string;
-    readonly pauseRatio?: number;
-    readonly totalStrokeDuration?: number;
-    readonly interactive?: boolean;
-}
-
 const SOURCE_JA = "ja";
 const SOURCE_ZH = "zh";
 
@@ -56,23 +44,25 @@ interface StrokesRenderer {
 }
 
 interface StrokesRendererFactory {
-    (source: StrokesSource, format: CanvasFormat, userOptions?: UserAnimationOptions): CanvasRenderer;
-    (source: StrokesSource, format: SvgFormat, userOptions?: UserAnimationOptions): SvgRenderer;
-    (source: StrokesSource, format: StrokesFormat, userOptions?: UserAnimationOptions): StrokesRenderer;
+    (source: StrokesSource, format: CanvasFormat, partialOptions?: Partial<AnimationOptions>): CanvasRenderer;
+    (source: StrokesSource, format: SvgFormat, partialOptions?: Partial<AnimationOptions>): SvgRenderer;
+    (source: StrokesSource, format: StrokesFormat, partialOptions?: Partial<AnimationOptions>): StrokesRenderer;
 }
 
-const parseUserOptions = (userOptions?: UserAnimationOptions): AnimationOptions => {
-    const options = {
-        includeGrid: userOptions?.includeGrid ?? true,
-        gridColor: userOptions?.gridColor ?? "#dddddd",
-        gridRows: userOptions?.gridRows ?? 2,
-        gridColumns: userOptions?.gridColumns ?? 2,
-        strokeColor: userOptions?.strokeColor ?? "#000000",
-        backgroundColor: userOptions?.backgroundColor ?? null,
-        pauseRatio: userOptions?.pauseRatio ?? 0.2,
-        totalStrokeDuration: userOptions?.totalStrokeDuration ?? 1,
-        interactive: userOptions?.interactive ?? true,
-    };
+const defaultOptions: AnimationOptions = {
+    includeGrid: true,
+    gridColor: "#dddddd",
+    gridRows: 2,
+    gridColumns: 2,
+    strokeColor: "#000000",
+    backgroundColor: null,
+    pauseRatio: 0.2,
+    totalStrokeDuration: 1,
+    interactive: true,
+};
+
+export const getFullOptions = (partialOptions?: Partial<AnimationOptions>): AnimationOptions => {
+    const options = { ...defaultOptions, ...partialOptions };
     validateOptions(options);
     return options;
 };
@@ -107,8 +97,8 @@ const getAnimator: StrokesAnimatorFactory = (format: StrokesFormat): any => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const strokes: StrokesRendererFactory = (source: StrokesSource, format: StrokesFormat, userOptions?: UserAnimationOptions): any => {
-    const options = parseUserOptions(userOptions);
+export const strokes: StrokesRendererFactory = (source: StrokesSource, format: StrokesFormat, partialOptions?: Partial<AnimationOptions>): any => {
+    const options = getFullOptions(partialOptions);
     const load = getLoader(source);
     const animate = getAnimator(format);
     const render = async (character: string): Promise<Element> => {
