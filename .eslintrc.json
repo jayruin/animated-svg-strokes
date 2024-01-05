@@ -19,7 +19,7 @@
         "one-var": "off",
         "sort-imports": "off",
         "sort-keys": "off",
-        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "@typescript-eslint/consistent-type-assertions": ["error", { "assertionStyle": "never" }],
         "@typescript-eslint/no-magic-numbers": "off",
         "@typescript-eslint/no-type-alias": "off",
         "@typescript-eslint/prefer-function-type": "off",

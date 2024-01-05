@@ -1,8 +1,8 @@
 import type { AnimationOptions } from "./types";
 
 const isValidColor = (color: string): boolean => CSS.supports("color", color);
-const isString = (s: unknown): boolean => typeof s === "string";
-const isNumber = (n: unknown): boolean => typeof n === "number";
+const isString = (s: unknown): s is string => typeof s === "string";
+const isNumber = (n: unknown): n is number => typeof n === "number";
 
 const validateGridColor = (gridColor: string, errors: Error[]): void => {
     if (!isString(gridColor)) errors.push(new TypeError("gridColor is not a string!"));

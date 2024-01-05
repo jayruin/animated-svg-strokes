@@ -7,10 +7,15 @@ interface HanziWriterData {
     medians: number[][][];
 }
 
+const isDataValid = (data: unknown): data is HanziWriterData => typeof data === "object" && data !== null && "strokes" in data && "medians" in data;
+
 export const zhLoad: CharacterLoader = async character => {
     const url = `https://cdn.jsdelivr.net/npm/hanzi-writer-data/${character}.json`;
     const response = await fetch(url, { cache: "no-store" });
-    const data = (await response.json()) as HanziWriterData;
+    const data: unknown = await response.json();
+    if (!isDataValid(data)) {
+        throw new Error("data is invalid!");
+    }
     const strokes: StrokeInfo[] = [];
     for (let strokeNumber = 0; strokeNumber < Math.min(data.strokes.length, data.medians.length); strokeNumber += 1) {
         const strokePath = data.medians[strokeNumber].map((m, i) => [i === 0 ? "M" : "L", m[0].toString(), m[1].toString()].join(" ")).join(" ");
