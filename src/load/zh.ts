@@ -9,7 +9,7 @@ interface HanziWriterData {
 
 const isDataValid = (data: unknown): data is HanziWriterData => typeof data === "object" && data !== null && "strokes" in data && "medians" in data;
 
-export const zhLoad: CharacterLoader = async character => {
+export const zhLoad: CharacterLoader = async (character) => {
     const url = `https://cdn.jsdelivr.net/npm/hanzi-writer-data/${character}.json`;
     const response = await fetch(url, { cache: "no-store" });
     const data: unknown = await response.json();

@@ -44,7 +44,7 @@ export const animateStrokesSvgWa: SvgAnimator = (characterInfo, options) => {
 
     if (options.interactive) {
         const togglePause = (): void => {
-            animations.forEach(a => {
+            animations.forEach((a) => {
                 const paused = a.playState === "paused";
                 if (paused) {
                     a.play();

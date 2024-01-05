@@ -2,7 +2,7 @@ import type { CharacterLoader } from "./types";
 import type { StrokeInfo } from "../characters/types";
 import { getPathLength } from "../svg/path";
 
-export const jaLoad: CharacterLoader = async character => {
+export const jaLoad: CharacterLoader = async (character) => {
     const characterCode = character.codePointAt(0)?.toString(16).padStart(5, "0");
     if (typeof characterCode === "undefined") {
         throw new Error("characterCode is undefined!");
@@ -18,7 +18,7 @@ export const jaLoad: CharacterLoader = async character => {
     }
     const strokes: StrokeInfo[] = Array.from(xmlDocument.querySelectorAll("path"))
         .sort((firstEl, secondEl) => {
-            const [firstNum, secondNum] = [firstEl, secondEl].map(el => {
+            const [firstNum, secondNum] = [firstEl, secondEl].map((el) => {
                 const id = el.getAttribute("id");
                 if (id === null) {
                     throw new Error("id is null!");
@@ -27,21 +27,21 @@ export const jaLoad: CharacterLoader = async character => {
             });
             return firstNum - secondNum;
         })
-        .map(element => {
+        .map((element) => {
             const d = element.getAttribute("d");
             if (d === null) {
                 throw new Error("d is null!");
             }
             return d;
         })
-        .map(d => ({
+        .map((d) => ({
             clipPath: null,
             strokePath: d,
             strokePathLength: getPathLength(d),
         }));
     const strokeWidth = Array.from(xmlDocument.querySelectorAll<SVGGElement>("g[style]"))
-        .map(element => parseFloat(element.style.getPropertyValue("stroke-width")))
-        .find(num => !isNaN(num) && isFinite(num));
+        .map((element) => parseFloat(element.style.getPropertyValue("stroke-width")))
+        .find((num) => !isNaN(num) && isFinite(num));
     if (typeof strokeWidth === "undefined") {
         throw new Error("strokeWidth is undefined!");
     }

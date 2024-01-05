@@ -67,7 +67,7 @@ export const animateStrokesSvgCss: SvgAnimator = (characterInfo, options) => {
 
     if (options.interactive) {
         const togglePause = (): void => {
-            animatedElements.forEach(e => {
+            animatedElements.forEach((e) => {
                 const paused = e.style.animationPlayState === "paused";
                 e.style.animationPlayState = paused ? "running" : "paused";
             });

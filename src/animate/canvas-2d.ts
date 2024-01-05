@@ -75,7 +75,7 @@ const resetCanvas = (context: CanvasRenderingContext2D, options: AnimationOption
 export const animateStrokesCanvas2d: CanvasAnimator = (characterInfo, options) => {
     const { strokeWidth, strokes, transform, viewBox } = characterInfo;
     const { strokeColor, pauseRatio, totalStrokeDuration } = options;
-    const canvasStrokeInfos = strokes.map(strokeInfo => convertStrokeInfo(strokeInfo));
+    const canvasStrokeInfos = strokes.map((strokeInfo) => convertStrokeInfo(strokeInfo));
     const canvas = document.createElement("canvas");
     const { width, height } = parseViewBox(viewBox);
     canvas.width = width;
