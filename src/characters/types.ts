@@ -6,9 +6,9 @@ export interface StrokeInfo {
 
 export interface CharacterInfo {
     readonly character: string;
+    readonly source: string;
     readonly strokeWidth: number;
     readonly strokes: readonly StrokeInfo[];
     readonly transform: string | null;
-    readonly type: string;
     readonly viewBox: string;
 }

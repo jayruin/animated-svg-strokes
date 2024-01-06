@@ -79,7 +79,7 @@ export const animateStrokesSvgBase = (characterInfo: CharacterInfo, options: Ani
         let clipPathElement = null;
         let clipPathPathElement = null;
         if (strokeInfo.clipPath !== null) {
-            const clipPathId = `${characterInfo.character}-${characterInfo.type}-clipPath-${strokeNumber}`;
+            const clipPathId = `${characterInfo.character}-${characterInfo.source}-clipPath-${strokeNumber}`;
             clipPathElement = document.createElementNS(svgNS, "clipPath");
             clipPathElement.setAttributeNS(null, "id", clipPathId);
             group.append(clipPathElement);

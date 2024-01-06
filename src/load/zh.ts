@@ -27,10 +27,10 @@ export const zhLoad: CharacterLoader = async (character) => {
     }
     return {
         character,
+        source: "zh",
         strokeWidth: 128,
         strokes,
         transform: "scale(1, -1) translate(0, -900)",
-        type: "zh",
         viewBox: "0 0 1024 1024",
     };
 };

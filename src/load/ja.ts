@@ -47,10 +47,10 @@ export const jaLoad: CharacterLoader = async (character) => {
     }
     return {
         character,
+        source: "ja",
         strokeWidth,
         strokes,
         transform: null,
-        type: "ja",
         viewBox,
     };
 };

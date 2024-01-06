@@ -56,7 +56,7 @@ export const animateStrokesSvgCss: SvgAnimator = (characterInfo, options) => {
     for (let strokeNumber = 0; strokeNumber < characterInfo.strokes.length; strokeNumber += 1) {
         const strokeComponents = strokesComponents[strokeNumber];
 
-        const strokePathId = `${characterInfo.character}-${characterInfo.type}-strokePath-${strokeNumber}`;
+        const strokePathId = `${characterInfo.character}-${characterInfo.source}-strokePath-${strokeNumber}`;
         strokePathIds.push(strokePathId);
         strokeComponents.strokePath.setAttributeNS(null, "id", strokePathId);
         animatedElements.push(strokeComponents.strokePath);
