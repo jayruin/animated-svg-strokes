@@ -6,14 +6,13 @@
     "eslint": "latest",
     "@typescript-eslint/parser": "latest",
     "@typescript-eslint/eslint-plugin": "latest",
-    "eslint-config-prettier": "latest",
-    "prettier": "latest"
+    "@stylistic/eslint-plugin": "latest"
   },
   "scripts": {
-    "check": "tsc --noEmit",
+    "types": "tsc --noEmit",
     "lint": "eslint src",
-    "pretty": "prettier src --check",
-    "prettify": "prettier src --write",
+    "style": "eslint src --no-eslintrc --config .eslintrc.styles.json",
+    "format": "eslint src --no-eslintrc --config .eslintrc.styles.json --fix",
     "build": "parcel build",
     "reset": "git clean -fdx"
   },

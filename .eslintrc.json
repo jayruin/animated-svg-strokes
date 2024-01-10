@@ -1,16 +1,16 @@
 {
     "root": true,
-    "extends": [
-        "eslint:all",
-        "plugin:@typescript-eslint/all",
-        "prettier"
-    ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": { "project": ["./tsconfig.json"] },
     "plugins": [
         "@typescript-eslint"
     ],
+    "extends": [
+        "eslint:all",
+        "plugin:@typescript-eslint/all"
+    ],
     "rules": {
+        "curly": "off",
         "id-length": "off",
         "max-lines-per-function": "off",
         "max-statements": "off",

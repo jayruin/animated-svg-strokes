@@ -1,0 +1,26 @@
+{
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": { "project": ["./tsconfig.json"] },
+    "plugins": [
+        "@stylistic"
+    ],
+    "noInlineConfig": true,
+    "overrides": [
+        {
+            "files": ["*.ts"],
+            "rules": {
+                "@stylistic/array-bracket-newline": ["error", "consistent"],
+                "@stylistic/array-bracket-spacing": ["error", "never"],
+                "@stylistic/array-element-newline": ["error", "consistent"],
+                "@stylistic/arrow-parens": ["error", "always"],
+                "@stylistic/arrow-spacing": ["error", { "before": true, "after": true }],
+                "@stylistic/block-spacing": ["error", "always"],
+                "@stylistic/brace-style": ["error", "1tbs", { "allowSingleLine": false }],
+                "@stylistic/comma-dangle": ["error", "always-multiline"],
+                "@stylistic/comma-spacing": ["error", { "before": false, "after": true }],
+                "@stylistic/comma-style": ["error", "last"]
+            }
+        }
+    ]
+}

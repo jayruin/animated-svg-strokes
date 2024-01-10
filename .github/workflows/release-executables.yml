@@ -21,9 +21,9 @@ jobs:
         with:
           node-version: "lts/*"
       - run: npm i
-      - run: npm run check
+      - run: npm run types
       - run: npm run lint
-      - run: npm run pretty
+      - run: npm run style
       - run: npm run build
       - run: gh release delete ${{ env.TAG }} --yes --cleanup-tag || true
         env:
