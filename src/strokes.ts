@@ -13,7 +13,7 @@ interface CanvasRenderer {
 }
 
 interface SvgRenderer {
-    (character: string): Promise<SVGElement>;
+    (character: string): Promise<SVGSVGElement>;
 }
 
 interface StrokesRenderer {
