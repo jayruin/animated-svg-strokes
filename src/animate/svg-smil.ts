@@ -54,7 +54,7 @@ const animateStrokeWidth = (characterInfo: CharacterInfo, options: AnimationOpti
     const values: string[] = [];
     if (inactiveTimeBefore > 0) {
         keyTimes.push("0");
-        values.push(`0`);
+        values.push("0");
     }
     keyTimes.push(start.toString());
     values.push(strokeWidth.toString());

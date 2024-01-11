@@ -34,7 +34,7 @@ const createStyle = (characterInfo: CharacterInfo, strokePathIds: string[], opti
         parts.push(`@keyframes width-${strokePathId}`);
         parts.push("{");
         if (inactiveTimeBefore > 0) {
-            parts.push(`0% { stroke-width: 0; animation-timing-function: steps(1, end); }`);
+            parts.push("0% { stroke-width: 0; animation-timing-function: steps(1, end); }");
         }
         parts.push(`${startPercent}% { stroke-width: ${strokeWidth}; }`);
         if (endPercent < 100) {

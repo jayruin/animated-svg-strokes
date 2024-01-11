@@ -65,7 +65,13 @@
                 "@stylistic/nonblock-statement-body-position": ["error", "beside"],
                 "@stylistic/object-curly-newline": ["error", { "multiline": true, "consistent": true }],
                 "@stylistic/object-curly-spacing": ["error", "always"],
-                "@stylistic/object-property-newline": ["error", { "allowAllPropertiesOnSameLine": true }]
+                "@stylistic/object-property-newline": ["error", { "allowAllPropertiesOnSameLine": true }],
+                "@stylistic/one-var-declaration-per-line": "off",
+                "@stylistic/operator-linebreak": ["error", "before"],
+                "@stylistic/padded-blocks": ["error", "never"],
+                "@stylistic/padding-line-between-statements": "off",
+                "@stylistic/quote-props": ["error", "as-needed", { "keywords": true, "unnecessary": true, "numbers": true }],
+                "@stylistic/quotes": ["error", "double"]
             }
         }
     ]
