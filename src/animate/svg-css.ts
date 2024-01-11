@@ -48,6 +48,8 @@ const createStyle = (characterInfo: CharacterInfo, strokePathIds: string[], opti
     return style;
 };
 
+export const FORMAT_SVG_CSS = "svg-css";
+
 export const animateStrokesSvgCss: SvgAnimator = (characterInfo, options) => {
     const { svg, group, strokesComponents } = animateStrokesSvgBase(characterInfo, options);
 

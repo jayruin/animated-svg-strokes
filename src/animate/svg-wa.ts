@@ -29,6 +29,8 @@ const getWebAnimationsInfo = (characterInfo: CharacterInfo, options: AnimationOp
     return { dashKeyframes, widthKeyframes, keyframeOptions };
 };
 
+export const FORMAT_SVG_WA = "svg-wa";
+
 export const animateStrokesSvgWa: SvgAnimator = (characterInfo, options) => {
     const { svg, strokesComponents } = animateStrokesSvgBase(characterInfo, options);
 

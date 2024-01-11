@@ -2,8 +2,13 @@ import type { CharacterLoader } from "./types";
 import type { StrokeInfo } from "../characters/types";
 import { getPathLength } from "../svg/path";
 
+export const SOURCE_JA = "ja";
+
 export const jaLoad: CharacterLoader = async (character) => {
-    const characterCode = character.codePointAt(0)?.toString(16).padStart(5, "0");
+    const characterCode = character
+        .codePointAt(0)
+        ?.toString(16)
+        .padStart(5, "0");
     if (typeof characterCode === "undefined") {
         throw new Error("characterCode is undefined!");
     }
@@ -47,7 +52,7 @@ export const jaLoad: CharacterLoader = async (character) => {
     }
     return {
         character,
-        source: "ja",
+        source: SOURCE_JA,
         strokeWidth,
         strokes,
         transform: null,

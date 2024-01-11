@@ -1,5 +1,15 @@
 import type { CharacterInfo } from "../characters/types";
 import type { Line } from "../geometry/types";
+import { FORMAT_CANVAS_2D } from "./canvas-2d";
+import { FORMAT_SVG_CSS } from "./svg-css";
+import { FORMAT_SVG_SMIL } from "./svg-smil";
+import { FORMAT_SVG_WA } from "./svg-wa";
+
+export type CanvasFormat = typeof FORMAT_CANVAS_2D;
+
+export type SvgFormat = typeof FORMAT_SVG_CSS | typeof FORMAT_SVG_SMIL | typeof FORMAT_SVG_WA;
+
+export type StrokesFormat = CanvasFormat | SvgFormat;
 
 export interface CanvasAnimator {
     (characterInfo: CharacterInfo, options: AnimationOptions): HTMLCanvasElement;
@@ -11,6 +21,12 @@ export interface SvgAnimator {
 
 export interface StrokesAnimator {
     (characterInfo: CharacterInfo, options: AnimationOptions): Element;
+}
+
+export interface StrokesAnimatorFactory {
+    (format: CanvasFormat): CanvasAnimator;
+    (format: SvgFormat): SvgAnimator;
+    (format: StrokesFormat): StrokesAnimator;
 }
 
 export interface AnimationOptions {

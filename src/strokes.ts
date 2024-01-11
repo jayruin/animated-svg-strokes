@@ -1,35 +1,12 @@
-import type { CanvasAnimator, SvgAnimator, StrokesAnimator, AnimationOptions } from "./animate/types";
-import type { CharacterLoader } from "./load/types";
-import { animateStrokesCanvas2d } from "./animate/canvas-2d";
-import { animateStrokesSvgCss } from "./animate/svg-css";
-import { animateStrokesSvgSmil } from "./animate/svg-smil";
-import { animateStrokesSvgWa } from "./animate/svg-wa";
+import type { AnimationOptions, StrokesFormat, CanvasFormat, SvgFormat } from "./animate/types";
+import type { StrokesSource } from "./load/types";
+import { getAnimator } from "./animate/factory";
 import { validateOptions } from "./animate/validate-options";
 import { validateCharacter } from "./characters/validate-character";
-import { zhLoad } from "./load/zh";
-import { jaLoad } from "./load/ja";
+import { getLoader } from "./load/factory";
 
-const SOURCE_JA = "ja";
-const SOURCE_ZH = "zh";
-
-const FORMAT_SVG_SMIL = "svg-smil";
-const FORMAT_SVG_CSS = "svg-css";
-const FORMAT_SVG_WA = "svg-wa";
-const FORMAT_CANVAS_2D = "canvas-2d";
-
-type StrokesSource = typeof SOURCE_JA | typeof SOURCE_ZH;
-
-type CanvasFormat = typeof FORMAT_CANVAS_2D;
-
-type SvgFormat = typeof FORMAT_SVG_CSS | typeof FORMAT_SVG_SMIL | typeof FORMAT_SVG_WA;
-
-type StrokesFormat = CanvasFormat | SvgFormat;
-
-interface StrokesAnimatorFactory {
-    (format: CanvasFormat): CanvasAnimator;
-    (format: SvgFormat): SvgAnimator;
-    (format: StrokesFormat): StrokesAnimator;
-}
+export { getFormats } from "./animate/factory";
+export { getSources } from "./load/factory";
 
 interface CanvasRenderer {
     (character: string): Promise<HTMLCanvasElement>;
@@ -67,35 +44,6 @@ export const getFullOptions = (partialOptions?: Partial<AnimationOptions>): Anim
     return options;
 };
 
-const getLoader = (source: StrokesSource): CharacterLoader => {
-    switch (source) {
-        case SOURCE_JA:
-            return jaLoad;
-        case SOURCE_ZH:
-            return zhLoad;
-        default:
-            throw new Error("Unsupported source!");
-    }
-};
-
-// Remove any return types when typescript supports overloading for arrow functions
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const getAnimator: StrokesAnimatorFactory = (format: StrokesFormat): any => {
-    switch (format) {
-        case FORMAT_SVG_SMIL:
-            return animateStrokesSvgSmil;
-        case FORMAT_SVG_CSS:
-            return animateStrokesSvgCss;
-        case FORMAT_SVG_WA:
-            return animateStrokesSvgWa;
-        case FORMAT_CANVAS_2D:
-            return animateStrokesCanvas2d;
-        default:
-            throw new Error("Unsupported format!");
-    }
-};
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const strokes: StrokesRendererFactory = (source: StrokesSource, format: StrokesFormat, partialOptions?: Partial<AnimationOptions>): any => {
     const options = getFullOptions(partialOptions);
@@ -108,7 +56,3 @@ export const strokes: StrokesRendererFactory = (source: StrokesSource, format: S
     };
     return render;
 };
-
-export const getSources = (): ReadonlySet<StrokesSource> => Object.freeze(new Set<StrokesSource>([SOURCE_JA, SOURCE_ZH]));
-
-export const getFormats = (): ReadonlySet<StrokesFormat> => Object.freeze(new Set<StrokesFormat>([FORMAT_CANVAS_2D, FORMAT_SVG_CSS, FORMAT_SVG_SMIL, FORMAT_SVG_WA]));

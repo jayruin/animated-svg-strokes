@@ -9,6 +9,8 @@ interface HanziWriterData {
 
 const isDataValid = (data: unknown): data is HanziWriterData => typeof data === "object" && data !== null && "strokes" in data && "medians" in data;
 
+export const SOURCE_ZH = "zh";
+
 export const zhLoad: CharacterLoader = async (character) => {
     const url = `https://cdn.jsdelivr.net/npm/hanzi-writer-data/${character}.json`;
     const response = await fetch(url, { cache: "no-store" });
@@ -27,7 +29,7 @@ export const zhLoad: CharacterLoader = async (character) => {
     }
     return {
         character,
-        source: "zh",
+        source: SOURCE_ZH,
         strokeWidth: 128,
         strokes,
         transform: "scale(1, -1) translate(0, -900)",

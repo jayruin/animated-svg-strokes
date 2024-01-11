@@ -74,6 +74,8 @@ const animateStrokeWidth = (characterInfo: CharacterInfo, options: AnimationOpti
     return animate;
 };
 
+export const FORMAT_SVG_SMIL = "svg-smil";
+
 export const animateStrokesSvgSmil: SvgAnimator = (characterInfo, options) => {
     const { svg, strokesComponents } = animateStrokesSvgBase(characterInfo, options);
 
