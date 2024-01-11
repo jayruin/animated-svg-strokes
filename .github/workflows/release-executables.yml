@@ -7,8 +7,6 @@ on:
       - "**.ts"
       - "**.json"
       - "**.yml"
-  schedule:
-    - cron: "10 10 * * *"
   workflow_dispatch:
 env:
   TAG: "latest"
@@ -17,14 +15,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
       - uses: actions/setup-node@v4
         with:
           node-version: "lts/*"
-      - run: npm i
-      - run: npm run types
-      - run: npm run lint
-      - run: npm run style
-      - run: npm run build
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run types
+      - run: pnpm run lint
+      - run: pnpm run style
+      - run: pnpm run build
       - run: gh release delete ${{ env.TAG }} --yes --cleanup-tag || true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -32,7 +34,7 @@ jobs:
       - run: gh release create ${{ env.TAG }} ./dist/strokes.js --title ${{ env.TAG }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: npm run reset
+      - run: pnpm run reset
       - run: git config user.name github-actions[bot]
       - run: git config user.email github-actions[bot]@users.noreply.github.com
       - run: git switch --orphan dist

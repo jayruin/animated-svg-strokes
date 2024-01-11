@@ -1,12 +1,12 @@
 {
   "type": "module",
   "devDependencies": {
-    "typescript": "latest",
-    "parcel": "latest",
-    "eslint": "latest",
-    "@typescript-eslint/parser": "latest",
-    "@typescript-eslint/eslint-plugin": "latest",
-    "@stylistic/eslint-plugin": "latest"
+    "@stylistic/eslint-plugin": "1.5.3",
+    "@typescript-eslint/eslint-plugin": "6.18.1",
+    "@typescript-eslint/parser": "6.18.1",
+    "eslint": "8.56.0",
+    "parcel": "2.11.0",
+    "typescript": "5.3.3"
   },
   "scripts": {
     "types": "tsc --noEmit",
@@ -14,7 +14,8 @@
     "style": "eslint src --no-eslintrc --config .eslintrc.styles.json",
     "format": "eslint src --no-eslintrc --config .eslintrc.styles.json --fix",
     "build": "parcel build",
-    "reset": "git clean -fdx"
+    "reset": "git clean -fdx",
+    "update": "node scripts/rm.js node_modules pnpm-lock.yaml && pnpm update --latest"
   },
   "targets": {
     "strokes": {
