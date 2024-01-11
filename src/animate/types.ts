@@ -1,9 +1,9 @@
+import type { FORMAT_CANVAS_2D } from "./canvas-2d";
+import type { FORMAT_SVG_CSS } from "./svg-css";
+import type { FORMAT_SVG_SMIL } from "./svg-smil";
+import type { FORMAT_SVG_WA } from "./svg-wa";
 import type { CharacterInfo } from "../characters/types";
 import type { Line } from "../geometry/types";
-import { FORMAT_CANVAS_2D } from "./canvas-2d";
-import { FORMAT_SVG_CSS } from "./svg-css";
-import { FORMAT_SVG_SMIL } from "./svg-smil";
-import { FORMAT_SVG_WA } from "./svg-wa";
 
 export type CanvasFormat = typeof FORMAT_CANVAS_2D;
 
