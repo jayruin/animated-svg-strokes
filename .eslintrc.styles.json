@@ -47,7 +47,15 @@
                 }],
                 "@stylistic/multiline-ternary": ["error", "always-multiline"],
                 "@stylistic/new-parens": ["error", "always"],
-                "@stylistic/no-confusing-arrow": ["error",  { "allowParens": false, "onlyOneSimpleParam": false }]
+                "@stylistic/no-confusing-arrow": ["error",  { "allowParens": false, "onlyOneSimpleParam": false }],
+                "@stylistic/no-extra-parens": ["error", "all", { "nestedBinaryExpressions": false }],
+                "@stylistic/no-extra-semi": "error",
+                "@stylistic/no-floating-decimal": "error",
+                "@stylistic/no-mixed-operators": "error",
+                "@stylistic/no-mixed-spaces-and-tabs": "error",
+                "@stylistic/no-multi-spaces": ["error", { "ignoreEOLComments": false, "exceptions": {}, "includeTabs": true }],
+                "@stylistic/no-multiple-empty-lines": ["error", { "max": 1, "maxBOF": 0, "maxEOF": 1 }],
+                "@stylistic/no-tabs": ["error", { "allowIndentationTabs": false }]
             }
         }
     ]
