@@ -8,4 +8,4 @@ export const getTransformMatrix = (transform: string): DOMMatrixReadOnly => {
         throw new Error("Cannot get svg transform.");
     }
     return svgTransform.matrix;
-}
+};

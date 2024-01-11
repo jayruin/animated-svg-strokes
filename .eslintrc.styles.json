@@ -71,7 +71,26 @@
                 "@stylistic/padded-blocks": ["error", "never"],
                 "@stylistic/padding-line-between-statements": "off",
                 "@stylistic/quote-props": ["error", "as-needed", { "keywords": true, "unnecessary": true, "numbers": true }],
-                "@stylistic/quotes": ["error", "double"]
+                "@stylistic/quotes": ["error", "double"],
+                "@stylistic/rest-spread-spacing": ["error", "never"],
+                "@stylistic/semi": ["error", "always"],
+                "@stylistic/semi-spacing": ["error", { "before": false, "after": true }],
+                "@stylistic/semi-style": ["error", "last"],
+                "@stylistic/space-before-blocks": ["error", "always"],
+                "@stylistic/space-before-function-paren": ["error", { "anonymous": "always", "named": "never", "asyncArrow": "always" }],
+                "@stylistic/space-in-parens": ["error", "never"],
+                "@stylistic/space-infix-ops": ["error", { "int32Hint": false }],
+                "@stylistic/space-unary-ops": ["error", { "words": true, "nonwords": false }],
+                "@stylistic/spaced-comment": ["error", "always"],
+                "@stylistic/switch-colon-spacing": ["error", { "before": false, "after": true }],
+                "@stylistic/template-curly-spacing": ["error", "never"],
+                "@stylistic/template-tag-spacing": ["error", "never"],
+                "@stylistic/type-annotation-spacing": ["error", { "before": false, "after": true }],
+                "@stylistic/type-generic-spacing": "error",
+                "@stylistic/type-named-tuple-spacing": "error",
+                "@stylistic/wrap-iife": ["error", "inside", { "functionPrototypeMethods": true }],
+                "@stylistic/wrap-regex": "error",
+                "@stylistic/yield-star-spacing": ["error", { "before": false, "after": true }]
             }
         }
     ]
