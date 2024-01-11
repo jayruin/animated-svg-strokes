@@ -3,6 +3,8 @@ import type { CharacterInfo } from "../characters/types";
 import { animateStrokesSvgBase } from "./svg-base";
 import { svgNS } from "../svg/constants";
 
+export const FORMAT_SVG_SMIL = "svg-smil";
+
 const animateStrokeDasharray = (characterInfo: CharacterInfo, options: AnimationOptions, strokeNumber: number): SVGAnimateElement => {
     const { strokes } = characterInfo;
     const { pauseRatio, totalStrokeDuration } = options;
@@ -73,8 +75,6 @@ const animateStrokeWidth = (characterInfo: CharacterInfo, options: AnimationOpti
 
     return animate;
 };
-
-export const FORMAT_SVG_SMIL = "svg-smil";
 
 export const animateStrokesSvgSmil: SvgAnimator = (characterInfo, options) => {
     const { svg, strokesComponents } = animateStrokesSvgBase(characterInfo, options);

@@ -3,6 +3,8 @@ import type { CharacterInfo } from "../characters/types";
 import { animateStrokesSvgBase } from "./svg-base";
 import { svgNS } from "../svg/constants";
 
+export const FORMAT_SVG_CSS = "svg-css";
+
 const createStyle = (characterInfo: CharacterInfo, strokePathIds: string[], options: AnimationOptions): SVGStyleElement => {
     const { strokeWidth, strokes } = characterInfo;
     const { pauseRatio, totalStrokeDuration } = options;
@@ -47,8 +49,6 @@ const createStyle = (characterInfo: CharacterInfo, strokePathIds: string[], opti
 
     return style;
 };
-
-export const FORMAT_SVG_CSS = "svg-css";
 
 export const animateStrokesSvgCss: SvgAnimator = (characterInfo, options) => {
     const { svg, group, strokesComponents } = animateStrokesSvgBase(characterInfo, options);

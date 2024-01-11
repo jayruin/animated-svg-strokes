@@ -2,14 +2,14 @@ import type { CharacterLoader } from "./types";
 import type { StrokeInfo } from "../characters/types";
 import { getPathLength } from "../svg/path";
 
+export const SOURCE_ZH = "zh";
+
 interface HanziWriterData {
     strokes: string[];
     medians: number[][][];
 }
 
 const isDataValid = (data: unknown): data is HanziWriterData => typeof data === "object" && data !== null && "strokes" in data && "medians" in data;
-
-export const SOURCE_ZH = "zh";
 
 export const zhLoad: CharacterLoader = async (character) => {
     const url = `https://cdn.jsdelivr.net/npm/hanzi-writer-data/${character}.json`;

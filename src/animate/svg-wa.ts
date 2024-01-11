@@ -2,6 +2,8 @@ import type { AnimationOptions, SvgAnimator, WebAnimationsInfo } from "./types";
 import type { CharacterInfo } from "../characters/types";
 import { animateStrokesSvgBase } from "./svg-base";
 
+export const FORMAT_SVG_WA = "svg-wa";
+
 const getWebAnimationsInfo = (characterInfo: CharacterInfo, options: AnimationOptions, strokeNumber: number): WebAnimationsInfo => {
     const dashKeyframes: Keyframe[] = [];
     const widthKeyframes: Keyframe[] = [];
@@ -28,8 +30,6 @@ const getWebAnimationsInfo = (characterInfo: CharacterInfo, options: AnimationOp
     const keyframeOptions = { duration: totalDuration * 1000, iterations: Infinity };
     return { dashKeyframes, widthKeyframes, keyframeOptions };
 };
-
-export const FORMAT_SVG_WA = "svg-wa";
 
 export const animateStrokesSvgWa: SvgAnimator = (characterInfo, options) => {
     const { svg, strokesComponents } = animateStrokesSvgBase(characterInfo, options);
