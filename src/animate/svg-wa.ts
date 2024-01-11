@@ -1,17 +1,19 @@
 import type { AnimationOptions, SvgAnimator, WebAnimationsInfo } from "./types";
-import type { CharacterInfo } from "../characters/types";
+import type { Character } from "../characters/types";
 import { animateStrokesSvgBase } from "./svg-base";
+import { getPathLength } from "../svg/path";
 
 export const FORMAT_SVG_WA = "svg-wa";
 
-const getWebAnimationsInfo = (characterInfo: CharacterInfo, options: AnimationOptions, strokeNumber: number): WebAnimationsInfo => {
+const getWebAnimationsInfo = (character: Character, options: AnimationOptions, strokeNumber: number): WebAnimationsInfo => {
     const dashKeyframes: Keyframe[] = [];
     const widthKeyframes: Keyframe[] = [];
-    const { strokeWidth, strokes } = characterInfo;
+    const { strokes } = character;
     const { pauseRatio, totalStrokeDuration } = options;
     const numberOfStrokes = strokes.length;
     const totalDuration = totalStrokeDuration * numberOfStrokes;
-    const { strokePathLength } = strokes[strokeNumber];
+    const { strokePath, strokeWidth } = strokes[strokeNumber];
+    const strokePathLength = getPathLength(strokePath);
     const startOffset = strokeNumber / numberOfStrokes;
     const endOffset = (strokeNumber + (1 - pauseRatio)) / numberOfStrokes;
     const inactiveTimeBefore = strokeNumber * totalStrokeDuration;
@@ -31,13 +33,13 @@ const getWebAnimationsInfo = (characterInfo: CharacterInfo, options: AnimationOp
     return { dashKeyframes, widthKeyframes, keyframeOptions };
 };
 
-export const animateStrokesSvgWa: SvgAnimator = (characterInfo, options) => {
-    const { svg, strokesComponents } = animateStrokesSvgBase(characterInfo, options);
+export const animateStrokesSvgWa: SvgAnimator = (character, options) => {
+    const { svg, strokesComponents } = animateStrokesSvgBase(character, options);
 
     const animations: Animation[] = [];
-    for (let strokeNumber = 0; strokeNumber < characterInfo.strokes.length; strokeNumber += 1) {
+    for (let strokeNumber = 0; strokeNumber < character.strokes.length; strokeNumber += 1) {
         const strokeComponents = strokesComponents[strokeNumber];
-        const { dashKeyframes, widthKeyframes, keyframeOptions } = getWebAnimationsInfo(characterInfo, options, strokeNumber);
+        const { dashKeyframes, widthKeyframes, keyframeOptions } = getWebAnimationsInfo(character, options, strokeNumber);
         const dashAnimation = strokeComponents.strokePath.animate(dashKeyframes, keyframeOptions);
         animations.push(dashAnimation);
         const strokeAnimation = strokeComponents.strokePath.animate(widthKeyframes, keyframeOptions);

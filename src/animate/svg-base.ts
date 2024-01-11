@@ -1,5 +1,5 @@
 import type { AnimationOptions, SvgComponents, SvgStrokeComponents } from "./types";
-import type { CharacterInfo } from "../characters/types";
+import type { Character } from "../characters/types";
 import type { Line } from "../geometry/types";
 import type { ViewBox } from "../svg/types";
 import { svgNS } from "../svg/constants";
@@ -51,42 +51,42 @@ const drawGrid = (svg: SVGSVGElement, options: AnimationOptions, viewBox: ViewBo
     }
 };
 
-export const animateStrokesSvgBase = (characterInfo: CharacterInfo, options: AnimationOptions): SvgComponents => {
+export const animateStrokesSvgBase = (character: Character, options: AnimationOptions): SvgComponents => {
     const svg = document.createElementNS(svgNS, "svg");
     svg.setAttribute("xmlns", svgNS);
-    svg.setAttributeNS(null, "viewBox", characterInfo.viewBox);
+    svg.setAttributeNS(null, "viewBox", character.viewBox);
 
-    const viewBox = parseViewBox(characterInfo.viewBox);
+    const viewBox = parseViewBox(character.viewBox);
 
     fillBackground(svg, options, viewBox);
 
     drawGrid(svg, options, viewBox);
 
     const group = document.createElementNS(svgNS, "g");
-    if (characterInfo.transform !== null) {
-        group.setAttributeNS(null, "transform", characterInfo.transform);
+    if (character.transform !== null) {
+        group.setAttributeNS(null, "transform", character.transform);
     }
     svg.append(group);
 
     const strokesComponents: SvgStrokeComponents[] = [];
 
-    for (let strokeNumber = 0; strokeNumber < characterInfo.strokes.length; strokeNumber += 1) {
-        const strokeInfo = characterInfo.strokes[strokeNumber];
+    for (let strokeNumber = 0; strokeNumber < character.strokes.length; strokeNumber += 1) {
+        const stroke = character.strokes[strokeNumber];
 
         const strokePath = document.createElementNS(svgNS, "path");
-        strokePath.setAttributeNS(null, "d", strokeInfo.strokePath);
+        strokePath.setAttributeNS(null, "d", stroke.strokePath);
 
         let clipPathElement = null;
         let clipPathPathElement = null;
-        if (strokeInfo.clipPath !== null) {
-            const clipPathId = `${characterInfo.character}-${characterInfo.source}-clipPath-${strokeNumber}`;
+        if (stroke.clipPath !== null) {
+            const clipPathId = `clipPath-${character.codePoint}-${character.source}-${strokeNumber}`;
             clipPathElement = document.createElementNS(svgNS, "clipPath");
             clipPathElement.setAttributeNS(null, "id", clipPathId);
             group.append(clipPathElement);
             strokePath.setAttributeNS(null, "clip-path", `url(#${clipPathId})`);
 
             clipPathPathElement = document.createElementNS(svgNS, "path");
-            clipPathPathElement.setAttributeNS(null, "d", strokeInfo.clipPath);
+            clipPathPathElement.setAttributeNS(null, "d", stroke.clipPath);
             clipPathElement.append(clipPathPathElement);
         }
 

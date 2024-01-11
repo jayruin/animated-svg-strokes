@@ -2,7 +2,7 @@ import type { AnimationOptions, StrokesFormat, CanvasFormat, SvgFormat } from ".
 import type { StrokesSource } from "./load/types";
 import { getAnimator } from "./animate/factory";
 import { validateOptions } from "./animate/validate-options";
-import { validateCharacter } from "./characters/validate-character";
+import { getCodePoint } from "./characters/code-point";
 import { getLoader } from "./load/factory";
 
 export { getFormats } from "./animate/factory";
@@ -49,10 +49,10 @@ export const strokes: StrokesRendererFactory = (source: StrokesSource, format: S
     const options = getFullOptions(partialOptions);
     const load = getLoader(source);
     const animate = getAnimator(format);
-    const render = async (character: string): Promise<Element> => {
-        validateCharacter(character);
-        const characterInfo = await load(character);
-        return animate(characterInfo, options);
+    const render = async (characterString: string): Promise<Element> => {
+        const characterCodePoint = getCodePoint(characterString);
+        const character = await load(characterCodePoint);
+        return animate(character, options);
     };
     return render;
 };

@@ -23,6 +23,6 @@ export const getAnimator: StrokesAnimatorFactory = (format): any => {
         case FORMAT_SVG_WA:
             return animateStrokesSvgWa;
         default:
-            throw new Error("Unsupported format!");
+            throw new Error("Unsupported format.");
     }
 };

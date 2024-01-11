@@ -1,14 +1,16 @@
 import type { AnimationOptions, SvgAnimator } from "./types";
-import type { CharacterInfo } from "../characters/types";
+import type { Character } from "../characters/types";
 import { animateStrokesSvgBase } from "./svg-base";
 import { svgNS } from "../svg/constants";
+import { getPathLength } from "../svg/path";
 
 export const FORMAT_SVG_SMIL = "svg-smil";
 
-const animateStrokeDasharray = (characterInfo: CharacterInfo, options: AnimationOptions, strokeNumber: number): SVGAnimateElement => {
-    const { strokes } = characterInfo;
+const animateStrokeDasharray = (character: Character, options: AnimationOptions, strokeNumber: number): SVGAnimateElement => {
+    const { strokes } = character;
     const { pauseRatio, totalStrokeDuration } = options;
-    const { strokePathLength } = strokes[strokeNumber];
+    const { strokePath } = strokes[strokeNumber];
+    const strokePathLength = getPathLength(strokePath);
     const numberOfStrokes = strokes.length;
 
     const totalDuration = totalStrokeDuration * numberOfStrokes;
@@ -41,10 +43,11 @@ const animateStrokeDasharray = (characterInfo: CharacterInfo, options: Animation
     return animate;
 };
 
-const animateStrokeWidth = (characterInfo: CharacterInfo, options: AnimationOptions, strokeNumber: number): SVGAnimateElement => {
-    const { strokeWidth, strokes } = characterInfo;
+const animateStrokeWidth = (character: Character, options: AnimationOptions, strokeNumber: number): SVGAnimateElement => {
+    const { strokes } = character;
     const { pauseRatio, totalStrokeDuration } = options;
     const numberOfStrokes = strokes.length;
+    const { strokeWidth } = strokes[strokeNumber];
 
     const totalDuration = totalStrokeDuration * numberOfStrokes;
     const start = strokeNumber / numberOfStrokes;
@@ -76,14 +79,14 @@ const animateStrokeWidth = (characterInfo: CharacterInfo, options: AnimationOpti
     return animate;
 };
 
-export const animateStrokesSvgSmil: SvgAnimator = (characterInfo, options) => {
-    const { svg, strokesComponents } = animateStrokesSvgBase(characterInfo, options);
+export const animateStrokesSvgSmil: SvgAnimator = (character, options) => {
+    const { svg, strokesComponents } = animateStrokesSvgBase(character, options);
 
-    for (let strokeNumber = 0; strokeNumber < characterInfo.strokes.length; strokeNumber += 1) {
+    for (let strokeNumber = 0; strokeNumber < character.strokes.length; strokeNumber += 1) {
         const strokeComponents = strokesComponents[strokeNumber];
 
-        strokeComponents.strokePath.append(animateStrokeDasharray(characterInfo, options, strokeNumber));
-        strokeComponents.strokePath.append(animateStrokeWidth(characterInfo, options, strokeNumber));
+        strokeComponents.strokePath.append(animateStrokeDasharray(character, options, strokeNumber));
+        strokeComponents.strokePath.append(animateStrokeWidth(character, options, strokeNumber));
     }
 
     if (options.interactive) {

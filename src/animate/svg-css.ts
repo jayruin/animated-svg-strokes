@@ -1,19 +1,21 @@
 import type { AnimationOptions, SvgAnimator } from "./types";
-import type { CharacterInfo } from "../characters/types";
+import type { Character } from "../characters/types";
 import { animateStrokesSvgBase } from "./svg-base";
 import { svgNS } from "../svg/constants";
+import { getPathLength } from "../svg/path";
 
 export const FORMAT_SVG_CSS = "svg-css";
 
-const createStyle = (characterInfo: CharacterInfo, strokePathIds: string[], options: AnimationOptions): SVGStyleElement => {
-    const { strokeWidth, strokes } = characterInfo;
+const createStyle = (character: Character, strokePathIds: string[], options: AnimationOptions): SVGStyleElement => {
+    const { strokes } = character;
     const { pauseRatio, totalStrokeDuration } = options;
     const numberOfStrokes = Math.min(strokes.length, strokePathIds.length);
     const style = document.createElementNS(svgNS, "style");
     const parts: string[] = [];
     const totalDuration = totalStrokeDuration * numberOfStrokes;
     for (let strokeNum = 0; strokeNum < numberOfStrokes; strokeNum += 1) {
-        const { strokePathLength } = strokes[strokeNum];
+        const { strokePath, strokeWidth } = strokes[strokeNum];
+        const strokePathLength = getPathLength(strokePath);
         const strokePathId = strokePathIds[strokeNum];
         const startPercent = (strokeNum / numberOfStrokes) * 100;
         const endPercent = ((strokeNum + (1 - pauseRatio)) / numberOfStrokes) * 100;
@@ -50,21 +52,21 @@ const createStyle = (characterInfo: CharacterInfo, strokePathIds: string[], opti
     return style;
 };
 
-export const animateStrokesSvgCss: SvgAnimator = (characterInfo, options) => {
-    const { svg, group, strokesComponents } = animateStrokesSvgBase(characterInfo, options);
+export const animateStrokesSvgCss: SvgAnimator = (character, options) => {
+    const { svg, group, strokesComponents } = animateStrokesSvgBase(character, options);
 
     const strokePathIds: string[] = [];
     const animatedElements: SVGElement[] = [];
-    for (let strokeNumber = 0; strokeNumber < characterInfo.strokes.length; strokeNumber += 1) {
+    for (let strokeNumber = 0; strokeNumber < character.strokes.length; strokeNumber += 1) {
         const strokeComponents = strokesComponents[strokeNumber];
 
-        const strokePathId = `${characterInfo.character}-${characterInfo.source}-strokePath-${strokeNumber}`;
+        const strokePathId = `strokePath-${character.codePoint}-${character.source}-${strokeNumber}`;
         strokePathIds.push(strokePathId);
         strokeComponents.strokePath.setAttributeNS(null, "id", strokePathId);
         animatedElements.push(strokeComponents.strokePath);
     }
 
-    const style = createStyle(characterInfo, strokePathIds, options);
+    const style = createStyle(character, strokePathIds, options);
     group.append(style);
 
     if (options.interactive) {

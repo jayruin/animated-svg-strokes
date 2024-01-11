@@ -14,6 +14,6 @@ export const getLoader: StrokesLoaderFactory = (source) => {
         case SOURCE_ZH:
             return zhLoad;
         default:
-            throw new Error("Unsupported source!");
+            throw new Error("Unsupported source.");
     }
 };

@@ -1,14 +1,13 @@
-export interface StrokeInfo {
+export interface Stroke {
     readonly clipPath: string | null;
     readonly strokePath: string;
-    readonly strokePathLength: number;
+    readonly strokeWidth: number;
 }
 
-export interface CharacterInfo {
-    readonly character: string;
+export interface Character {
+    readonly codePoint: number;
     readonly source: string;
-    readonly strokeWidth: number;
-    readonly strokes: readonly StrokeInfo[];
+    readonly strokes: readonly Stroke[];
     readonly transform: string | null;
     readonly viewBox: string;
 }

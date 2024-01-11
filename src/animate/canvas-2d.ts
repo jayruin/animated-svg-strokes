@@ -1,33 +1,18 @@
-import type { AnimationOptions, CanvasAnimator, CanvasContextAction, CanvasLineInfo, CanvasStrokeInfo } from "./types";
-import type { StrokeInfo } from "../characters/types";
-import { svgNS } from "../svg/constants";
+import type { AnimationOptions, CanvasAnimator, Canvas2dContextAction, Canvas2dLineInfo, Canvas2dStrokeInfo } from "./types";
+import { getPathLength } from "../svg/path";
+import { getTransformMatrix } from "../svg/transform";
 import { parseViewBox } from "../svg/view-box";
 
 export const FORMAT_CANVAS_2D = "canvas-2d";
 
-const convertStrokeInfo = (strokeInfo: StrokeInfo): CanvasStrokeInfo => {
-    const { clipPath, strokePath, strokePathLength } = strokeInfo;
-    return {
-        clipPath: clipPath === null ? null : new Path2D(clipPath),
-        strokePath: new Path2D(strokePath),
-        strokePathLength,
-    };
-};
-
-const getContextTransform = (transform: string): CanvasContextAction => {
-    const svgElement = document.createElementNS(svgNS, "svg");
-    svgElement.setAttributeNS(null, "transform", transform);
-    const svgTransform = svgElement.transform.baseVal.consolidate();
-    if (svgTransform === null) {
-        throw new Error("Could not get svg transform!");
-    }
-    const { a, b, c, d, e, f } = svgTransform.matrix;
+const getContextTransform = (transform: string): Canvas2dContextAction => {
+    const { a, b, c, d, e, f } = getTransformMatrix(transform);
     return (context: CanvasRenderingContext2D): void => {
         context.transform(a, b, c, d, e, f);
     };
 };
 
-const drawLine = (context: CanvasRenderingContext2D, lineInfo: CanvasLineInfo): void => {
+const drawLine = (context: CanvasRenderingContext2D, lineInfo: Canvas2dLineInfo): void => {
     context.save();
     context.lineWidth = lineInfo.width;
     context.strokeStyle = lineInfo.color;
@@ -74,17 +59,50 @@ const resetCanvas = (context: CanvasRenderingContext2D, options: AnimationOption
     drawGrid(context, options);
 };
 
-export const animateStrokesCanvas2d: CanvasAnimator = (characterInfo, options) => {
-    const { strokeWidth, strokes, transform, viewBox } = characterInfo;
+const drawStroke = (context: CanvasRenderingContext2D, canvasStrokeInfo: Canvas2dStrokeInfo, progress: number): void => {
+    context.save();
+    const { clipPath, strokePath, strokeWidth, strokePathLength, parsedViewBox, strokeColor, contextTransform } = canvasStrokeInfo;
+    context.scale(context.canvas.width / parsedViewBox.width, context.canvas.height / parsedViewBox.height);
+    if (contextTransform !== null) {
+        contextTransform(context);
+    }
+    context.fillStyle = "none";
+    context.strokeStyle = strokeColor;
+    context.lineCap = "round";
+    context.lineJoin = "round";
+    context.lineWidth = strokeWidth;
+    context.setLineDash([strokePathLength * progress, strokePathLength * (1 - progress)]);
+    if (clipPath !== null) {
+        context.clip(clipPath);
+    }
+    context.stroke(strokePath);
+    context.restore();
+};
+
+export const animateStrokesCanvas2d: CanvasAnimator = (character, options) => {
+    const { strokes, transform, viewBox } = character;
     const { strokeColor, pauseRatio, totalStrokeDuration } = options;
-    const canvasStrokeInfos = strokes.map((strokeInfo) => convertStrokeInfo(strokeInfo));
+    const parsedViewBox = parseViewBox(viewBox);
+    const contextTransform = transform === null ? null : getContextTransform(transform);
+    const canvasStrokeInfos: Canvas2dStrokeInfo[] = strokes.map((stroke) => {
+        const { clipPath, strokePath, strokeWidth } = stroke;
+        const strokePathLength = getPathLength(strokePath);
+        return {
+            clipPath: clipPath === null ? null : new Path2D(clipPath),
+            strokePath: new Path2D(strokePath),
+            strokeWidth,
+            strokePathLength,
+            parsedViewBox,
+            strokeColor,
+            contextTransform,
+        };
+    });
     const canvas = document.createElement("canvas");
-    const { width, height } = parseViewBox(viewBox);
-    canvas.width = width;
-    canvas.height = height;
-    const context = canvas.getContext("2d", { willReadFrequently: true });
+    canvas.width = parsedViewBox.width;
+    canvas.height = parsedViewBox.height;
+    const context = canvas.getContext("2d");
     if (context === null) {
-        throw new Error("Could not get context from canvas!");
+        throw new Error("Cannot get 2d context from canvas.");
     }
     let previousTimestamp: number | null = null;
     let elapsed = 0;
@@ -105,29 +123,14 @@ export const animateStrokesCanvas2d: CanvasAnimator = (characterInfo, options) =
         if (elapsed > totalDurationMs) {
             elapsed = 0;
         }
-        if (elapsed === 0) {
-            resetCanvas(context, options);
-        }
-        context.save();
+        resetCanvas(context, options);
         const strokeIndex = Math.trunc(elapsed / totalStrokeDurationMs);
+        canvasStrokeInfos.slice(0, strokeIndex)
+            .forEach((canvasStrokeInfo) => {
+                drawStroke(context, canvasStrokeInfo, 1);
+            });
         const progress = Math.min(1, (elapsed % totalStrokeDurationMs) / totalStrokeDurationMs / (1 - pauseRatio));
-        const { clipPath, strokePath, strokePathLength } = canvasStrokeInfos[strokeIndex];
-        context.scale(canvas.width / width, canvas.height / height);
-        if (transform !== null) {
-            const contextTransform = getContextTransform(transform);
-            contextTransform(context);
-        }
-        context.fillStyle = "none";
-        context.strokeStyle = strokeColor;
-        context.lineCap = "round";
-        context.lineJoin = "round";
-        context.lineWidth = strokeWidth;
-        context.setLineDash([strokePathLength * progress, strokePathLength * (1 - progress)]);
-        if (clipPath !== null) {
-            context.clip(clipPath);
-        }
-        context.stroke(strokePath);
-        context.restore();
+        drawStroke(context, canvasStrokeInfos[strokeIndex], progress);
         previousTimestamp = timestamp;
         window.requestAnimationFrame(draw);
     };

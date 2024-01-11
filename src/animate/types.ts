@@ -2,8 +2,9 @@ import type { FORMAT_CANVAS_2D } from "./canvas-2d";
 import type { FORMAT_SVG_CSS } from "./svg-css";
 import type { FORMAT_SVG_SMIL } from "./svg-smil";
 import type { FORMAT_SVG_WA } from "./svg-wa";
-import type { CharacterInfo } from "../characters/types";
+import type { Character } from "../characters/types";
 import type { Line } from "../geometry/types";
+import type { ViewBox } from "../svg/types";
 
 export type CanvasFormat = typeof FORMAT_CANVAS_2D;
 
@@ -12,15 +13,15 @@ export type SvgFormat = typeof FORMAT_SVG_CSS | typeof FORMAT_SVG_SMIL | typeof 
 export type StrokesFormat = CanvasFormat | SvgFormat;
 
 export interface CanvasAnimator {
-    (characterInfo: CharacterInfo, options: AnimationOptions): HTMLCanvasElement;
+    (character: Character, options: AnimationOptions): HTMLCanvasElement;
 }
 
 export interface SvgAnimator {
-    (characterInfo: CharacterInfo, options: AnimationOptions): SVGSVGElement;
+    (character: Character, options: AnimationOptions): SVGSVGElement;
 }
 
 export interface StrokesAnimator {
-    (characterInfo: CharacterInfo, options: AnimationOptions): Element;
+    (character: Character, options: AnimationOptions): Element;
 }
 
 export interface StrokesAnimatorFactory {
@@ -41,6 +42,26 @@ export interface AnimationOptions {
     readonly interactive: boolean;
 }
 
+export interface Canvas2dStrokeInfo {
+    readonly clipPath: Path2D | null;
+    readonly strokePath: Path2D;
+    readonly strokeWidth: number;
+    readonly strokePathLength: number;
+    readonly strokeColor: string;
+    readonly parsedViewBox: ViewBox;
+    readonly contextTransform: Canvas2dContextAction | null;
+}
+
+export interface Canvas2dLineInfo {
+    readonly line: Line;
+    readonly width: number;
+    readonly color: string;
+}
+
+export interface Canvas2dContextAction {
+    (context: CanvasRenderingContext2D): void;
+}
+
 export interface SvgComponents {
     readonly svg: SVGSVGElement;
     readonly group: SVGGElement;
@@ -57,20 +78,4 @@ export interface WebAnimationsInfo {
     readonly dashKeyframes: Keyframe[];
     readonly widthKeyframes: Keyframe[];
     readonly keyframeOptions: KeyframeAnimationOptions;
-}
-
-export interface CanvasStrokeInfo {
-    readonly clipPath: Path2D | null;
-    readonly strokePath: Path2D;
-    readonly strokePathLength: number;
-}
-
-export interface CanvasLineInfo {
-    readonly line: Line;
-    readonly width: number;
-    readonly color: string;
-}
-
-export interface CanvasContextAction {
-    (context: CanvasRenderingContext2D): void;
 }
