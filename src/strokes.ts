@@ -1,9 +1,11 @@
 import type { AnimationOptions, StrokesFormat, CanvasFormat, SvgFormat } from "./animate/types";
 import type { StrokesSource } from "./load/types";
 import { getAnimator } from "./animate/factory";
-import { validateOptions } from "./animate/validate-options";
+import { getFullOptions } from "./animate/options";
 import { getCodePoint } from "./characters/code-point";
 import { getLoader } from "./load/factory";
+
+export { getFullOptions };
 
 export { getFormats } from "./animate/factory";
 export { getSources } from "./load/factory";
@@ -25,25 +27,6 @@ interface StrokesRendererFactory {
     (source: StrokesSource, format: SvgFormat, partialOptions?: Partial<AnimationOptions>): SvgRenderer;
     (source: StrokesSource, format: StrokesFormat, partialOptions?: Partial<AnimationOptions>): StrokesRenderer;
 }
-
-const defaultOptions: AnimationOptions = {
-    includeGrid: true,
-    gridColor: "#dddddd",
-    gridRows: 2,
-    gridColumns: 2,
-    strokeColor: "#000000",
-    includeBackground: false,
-    backgroundColor: "#ffffff",
-    pauseRatio: 0.2,
-    totalStrokeDuration: 1,
-    interactive: true,
-};
-
-export const getFullOptions = (partialOptions?: Partial<AnimationOptions>): AnimationOptions => {
-    const options = { ...defaultOptions, ...partialOptions };
-    validateOptions(options);
-    return options;
-};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const strokes: StrokesRendererFactory = (source: StrokesSource, format: StrokesFormat, partialOptions?: Partial<AnimationOptions>): any => {

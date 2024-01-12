@@ -43,7 +43,7 @@ const validateTotalStrokeDuration = (totalStrokeDuration: number, errors: Error[
     if (!isFinite(totalStrokeDuration)) errors.push(new RangeError("totalStrokeDuration must be finite."));
 };
 
-export const validateOptions = (options: AnimationOptions): void => {
+const validateOptions = (options: AnimationOptions): void => {
     const { gridColor, gridRows, gridColumns, strokeColor, backgroundColor, pauseRatio, totalStrokeDuration } = options;
 
     const errors: Error[] = [];
@@ -57,4 +57,23 @@ export const validateOptions = (options: AnimationOptions): void => {
     validateTotalStrokeDuration(totalStrokeDuration, errors);
 
     if (errors.length > 0) throw new AggregateError(errors);
+};
+
+const defaultOptions: AnimationOptions = Object.freeze({
+    includeGrid: true,
+    gridColor: "#dddddd",
+    gridRows: 2,
+    gridColumns: 2,
+    strokeColor: "#000000",
+    includeBackground: false,
+    backgroundColor: "#ffffff",
+    pauseRatio: 0.2,
+    totalStrokeDuration: 1,
+    interactive: true,
+});
+
+export const getFullOptions = (partialOptions?: Partial<AnimationOptions>): AnimationOptions => {
+    const options = { ...defaultOptions, ...partialOptions };
+    validateOptions(options);
+    return options;
 };
