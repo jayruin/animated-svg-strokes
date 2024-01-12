@@ -6,13 +6,15 @@ import { getPathLength } from "../svg/path";
 
 export const FORMAT_SVG_CSS = "svg-css";
 
+const isKeyframesRule = (rule: unknown): rule is CSSKeyframesRule => rule instanceof CSSKeyframesRule;
+
 const createStyle = (character: Character, strokePathIds: string[], options: AnimationOptions): SVGStyleElement => {
     const { strokes } = character;
     const { pauseRatio, totalStrokeDuration } = options;
     const numberOfStrokes = Math.min(strokes.length, strokePathIds.length);
     const style = document.createElementNS(svgNS, "style");
-    const parts: string[] = [];
     const totalDuration = totalStrokeDuration * numberOfStrokes;
+    const styleSheet = new CSSStyleSheet();
     for (let strokeNum = 0; strokeNum < numberOfStrokes; strokeNum += 1) {
         const { strokePath, strokeWidth } = strokes[strokeNum];
         const strokePathLength = getPathLength(strokePath);
@@ -21,33 +23,36 @@ const createStyle = (character: Character, strokePathIds: string[], options: Ani
         const endPercent = ((strokeNum + (1 - pauseRatio)) / numberOfStrokes) * 100;
         const inactiveTimeBefore = strokeNum * totalStrokeDuration;
 
-        parts.push(`@keyframes dash-${strokePathId}`);
-        parts.push("{");
+        const keyframesDash = styleSheet.cssRules[styleSheet.insertRule(`@keyframes dash-${strokePathId} {}`, styleSheet.cssRules.length)];
+        if (!isKeyframesRule(keyframesDash)) {
+            throw new TypeError("keyframesDash must be a CSSKeyframesRule.");
+        }
         if (inactiveTimeBefore > 0) {
-            parts.push(`0% { stroke-dasharray: 0 ${strokePathLength}; }`);
+            keyframesDash.appendRule(`0% { stroke-dasharray: 0 ${strokePathLength}; }`);
         }
-        parts.push(`${startPercent}% { stroke-dasharray: 0 ${strokePathLength}; animation-timing-function: linear; }`);
+        keyframesDash.appendRule(`${startPercent}% { stroke-dasharray: 0 ${strokePathLength}; animation-timing-function: linear; }`);
         if (endPercent < 100) {
-            parts.push(`${endPercent}% { stroke-dasharray: ${strokePathLength} 0; }`);
+            keyframesDash.appendRule(`${endPercent}% { stroke-dasharray: ${strokePathLength} 0; }`);
         }
-        parts.push(`100% { stroke-dasharray: ${strokePathLength} 0; }`);
-        parts.push("}");
+        keyframesDash.appendRule(`100% { stroke-dasharray: ${strokePathLength} 0; }`);
 
-        parts.push(`@keyframes width-${strokePathId}`);
-        parts.push("{");
+        const keyframesWidth = styleSheet.cssRules[styleSheet.insertRule(`@keyframes width-${strokePathId} {}`, styleSheet.cssRules.length)];
+        if (!isKeyframesRule(keyframesWidth)) {
+            throw new TypeError("keyframesWidth must be a CSSKeyframesRule.");
+        }
         if (inactiveTimeBefore > 0) {
-            parts.push("0% { stroke-width: 0; animation-timing-function: steps(1, end); }");
+            keyframesWidth.appendRule("0% { stroke-width: 0; animation-timing-function: steps(1, end); }");
         }
-        parts.push(`${startPercent}% { stroke-width: ${strokeWidth}; }`);
+        keyframesWidth.appendRule(`${startPercent}% { stroke-width: ${strokeWidth}; }`);
         if (endPercent < 100) {
-            parts.push(`${endPercent}% { stroke-width: ${strokeWidth}; }`);
+            keyframesWidth.appendRule(`${endPercent}% { stroke-width: ${strokeWidth}; }`);
         }
-        parts.push(`100% { stroke-width: ${strokeWidth}; }`);
-        parts.push("}");
+        keyframesWidth.appendRule(`100% { stroke-width: ${strokeWidth}; }`);
 
-        parts.push(`#${strokePathId} { animation: dash-${strokePathId} ${totalDuration}s infinite, width-${strokePathId} ${totalDuration}s infinite; }`);
+        styleSheet.insertRule(`#${strokePathId} { animation: dash-${strokePathId} ${totalDuration}s infinite, width-${strokePathId} ${totalDuration}s infinite; }`, styleSheet.cssRules.length);
     }
-    style.append(parts.join(" "));
+
+    style.append(Array.from(styleSheet.cssRules).map((rule) => rule.cssText).join("\n"));
 
     return style;
 };
