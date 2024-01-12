@@ -60,8 +60,8 @@ const validateOptions = (options: AnimationOptions): void => {
 };
 
 const defaultOptions: AnimationOptions = Object.freeze({
-    includeGrid: true,
-    gridColor: "#dddddd",
+    includeGrid: false,
+    gridColor: "#c0c0c0",
     gridRows: 2,
     gridColumns: 2,
     strokeColor: "#000000",
