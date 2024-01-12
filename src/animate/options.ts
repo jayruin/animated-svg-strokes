@@ -73,7 +73,13 @@ const defaultOptions: AnimationOptions = Object.freeze({
 });
 
 export const getFullOptions = (partialOptions?: Partial<AnimationOptions>): AnimationOptions => {
-    const options = { ...defaultOptions, ...partialOptions };
+    const options = {
+        ...defaultOptions,
+        ...Object.fromEntries(
+            Object.entries(partialOptions ?? {})
+                .filter(([k, v]: [string, unknown]) => k in defaultOptions && typeof v !== "undefined" && v !== null)
+        ),
+    };
     validateOptions(options);
-    return options;
+    return Object.freeze(options);
 };
