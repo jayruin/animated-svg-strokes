@@ -6,8 +6,8 @@ import { svgNS } from "../svg/constants";
 import { parseViewBox } from "../svg/view-box";
 
 const fillBackground = (svg: SVGSVGElement, options: AnimationOptions, viewBox: ViewBox): void => {
-    const { backgroundColor } = options;
-    if (backgroundColor === null) {
+    const { includeBackground, backgroundColor } = options;
+    if (!includeBackground) {
         return;
     }
     const rect = document.createElementNS(svgNS, "rect");

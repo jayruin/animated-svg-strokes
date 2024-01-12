@@ -47,13 +47,13 @@ const drawGrid = (context: CanvasRenderingContext2D, options: AnimationOptions):
 };
 
 const resetCanvas = (context: CanvasRenderingContext2D, options: AnimationOptions): void => {
-    const { backgroundColor } = options;
+    const { includeBackground, backgroundColor } = options;
     context.save();
-    if (backgroundColor === null) {
-        context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-    } else {
+    if (includeBackground) {
         context.fillStyle = backgroundColor;
         context.fillRect(0, 0, context.canvas.width, context.canvas.height);
+    } else {
+        context.clearRect(0, 0, context.canvas.width, context.canvas.height);
     }
     context.restore();
     drawGrid(context, options);
