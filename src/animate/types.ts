@@ -37,6 +37,8 @@ export interface AnimationOptions {
     readonly gridColumns: number;
     readonly includeBackground: boolean;
     readonly backgroundColor: string;
+    readonly includePreview: boolean;
+    readonly previewColor: string;
     readonly strokeColor: string;
     readonly pauseRatio: number;
     readonly totalStrokeDuration: number;
@@ -61,6 +63,13 @@ export interface Canvas2dLineInfo {
 
 export interface Canvas2dContextAction {
     (context: CanvasRenderingContext2D): void;
+}
+
+export interface StrokesComponentsInfo {
+    readonly character: Character;
+    readonly strokeColor: string;
+    readonly uniqueId: string;
+    readonly isStatic: boolean;
 }
 
 export interface SvgComponents {

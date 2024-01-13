@@ -125,6 +125,11 @@ export const animateStrokesCanvas2d: CanvasAnimator = (character, options) => {
         }
         resetCanvas(context, options);
         const strokeIndex = Math.trunc(elapsed / totalStrokeDurationMs);
+        if (options.includePreview) {
+            canvasStrokeInfos.forEach((canvasStrokeInfo) => {
+                drawStroke(context, { ...canvasStrokeInfo, strokeColor: options.previewColor }, 1);
+            });
+        }
         canvasStrokeInfos.slice(0, strokeIndex)
             .forEach((canvasStrokeInfo) => {
                 drawStroke(context, canvasStrokeInfo, 1);
