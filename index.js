@@ -2,6 +2,12 @@
 // import { strokes } from "https://raw.githubusercontent.com/jayruin/strokes/dist/index.js";
 import { strokes, getSources, getFormats } from "https://cdn.jsdelivr.net/gh/jayruin/strokes@dist/strokes.js";
 
+let counter = 0;
+function getCounter() {
+    counter += 1;
+    return counter;
+}
+
 const sources = Array.from(getSources()).reverse();
 const formats = Array.from(getFormats()).reverse();
 
@@ -17,8 +23,6 @@ function clear(element) {
         element.removeChild(element.lastChild);
     }
 }
-
-const existingCharacters = new Map();
 
 const sourcesCheckboxes = document.getElementById("sources-checkboxes");
 const sourcesOutputs = document.getElementById("sources-outputs");
@@ -55,7 +59,6 @@ function addSource(source) {
 }
 
 for (const source of sources) {
-    existingCharacters.set(source, new Set());
     addSource(source);
 }
 
@@ -78,7 +81,7 @@ function renderCharacter(character, source, characterStrokes) {
     characterStrokes.classList.add("character-strokes");
     const characterStrokesContainer = document.createElement("div");
     characterStrokesContainer.draggable = true;
-    characterStrokesContainer.id = `character-strokes-${source}-${character}`;
+    characterStrokesContainer.id = `character-strokes-${source}-${character}-${getCounter()}`;
     characterStrokesContainer.classList.add("character-strokes-container");
     characterStrokesContainer.append(characterStrokes);
     characterStrokesContainer.addEventListener("click", event => {
@@ -89,8 +92,8 @@ function renderCharacter(character, source, characterStrokes) {
     characterStrokesContainer.addEventListener("dragover", event => {
         const draggedIdParts = draggedElement.id.split('-');
         const targetIdParts = event.target.id.split('-');
-        const draggedIdValid = draggedIdParts.length === 4 && draggedIdParts[0] === "character" && draggedIdParts[1] === "strokes";
-        const targetIdValid = targetIdParts.length === 4 && targetIdParts[0] === "character" && targetIdParts[1] === "strokes";
+        const draggedIdValid = draggedIdParts.length === 5 && draggedIdParts[0] === "character" && draggedIdParts[1] === "strokes";
+        const targetIdValid = targetIdParts.length === 5 && targetIdParts[0] === "character" && targetIdParts[1] === "strokes";
         const draggedCharacterSource = draggedIdParts[2];
         const draggedCharacter = draggedIdParts[3];
         const targetCharacterSource = targetIdParts[2];
@@ -108,14 +111,13 @@ function renderCharacter(character, source, characterStrokes) {
     });
     characterStrokesContainer.addEventListener("dragend", () => draggedElement = null);
     document.getElementById(`${source}-outputs`).prepend(characterStrokesContainer);
-    existingCharacters.get(source).add(character);
 }
 
 renderButton.addEventListener("click", async () => {
     const character = characterInput.value;
     const promises = [];
     for (const source of sources) {
-        const shouldRender = document.getElementById(`${source}-checked`).checked && !existingCharacters.get(source).has(character);
+        const shouldRender = document.getElementById(`${source}-checked`).checked;
         promises.push(shouldRender ? strokes(source, strokesFormat.value, animationOptions)(character) : Promise.resolve(null));
     }
     const outputs = await Promise.all(promises.values());
@@ -131,7 +133,6 @@ clearButton.addEventListener("click", () => {
     for (const source of sources) {
         if (document.getElementById(`${source}-checked`).checked) {
             clear(document.getElementById(`${source}-outputs`));
-            existingCharacters.get(source).clear();
         }
     }
 });
@@ -144,13 +145,10 @@ clearButton.addEventListener("drop", event => {
         return;
     }
     const idParts = draggedElement.id.split('-');
-    const idValid = idParts.length === 4 && idParts[0] === "character" && idParts[1] === "strokes";
+    const idValid = idParts.length === 5 && idParts[0] === "character" && idParts[1] === "strokes";
     if (!idValid) {
         return;
     }
-    const characterSource = idParts[2];
-    const character = idParts[3];
-    existingCharacters[characterSource].delete(character);
     draggedElement.remove();
 });
 
