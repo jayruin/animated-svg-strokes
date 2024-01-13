@@ -1,7 +1,8 @@
 import type { AnimationOptions, SvgAnimator, WebAnimationsInfo } from "./types";
 import type { Character } from "../characters/types";
-import { animateStrokesSvgBase } from "./svg-base";
+import { getStrokesSvgBase } from "./svg-base";
 import { getPathLength } from "../svg/path";
+import { getUniqueId } from "../unique/id";
 
 export const FORMAT_SVG_WA = "svg-wa";
 
@@ -34,7 +35,8 @@ const getWebAnimationsInfo = (character: Character, options: AnimationOptions, s
 };
 
 export const animateStrokesSvgWa: SvgAnimator = (character, options) => {
-    const { svg, strokesComponents } = animateStrokesSvgBase(character, options);
+    const uniqueId = getUniqueId();
+    const { svg, strokesComponents } = getStrokesSvgBase(character, options, uniqueId);
 
     const animations: Animation[] = [];
     for (let strokeNumber = 0; strokeNumber < character.strokes.length; strokeNumber += 1) {

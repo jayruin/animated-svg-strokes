@@ -51,7 +51,7 @@ const drawGrid = (svg: SVGSVGElement, options: AnimationOptions, viewBox: ViewBo
     }
 };
 
-export const animateStrokesSvgBase = (character: Character, options: AnimationOptions): SvgComponents => {
+export const getStrokesSvgBase = (character: Character, options: AnimationOptions, uniqueId: string): SvgComponents => {
     const svg = document.createElementNS(svgNS, "svg");
     svg.setAttribute("xmlns", svgNS);
     svg.setAttributeNS(null, "viewBox", character.viewBox);
@@ -79,7 +79,7 @@ export const animateStrokesSvgBase = (character: Character, options: AnimationOp
         let clipPathElement = null;
         let clipPathPathElement = null;
         if (stroke.clipPath !== null) {
-            const clipPathId = `clipPath-${character.codePoint}-${character.source}-${strokeNumber}`;
+            const clipPathId = `clipPath-${character.codePoint}-${character.source}-${strokeNumber}-${uniqueId}`;
             clipPathElement = document.createElementNS(svgNS, "clipPath");
             clipPathElement.setAttributeNS(null, "id", clipPathId);
             group.append(clipPathElement);

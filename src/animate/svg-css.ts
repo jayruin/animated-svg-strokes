@@ -1,8 +1,9 @@
 import type { AnimationOptions, SvgAnimator } from "./types";
 import type { Character } from "../characters/types";
-import { animateStrokesSvgBase } from "./svg-base";
+import { getStrokesSvgBase } from "./svg-base";
 import { svgNS } from "../svg/constants";
 import { getPathLength } from "../svg/path";
+import { getUniqueId } from "../unique/id";
 
 export const FORMAT_SVG_CSS = "svg-css";
 
@@ -58,14 +59,15 @@ const createStyle = (character: Character, strokePathIds: string[], options: Ani
 };
 
 export const animateStrokesSvgCss: SvgAnimator = (character, options) => {
-    const { svg, group, strokesComponents } = animateStrokesSvgBase(character, options);
+    const uniqueId = getUniqueId();
+    const { svg, group, strokesComponents } = getStrokesSvgBase(character, options, uniqueId);
 
     const strokePathIds: string[] = [];
     const animatedElements: SVGElement[] = [];
     for (let strokeNumber = 0; strokeNumber < character.strokes.length; strokeNumber += 1) {
         const strokeComponents = strokesComponents[strokeNumber];
 
-        const strokePathId = `strokePath-${character.codePoint}-${character.source}-${strokeNumber}`;
+        const strokePathId = `strokePath-${character.codePoint}-${character.source}-${strokeNumber}-${uniqueId}`;
         strokePathIds.push(strokePathId);
         strokeComponents.strokePath.setAttributeNS(null, "id", strokePathId);
         animatedElements.push(strokeComponents.strokePath);
