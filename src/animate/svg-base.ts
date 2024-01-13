@@ -1,4 +1,4 @@
-import type { AnimationOptions, StrokesComponentsInfo, SvgComponents, SvgStrokeComponents } from "./types";
+import type { AnimationOptions, SvgComponents, SvgStrokeComponents, SvgStrokesComponentsInfo } from "./types";
 import type { Character } from "../characters/types";
 import type { Line } from "../geometry/types";
 import type { ViewBox } from "../svg/types";
@@ -55,7 +55,7 @@ const createGrid = (options: AnimationOptions, viewBox: ViewBox): SVGGElement | 
     return group;
 };
 
-const getStrokesComponents = (strokesComponentsInfo: StrokesComponentsInfo): SvgStrokeComponents[] => {
+const getStrokesComponents = (strokesComponentsInfo: SvgStrokesComponentsInfo): SvgStrokeComponents[] => {
     const { character, strokeColor, uniqueId, isStatic } = strokesComponentsInfo;
     const strokesComponents: SvgStrokeComponents[] = [];
     for (let strokeNumber = 0; strokeNumber < character.strokes.length; strokeNumber += 1) {

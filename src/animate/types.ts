@@ -65,7 +65,7 @@ export interface Canvas2dContextAction {
     (context: CanvasRenderingContext2D): void;
 }
 
-export interface StrokesComponentsInfo {
+export interface SvgStrokesComponentsInfo {
     readonly character: Character;
     readonly strokeColor: string;
     readonly uniqueId: string;
