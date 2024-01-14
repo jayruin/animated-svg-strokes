@@ -9,6 +9,7 @@
         "eslint:all",
         "plugin:@typescript-eslint/all"
     ],
+    "noInlineConfig": true,
     "rules": {
         "curly": "off",
         "id-length": "off",

@@ -25,8 +25,6 @@ export interface StrokesAnimator {
 }
 
 export interface StrokesAnimatorFactory {
-    (format: CanvasFormat): CanvasAnimator;
-    (format: SvgFormat): SvgAnimator;
     (format: StrokesFormat): StrokesAnimator;
 }
 

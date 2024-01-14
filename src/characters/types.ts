@@ -4,10 +4,15 @@ export interface Stroke {
     readonly strokeWidth: number;
 }
 
-export interface Character {
+export interface CharacterIdentifiers {
     readonly codePoint: number;
     readonly source: string;
+}
+
+export interface CharacterSvgData {
     readonly strokes: readonly Stroke[];
     readonly transform: string | null;
     readonly viewBox: string;
 }
+
+export interface Character extends CharacterIdentifiers, CharacterSvgData {}

@@ -1,14 +1,18 @@
-import type { CharacterLoader } from "./types";
+import type { StrokesParser, StrokesRequester } from "./types";
 import type { Stroke } from "../characters/types";
 import { svgMediaType } from "../svg/constants";
 
 export const SOURCE_JA = "ja";
 
-export const jaLoad: CharacterLoader = async (codePoint) => {
+export const jaRequest: StrokesRequester = async (codePoint) => {
     const characterCode = codePoint.toString(16).padStart(5, "0");
     const characterFile = `${characterCode}.svg`;
     const url = `https://cdn.jsdelivr.net/gh/KanjiVG/kanjivg/kanji/${characterFile}`;
     const response = await fetch(url, { cache: "no-store" });
+    return response;
+};
+
+export const jaParse: StrokesParser = async (response) => {
     const data = await response.text();
     const xmlDocument: XMLDocument = new DOMParser().parseFromString(data, svgMediaType);
     const viewBox = xmlDocument.querySelector("svg")?.getAttribute("viewBox");
@@ -45,8 +49,6 @@ export const jaLoad: CharacterLoader = async (codePoint) => {
             strokeWidth,
         }));
     return {
-        codePoint,
-        source: SOURCE_JA,
         strokes,
         transform: null,
         viewBox,
