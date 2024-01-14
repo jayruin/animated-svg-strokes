@@ -1,4 +1,4 @@
-import type { StrokesAnimator, StrokesAnimatorFactory, StrokesFormat } from "./types";
+import type { StrokesAnimator, StrokesFormat } from "./types";
 import { FORMAT_CANVAS_2D, animateStrokesCanvas2d } from "./canvas-2d";
 import { FORMAT_SVG_CSS, animateStrokesSvgCss } from "./svg-css";
 import { FORMAT_SVG_SMIL, animateStrokesSvgSmil } from "./svg-smil";
@@ -13,7 +13,7 @@ const formats: ReadonlyMap<StrokesFormat, StrokesAnimator> = new Map<StrokesForm
 
 export const getFormats = (): ReadonlySet<StrokesFormat> => Object.freeze(new Set<StrokesFormat>(formats.keys()));
 
-export const getAnimator: StrokesAnimatorFactory = (format) => {
+export const getAnimator = (format: StrokesFormat): StrokesAnimator => {
     const animate = formats.get(format);
     if (typeof animate === "undefined") throw new Error("Unsupported format.");
     return animate;

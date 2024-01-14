@@ -30,7 +30,3 @@ export interface StrokesLoaderComponents {
 export interface StrokesLoaderBuilder {
     (components: StrokesLoaderComponents): StrokesLoader;
 }
-
-export interface StrokesLoaderFactory {
-    (source: StrokesSource): StrokesLoader;
-}

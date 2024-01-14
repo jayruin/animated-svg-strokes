@@ -8,7 +8,7 @@ import { getLoader } from "./sources/factory";
 export { getAnimator, getFullOptions, getLoader };
 
 export { getFormats } from "./formats/factory";
-export { buildLoader, getSources } from "./sources/factory";
+export { buildLoader, getParser, getRequester, getSources } from "./sources/factory";
 
 interface StrokesRenderer {
     (character: string): Promise<Element>;

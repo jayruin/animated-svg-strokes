@@ -24,10 +24,6 @@ export interface StrokesAnimator {
     (character: Character, options: AnimationOptions): Element;
 }
 
-export interface StrokesAnimatorFactory {
-    (format: StrokesFormat): StrokesAnimator;
-}
-
 export interface AnimationOptions {
     readonly includeGrid: boolean;
     readonly gridColor: string;
