@@ -1,5 +1,6 @@
 import type { StrokesParser, StrokesRequester } from "./types";
 import type { Stroke } from "../characters/types";
+import { strictFetch } from "./http";
 import { svgMediaType } from "../svg/constants";
 
 export const SOURCE_JA = "ja";
@@ -8,7 +9,7 @@ export const jaRequest: StrokesRequester = async (codePoint) => {
     const characterCode = codePoint.toString(16).padStart(5, "0");
     const characterFile = `${characterCode}.svg`;
     const url = `https://cdn.jsdelivr.net/gh/KanjiVG/kanjivg/kanji/${characterFile}`;
-    const response = await fetch(url, { cache: "no-store" });
+    const response = await strictFetch(url);
     return response;
 };
 

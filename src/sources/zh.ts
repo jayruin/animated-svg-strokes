@@ -1,5 +1,6 @@
 import type { StrokesParser, StrokesRequester } from "./types";
 import type { Stroke } from "../characters/types";
+import { strictFetch } from "./http";
 
 export const SOURCE_ZH = "zh";
 
@@ -13,7 +14,7 @@ const isDataValid = (data: unknown): data is HanziWriterData => typeof data === 
 export const zhRequest: StrokesRequester = async (codePoint) => {
     const characterString = String.fromCodePoint(codePoint);
     const url = `https://cdn.jsdelivr.net/npm/hanzi-writer-data/${characterString}.json`;
-    const response = await fetch(url, { cache: "no-store" });
+    const response = await strictFetch(url);
     return response;
 };
 
