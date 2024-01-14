@@ -118,7 +118,7 @@ renderButton.addEventListener("click", async () => {
     const promises = [];
     for (const source of sources) {
         const shouldRender = document.getElementById(`${source}-checked`).checked;
-        promises.push(shouldRender ? strokes(source, strokesFormat.value, animationOptions)(character) : Promise.resolve(null));
+        promises.push(shouldRender ? strokes({ source, format: strokesFormat.value, options: animationOptions })(character) : Promise.resolve(null));
     }
     const outputs = await Promise.all(promises.values());
     let i = 0;
