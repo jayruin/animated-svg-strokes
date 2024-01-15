@@ -11,7 +11,7 @@ export { getFormats } from "./formats/factory";
 export { buildLoader, getParser, getRequester, getSources } from "./sources/factory";
 
 interface StrokesRenderer {
-    (character: string): Promise<Element>;
+    (characterString: string): Promise<Element>;
 }
 
 interface StrokesRendererFactoryArguments {
