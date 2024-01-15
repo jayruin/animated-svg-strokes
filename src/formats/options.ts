@@ -56,7 +56,7 @@ const validateOptions = (options: AnimationOptions): void => {
         ...validateBoolean(interactive, "interactive"),
     ];
 
-    if (errors.length > 0) throw new AggregateError(errors);
+    if (errors.length > 0) throw new AggregateError(errors, errors.map((e) => e.message).join(" "));
 };
 
 const defaultOptions: AnimationOptions = Object.freeze({
