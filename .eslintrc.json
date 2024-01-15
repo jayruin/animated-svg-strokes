@@ -12,6 +12,7 @@
     "noInlineConfig": true,
     "rules": {
         "curly": "off",
+        "func-names": ["error", "as-needed"],
         "id-length": "off",
         "max-lines-per-function": "off",
         "max-statements": "off",

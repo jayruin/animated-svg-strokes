@@ -5,37 +5,29 @@ const isString = (s: unknown): s is string => typeof s === "string";
 const isNumber = (n: unknown): n is number => typeof n === "number";
 const isBoolean = (b: unknown): b is boolean => typeof b === "boolean";
 
-const validateBoolean = (option: boolean, optionName: string, errors: Error[]): void => {
-    if (!isBoolean(option)) errors.push(new TypeError(`${optionName} is not a boolean.`));
-};
-const validateColor = (option: string, optionName: string, errors: Error[]): void => {
-    if (!isString(option)) errors.push(new TypeError(`${optionName} is not a string.`));
-    if (!isValidColor(option)) errors.push(new RangeError(`${optionName} is not a valid color.`));
+const validateBoolean = function* (value: boolean, name: string): Iterable<Error> {
+    if (!isBoolean(value)) yield new TypeError(`${name} is not a boolean.`);
 };
 
-const validateGridRows = (gridRows: number, errors: Error[]): void => {
-    if (!isNumber(gridRows)) errors.push(new TypeError("gridRows is not a number."));
-    if (isNaN(gridRows)) errors.push(new RangeError("gridRows is NaN."));
-    if (gridRows < 1) errors.push(new RangeError("gridRows cannot be < 1."));
-    if (!isFinite(gridRows)) errors.push(new RangeError("gridRows must be finite."));
+const validateColor = function* (value: string, name: string): Iterable<Error> {
+    if (!isString(value)) yield new TypeError(`${name} is not a string.`);
+    if (!isValidColor(value)) yield new RangeError(`${name} is not a valid color.`);
 };
-const validateGridColumns = (gridColumns: number, errors: Error[]): void => {
-    if (!isNumber(gridColumns)) errors.push(new TypeError("gridColumns is not a number."));
-    if (isNaN(gridColumns)) errors.push(new RangeError("gridColumns is NaN."));
-    if (gridColumns < 1) errors.push(new RangeError("gridColumns cannot be < 1."));
-    if (!isFinite(gridColumns)) errors.push(new RangeError("gridColumns must be finite."));
-};
-const validatePauseRatio = (pauseRatio: number, errors: Error[]): void => {
-    if (!isNumber(pauseRatio)) errors.push(new TypeError("pauseRatio is not a number."));
-    if (isNaN(pauseRatio)) errors.push(new RangeError("pauseRatio cannot be NaN."));
-    if (pauseRatio < 0) errors.push(new RangeError("pauseRatio cannot be < 0."));
-    if (pauseRatio >= 1) errors.push(new RangeError("pauseRatio cannot be >= 1."));
-};
-const validateTotalStrokeDuration = (totalStrokeDuration: number, errors: Error[]): void => {
-    if (!isNumber(totalStrokeDuration)) errors.push(new TypeError("totalStrokeDuration is not a number."));
-    if (isNaN(totalStrokeDuration)) errors.push(new RangeError("totalStrokeDuration cannot be NaN."));
-    if (totalStrokeDuration <= 0) errors.push(new RangeError("totalStrokeDuration cannnot be <= 0."));
-    if (!isFinite(totalStrokeDuration)) errors.push(new RangeError("totalStrokeDuration must be finite."));
+
+interface NumberRange {
+    readonly gt?: number;
+    readonly lt?: number;
+    readonly ge?: number;
+    readonly le?: number;
+}
+const validateNumber = function* (value: number, name: string, range?: NumberRange): Iterable<Error> {
+    if (!isNumber(value)) yield new TypeError(`${name} is not a number.`);
+    if (isNaN(value)) yield new RangeError(`${name} is NaN.`);
+    if (!isFinite(value)) yield new RangeError(`${name} is not finite.`);
+    if (isNumber(range?.gt) && !(value > range.gt)) yield new RangeError(`${name} is not > ${range.gt}.`);
+    if (isNumber(range?.lt) && !(value < range.lt)) yield new RangeError(`${name} is not < ${range.lt}.`);
+    if (isNumber(range?.ge) && !(value >= range.ge)) yield new RangeError(`${name} is not >= ${range.ge}.`);
+    if (isNumber(range?.le) && !(value <= range.le)) yield new RangeError(`${name} is not <= ${range.le}.`);
 };
 
 const validateOptions = (options: AnimationOptions): void => {
@@ -46,23 +38,23 @@ const validateOptions = (options: AnimationOptions): void => {
         strokeColor, pauseRatio, totalStrokeDuration, interactive,
     } = options;
 
-    const errors: Error[] = [];
+    const errors: Error[] = [
+        ...validateBoolean(includeGrid, "includeGrid"),
+        ...validateColor(gridColor, "gridColor"),
+        ...validateNumber(gridRows, "gridRows", { ge: 1 }),
+        ...validateNumber(gridColumns, "gridColumns", { ge: 1 }),
 
-    validateBoolean(includeGrid, "includeGrid", errors);
-    validateColor(gridColor, "gridColor", errors);
-    validateGridRows(gridRows, errors);
-    validateGridColumns(gridColumns, errors);
+        ...validateBoolean(includeBackground, "includeBackground"),
+        ...validateColor(backgroundColor, "backgroundColor"),
 
-    validateBoolean(includeBackground, "includeBackground", errors);
-    validateColor(backgroundColor, "backgroundColor", errors);
+        ...validateBoolean(includePreview, "includePreview"),
+        ...validateColor(previewColor, "previewColor"),
 
-    validateBoolean(includePreview, "includePreview", errors);
-    validateColor(previewColor, "previewColor", errors);
-
-    validateColor(strokeColor, "strokeColor", errors);
-    validatePauseRatio(pauseRatio, errors);
-    validateTotalStrokeDuration(totalStrokeDuration, errors);
-    validateBoolean(interactive, "interactive", errors);
+        ...validateColor(strokeColor, "strokeColor"),
+        ...validateNumber(pauseRatio, "pauseRatio", { ge: 0, lt: 1 }),
+        ...validateNumber(totalStrokeDuration, "totalStrokeDuration", { gt: 0 }),
+        ...validateBoolean(interactive, "interactive"),
+    ];
 
     if (errors.length > 0) throw new AggregateError(errors);
 };
