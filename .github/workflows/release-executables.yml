@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: "lts/*"
           cache: pnpm
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm run init
       - run: pnpm run types
       - run: pnpm run lint
       - run: pnpm run style

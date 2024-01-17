@@ -4,18 +4,20 @@
     "@stylistic/eslint-plugin": "1.5.3",
     "@typescript-eslint/eslint-plugin": "6.19.0",
     "@typescript-eslint/parser": "6.19.0",
+    "@vitest/browser": "1.2.0",
     "eslint": "8.56.0",
-    "happy-dom": "13.1.4",
     "parcel": "2.11.0",
+    "playwright": "1.41.0",
     "typescript": "5.3.3",
     "vitest": "1.2.0"
   },
   "scripts": {
+    "init": "pnpm install --frozen-lockfile && node scripts/install-browsers.js",
     "types": "tsc --noEmit",
     "lint": "eslint src",
     "style": "eslint src --no-eslintrc --config .eslintrc.styles.json",
     "format": "eslint src --no-eslintrc --config .eslintrc.styles.json --fix",
-    "test": "vitest run",
+    "test": "node scripts/run-tests.js",
     "build": "parcel build",
     "reset": "git clean -fdx",
     "update": "node scripts/rm.js node_modules pnpm-lock.yaml && pnpm update --latest"
