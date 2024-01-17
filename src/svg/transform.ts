@@ -1,4 +1,4 @@
-import { svgNS } from "./constants";
+import { svgNS } from "./constants.js";
 
 export const getTransformMatrix = (transform: string): DOMMatrixReadOnly => {
     const svgElement = document.createElementNS(svgNS, "svg");

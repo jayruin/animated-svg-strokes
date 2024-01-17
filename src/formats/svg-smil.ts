@@ -1,9 +1,9 @@
-import type { AnimationOptions, SvgAnimator } from "./types";
-import type { Character } from "../characters/types";
-import { getStrokesSvgBase } from "./svg-base";
-import { svgNS } from "../svg/constants";
-import { getPathLength } from "../svg/path";
-import { getUniqueId } from "../unique/id";
+import type { AnimationOptions, SvgAnimator } from "./types.js";
+import type { Character } from "../characters/types.js";
+import { getStrokesSvgBase } from "./svg-base.js";
+import { svgNS } from "../svg/constants.js";
+import { getPathLength } from "../svg/path.js";
+import { getUniqueId } from "../unique/id.js";
 
 export const FORMAT_SVG_SMIL = "svg-smil";
 

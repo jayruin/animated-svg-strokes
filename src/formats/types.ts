@@ -1,10 +1,10 @@
-import type { FORMAT_CANVAS_2D } from "./canvas-2d";
-import type { FORMAT_SVG_CSS } from "./svg-css";
-import type { FORMAT_SVG_SMIL } from "./svg-smil";
-import type { FORMAT_SVG_WA } from "./svg-wa";
-import type { Character } from "../characters/types";
-import type { Line } from "../geometry/types";
-import type { ViewBox } from "../svg/types";
+import type { FORMAT_CANVAS_2D } from "./canvas-2d.js";
+import type { FORMAT_SVG_CSS } from "./svg-css.js";
+import type { FORMAT_SVG_SMIL } from "./svg-smil.js";
+import type { FORMAT_SVG_WA } from "./svg-wa.js";
+import type { Character } from "../characters/types.js";
+import type { Line } from "../geometry/types.js";
+import type { ViewBox } from "../svg/types.js";
 
 export type CanvasFormat = typeof FORMAT_CANVAS_2D;
 

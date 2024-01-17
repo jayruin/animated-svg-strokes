@@ -1,9 +1,9 @@
-import type { AnimationOptions, SvgComponents, SvgStrokeComponents, SvgStrokesComponentsInfo } from "./types";
-import type { Character } from "../characters/types";
-import type { Line } from "../geometry/types";
-import type { ViewBox } from "../svg/types";
-import { svgNS } from "../svg/constants";
-import { parseViewBox } from "../svg/view-box";
+import type { AnimationOptions, SvgComponents, SvgStrokeComponents, SvgStrokesComponentsInfo } from "./types.js";
+import type { Character } from "../characters/types.js";
+import type { Line } from "../geometry/types.js";
+import type { ViewBox } from "../svg/types.js";
+import { svgNS } from "../svg/constants.js";
+import { parseViewBox } from "../svg/view-box.js";
 
 const createBackground = (options: AnimationOptions, viewBox: ViewBox): SVGGElement | null => {
     const { includeBackground, backgroundColor } = options;

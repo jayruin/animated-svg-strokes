@@ -1,6 +1,6 @@
-import type { StrokesParser, StrokesRequester } from "./types";
-import type { Stroke } from "../characters/types";
-import { strictFetch } from "./http";
+import type { StrokesParser, StrokesRequester } from "./types.js";
+import type { Stroke } from "../characters/types.js";
+import { strictFetch } from "./http.js";
 
 export const SOURCE_ZH = "zh";
 

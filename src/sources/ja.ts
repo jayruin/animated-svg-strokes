@@ -1,7 +1,7 @@
-import type { StrokesParser, StrokesRequester } from "./types";
-import type { Stroke } from "../characters/types";
-import { strictFetch } from "./http";
-import { svgMediaType } from "../svg/constants";
+import type { StrokesParser, StrokesRequester } from "./types.js";
+import type { Stroke } from "../characters/types.js";
+import { strictFetch } from "./http.js";
+import { svgMediaType } from "../svg/constants.js";
 
 export const SOURCE_JA = "ja";
 

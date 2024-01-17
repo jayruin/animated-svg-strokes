@@ -1,7 +1,7 @@
-import type { AnimationOptions, CanvasAnimator, Canvas2dContextAction, Canvas2dLineInfo, Canvas2dStrokeInfo } from "./types";
-import { getPathLength } from "../svg/path";
-import { getTransformMatrix } from "../svg/transform";
-import { parseViewBox } from "../svg/view-box";
+import type { AnimationOptions, CanvasAnimator, Canvas2dContextAction, Canvas2dLineInfo, Canvas2dStrokeInfo } from "./types.js";
+import { getPathLength } from "../svg/path.js";
+import { getTransformMatrix } from "../svg/transform.js";
+import { parseViewBox } from "../svg/view-box.js";
 
 export const FORMAT_CANVAS_2D = "canvas-2d";
 

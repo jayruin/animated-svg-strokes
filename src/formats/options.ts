@@ -1,4 +1,4 @@
-import type { AnimationOptions } from "./types";
+import type { AnimationOptions } from "./types.js";
 
 const isValidColor = (color: string): boolean => CSS.supports("color", color);
 const isString = (s: unknown): s is string => typeof s === "string";

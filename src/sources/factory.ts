@@ -1,6 +1,6 @@
-import type { StrokesLoader, StrokesLoaderComponents, StrokesParser, StrokesRequester, StrokesSource } from "./types";
-import { SOURCE_JA, jaParse, jaRequest } from "./ja";
-import { SOURCE_ZH, zhParse, zhRequest } from "./zh";
+import type { StrokesLoader, StrokesLoaderComponents, StrokesParser, StrokesRequester, StrokesSource } from "./types.js";
+import { SOURCE_JA, jaParse, jaRequest } from "./ja.js";
+import { SOURCE_ZH, zhParse, zhRequest } from "./zh.js";
 
 const sources: ReadonlyMap<StrokesSource, Readonly<[StrokesRequester, StrokesParser]>> = new Map<StrokesSource, Readonly<[StrokesRequester, StrokesParser]>>([
     [SOURCE_JA, [jaRequest, jaParse]],

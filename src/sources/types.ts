@@ -1,6 +1,6 @@
-import type { SOURCE_JA } from "./ja";
-import type { SOURCE_ZH } from "./zh";
-import type { Character, CharacterSvgData } from "../characters/types";
+import type { SOURCE_JA } from "./ja.js";
+import type { SOURCE_ZH } from "./zh.js";
+import type { Character, CharacterSvgData } from "../characters/types.js";
 
 export type StrokesSource = typeof SOURCE_JA | typeof SOURCE_ZH;
 
