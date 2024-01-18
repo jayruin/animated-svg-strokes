@@ -1,15 +1,15 @@
 {
   "type": "module",
   "devDependencies": {
-    "@stylistic/eslint-plugin": "1.5.3",
+    "@stylistic/eslint-plugin": "1.5.4",
     "@typescript-eslint/eslint-plugin": "6.19.0",
     "@typescript-eslint/parser": "6.19.0",
-    "@vitest/browser": "1.2.0",
+    "@vitest/browser": "1.2.1",
     "eslint": "8.56.0",
     "parcel": "2.11.0",
     "playwright": "1.41.0",
     "typescript": "5.3.3",
-    "vitest": "1.2.0"
+    "vitest": "1.2.1"
   },
   "scripts": {
     "init": "pnpm install --frozen-lockfile && node scripts/install-browsers.js",
