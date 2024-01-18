@@ -22,7 +22,7 @@ export interface StrokesLoader {
 
 export interface StrokesLoaderComponents {
     source: StrokesSource;
-    convert?: StrokesConverter;
-    request: StrokesRequester;
-    parse: StrokesParser;
+    converter?: StrokesConverter;
+    requester: StrokesRequester;
+    parser: StrokesParser;
 }

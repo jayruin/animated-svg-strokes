@@ -26,11 +26,11 @@ export const getParser = (source: StrokesSource): StrokesParser => {
 };
 
 export const buildLoader = (components: StrokesLoaderComponents): StrokesLoader => {
-    const { source, convert, request, parse } = components;
+    const { source, converter, requester, parser } = components;
     const load: StrokesLoader = async (codePoint) => {
-        const convertedCodePoint = typeof convert === "function" ? await convert(codePoint) : codePoint;
-        const response = await request(convertedCodePoint);
-        const character = { codePoint: convertedCodePoint, source, ...await parse(response) };
+        const convertedCodePoint = typeof converter === "function" ? await converter(codePoint) : codePoint;
+        const response = await requester(convertedCodePoint);
+        const character = { codePoint: convertedCodePoint, source, ...await parser(response) };
         return character;
     };
     return load;
@@ -38,6 +38,6 @@ export const buildLoader = (components: StrokesLoaderComponents): StrokesLoader 
 
 export const getLoader = (source: StrokesSource): StrokesLoader => {
     const handlers = getHandlers(source);
-    const [request, parse] = handlers;
-    return buildLoader({ source, request, parse });
+    const [requester, parser] = handlers;
+    return buildLoader({ source, requester, parser });
 };
