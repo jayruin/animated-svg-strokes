@@ -1,6 +1,8 @@
 import type { AnimationOptions } from "./types.js";
 
-const isValidColor = (color: string): boolean => CSS.supports("color", color);
+const isValidColor = (color: string): boolean => CSS.supports("color", color)
+    && ["currentcolor", "inherit", "initial", "revert", "revert-layer", "unset"]
+        .every((c) => c.localeCompare(color, undefined, { sensitivity: "accent" }) !== 0);
 const isString = (s: unknown): s is string => typeof s === "string";
 const isNumber = (n: unknown): n is number => typeof n === "number";
 const isBoolean = (b: unknown): b is boolean => typeof b === "boolean";

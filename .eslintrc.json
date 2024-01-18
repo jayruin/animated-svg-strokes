@@ -17,6 +17,7 @@
         "max-lines-per-function": "off",
         "max-statements": "off",
         "no-ternary": "off",
+        "no-undefined": "off",
         "one-var": "off",
         "sort-imports": "off",
         "sort-keys": "off",
@@ -25,5 +26,16 @@
         "@typescript-eslint/no-type-alias": "off",
         "@typescript-eslint/prefer-function-type": "off",
         "@typescript-eslint/prefer-readonly-parameter-types": "off"
-    }
+    },
+    "overrides": [
+        {
+            "files": ["*.test.ts"],
+            "rules": {
+                "@typescript-eslint/consistent-type-assertions": "off",
+                "@typescript-eslint/no-explicit-any": "off",
+                "@typescript-eslint/no-unsafe-argument": "off",
+                "@typescript-eslint/no-unsafe-member-access": "off"
+            }
+        }
+    ]
 }
