@@ -113,7 +113,7 @@ const customAnimator = (character, options) => {
         element.width = width;
         element.height = height;
         element.style.filter = "invert(100%)";
-    } else if (element instanceof HTMLElement || element instanceof SVGElement) {
+    } else if (element instanceof SVGSVGElement) {
         element.style.width = `${width}px`;
         element.style.height = `${height}px`;
         element.style.filter = "invert(100%)";

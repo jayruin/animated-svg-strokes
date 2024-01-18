@@ -46,9 +46,9 @@ declare interface StrokesLoader {
 
 declare interface StrokesLoaderComponents {
     source: StrokesSource;
-    convert?: StrokesConverter;
-    request: StrokesRequester;
-    parse: StrokesParser;
+    converter?: StrokesConverter;
+    requester: StrokesRequester;
+    parser: StrokesParser;
 }
 ```
 
