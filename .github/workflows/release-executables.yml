@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - "**.ts"
+      - "**.js"
       - "**.json"
       - "**.yml"
   workflow_dispatch:
