@@ -75,3 +75,72 @@ describe.each([
         expect(() => getFullOptions({ strokeColor: color })).toThrowError("strokeColor");
     });
 });
+
+describe.each([
+    1,
+    2,
+    5,
+])("%s is a valid grid size", (size) => {
+    test(`gridRows = ${size} is valid`, () => {
+        const options = getFullOptions({ gridRows: size });
+        expect(options.gridRows).toBe(size);
+    });
+
+    test(`gridColumns = ${size} is valid`, () => {
+        const options = getFullOptions({ gridColumns: size });
+        expect(options.gridColumns).toBe(size);
+    });
+});
+
+describe.each([
+    NaN,
+    Infinity,
+    -1,
+    0,
+    0.5,
+])("%s is not a valid grid size", (size) => {
+    test(`gridRows = ${size} is invalid`, () => {
+        expect(() => getFullOptions({ gridRows: size })).toThrowError("gridRows");
+    });
+
+    test(`gridColumns = ${size} is invalid`, () => {
+        expect(() => getFullOptions({ gridColumns: size })).toThrowError("gridColumns");
+    });
+});
+
+test.each([
+    0,
+    0.5,
+    0.99,
+])("pauseRatio = %s is valid", (pauseRatio) => {
+    const options = getFullOptions({ pauseRatio });
+    expect(options.pauseRatio).toBe(pauseRatio);
+});
+
+test.each([
+    NaN,
+    Infinity,
+    -1,
+    1,
+    100,
+])("pauseRatio = %s is invalid", (pauseRatio) => {
+    expect(() => getFullOptions({ pauseRatio })).toThrowError("pauseRatio");
+});
+
+test.each([
+    0.5,
+    1,
+    10,
+])("totalStrokeDuration = %s is valid", (totalStrokeDuration) => {
+    const options = getFullOptions({ totalStrokeDuration });
+    expect(options.totalStrokeDuration).toBe(totalStrokeDuration);
+});
+
+test.each([
+    NaN,
+    Infinity,
+    -1,
+    0,
+])("totalStrokeDuration = %s is invalid", (totalStrokeDuration) => {
+    expect(() => getFullOptions({ totalStrokeDuration })).toThrowError("totalStrokeDuration");
+});
