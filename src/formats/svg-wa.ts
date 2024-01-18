@@ -1,8 +1,8 @@
 import type { AnimationOptions, SvgAnimator, WebAnimationsInfo } from "./types.js";
 import type { Character } from "../characters/types.js";
+import { getUniqueId } from "./id.js";
 import { getStrokesSvgBase } from "./svg-base.js";
 import { getPathLength } from "../svg/path.js";
-import { getUniqueId } from "../unique/id.js";
 
 export const FORMAT_SVG_WA = "svg-wa";
 

@@ -1,9 +1,9 @@
 import type { AnimationOptions, SvgAnimator } from "./types.js";
 import type { Character } from "../characters/types.js";
+import { getUniqueId } from "./id.js";
 import { getStrokesSvgBase } from "./svg-base.js";
 import { svgNS } from "../svg/constants.js";
 import { getPathLength } from "../svg/path.js";
-import { getUniqueId } from "../unique/id.js";
 
 export const FORMAT_SVG_CSS = "svg-css";
 

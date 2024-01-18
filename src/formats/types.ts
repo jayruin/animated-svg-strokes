@@ -3,7 +3,6 @@ import type { FORMAT_SVG_CSS } from "./svg-css.js";
 import type { FORMAT_SVG_SMIL } from "./svg-smil.js";
 import type { FORMAT_SVG_WA } from "./svg-wa.js";
 import type { Character } from "../characters/types.js";
-import type { Line } from "../geometry/types.js";
 import type { ViewBox } from "../svg/types.js";
 
 export type CanvasFormat = typeof FORMAT_CANVAS_2D;
@@ -37,6 +36,16 @@ export interface AnimationOptions {
     readonly pauseRatio: number;
     readonly totalStrokeDuration: number;
     readonly interactive: boolean;
+}
+
+export interface Point {
+    readonly x: number;
+    readonly y: number;
+}
+
+export interface Line {
+    readonly startPoint: Point;
+    readonly endPoint: Point;
 }
 
 export interface Canvas2dStrokeInfo {

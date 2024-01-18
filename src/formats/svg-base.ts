@@ -1,6 +1,5 @@
-import type { AnimationOptions, SvgComponents, SvgStrokeComponents, SvgStrokesComponentsInfo } from "./types.js";
+import type { AnimationOptions, Line, SvgComponents, SvgStrokeComponents, SvgStrokesComponentsInfo } from "./types.js";
 import type { Character } from "../characters/types.js";
-import type { Line } from "../geometry/types.js";
 import type { ViewBox } from "../svg/types.js";
 import { svgNS } from "../svg/constants.js";
 import { parseViewBox } from "../svg/view-box.js";
