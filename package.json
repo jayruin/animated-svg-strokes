@@ -20,7 +20,7 @@
     "test": "node scripts/run-tests.js",
     "build": "parcel build",
     "reset": "git clean -fdx",
-    "update": "node scripts/rm.js node_modules pnpm-lock.yaml && pnpm update --latest"
+    "update": "node scripts/rm.js node_modules pnpm-lock.yaml && pnpm update --latest && node scripts/install-browsers.js"
   },
   "targets": {
     "strokes": {
