@@ -12,15 +12,15 @@
     "vitest": "1.2.1"
   },
   "scripts": {
-    "init": "pnpm install --frozen-lockfile && node scripts/install-browsers.js",
+    "init": "pnpm install --frozen-lockfile && node scripts/install-browsers.js && node scripts/encode-test-data.js",
     "types": "tsc --noEmit",
-    "lint": "eslint src",
-    "style": "eslint src --no-eslintrc --config .eslintrc.styles.json",
-    "format": "eslint src --no-eslintrc --config .eslintrc.styles.json --fix",
+    "lint": "eslint src tests",
+    "style": "eslint src tests --no-eslintrc --config .eslintrc.styles.json",
+    "format": "eslint src tests --no-eslintrc --config .eslintrc.styles.json --fix",
     "test": "node scripts/run-tests.js",
     "build": "parcel build",
     "reset": "git clean -fdx",
-    "update": "node scripts/rm.js node_modules pnpm-lock.yaml && pnpm update --latest && node scripts/install-browsers.js"
+    "update": "node scripts/rm.js node_modules pnpm-lock.yaml && pnpm update --latest && node scripts/install-browsers.js && node scripts/encode-test-data.js"
   },
   "targets": {
     "strokes": {

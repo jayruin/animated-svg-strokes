@@ -6,7 +6,7 @@
             "DOM",
             "ES2021"
         ],
-        "rootDir": "src",
+        "rootDirs": ["src", "tests"],
         "outDir": "dist",
         "module": "NodeNext",
         "moduleResolution": "NodeNext",
