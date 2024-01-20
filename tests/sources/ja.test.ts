@@ -43,7 +43,7 @@ const expected23383 = {
 
 test.each([
     [23383, $23383svg, expected23383],
-])("zh parser handles %s", async (_, base64String, expected) => {
+])("ja parser handles %s", async (_, base64String, expected) => {
     const blob = blobify(base64String);
     const response = new Response(blob);
     const character = await jaParse(response);
