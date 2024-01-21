@@ -70,10 +70,14 @@ label>input[type="checkbox"]:checked+div {
     justify-items: center;
 }
 
+div.strokes-container>div.character-strokes-container {
+    width: 100%;
+    height: auto;
+}
+
 div.strokes-container>div.character-strokes-container>.character-strokes {
-    margin: 10px;
-    width: 360px;
-    height: 360px;
+    width: 100%;
+    height: auto;
     border: 1px solid rgb(0, 0, 0);
     pointer-events: none;
 }
