@@ -1,13 +1,13 @@
-import type { AnimationOptions, SvgAnimator } from "./types.js";
+import type { StrokesAnimationOptions, StrokesAnimator } from "./types.js";
 import type { Character } from "../characters/types.js";
 import { getUniqueId } from "./id.js";
-import { getStrokesSvgBase } from "./svg-base.js";
+import { clearElement, getStrokesSvgBase } from "./svg-base.js";
 import { svgNS } from "../svg/constants.js";
 import { getPathLength } from "../svg/path.js";
 
 export const FORMAT_SVG_SMIL = "svg-smil";
 
-const animateStrokeDasharray = (character: Character, options: AnimationOptions, strokeNumber: number): SVGAnimateElement => {
+const animateStrokeDasharray = (character: Character, options: StrokesAnimationOptions, strokeNumber: number): SVGAnimateElement => {
     const { strokes } = character;
     const { pauseRatio, totalStrokeDuration } = options;
     const { strokePath } = strokes[strokeNumber];
@@ -44,7 +44,7 @@ const animateStrokeDasharray = (character: Character, options: AnimationOptions,
     return animate;
 };
 
-const animateStrokeWidth = (character: Character, options: AnimationOptions, strokeNumber: number): SVGAnimateElement => {
+const animateStrokeWidth = (character: Character, options: StrokesAnimationOptions, strokeNumber: number): SVGAnimateElement => {
     const { strokes } = character;
     const { pauseRatio, totalStrokeDuration } = options;
     const numberOfStrokes = strokes.length;
@@ -80,7 +80,7 @@ const animateStrokeWidth = (character: Character, options: AnimationOptions, str
     return animate;
 };
 
-export const animateStrokesSvgSmil: SvgAnimator = (character, options) => {
+export const animateStrokesSvgSmil: StrokesAnimator = (character, options) => {
     const uniqueId = getUniqueId();
     const { svg, strokesComponents } = getStrokesSvgBase(character, options, uniqueId);
 
@@ -91,17 +91,17 @@ export const animateStrokesSvgSmil: SvgAnimator = (character, options) => {
         strokeComponents.strokePath.append(animateStrokeWidth(character, options, strokeNumber));
     }
 
-    if (options.interactive) {
-        const togglePause = (): void => {
-            const paused = svg.animationsPaused();
-            if (paused) {
-                svg.unpauseAnimations();
-            } else {
-                svg.pauseAnimations();
-            }
-        };
-        svg.addEventListener("click", togglePause);
-    }
-
-    return svg;
+    return Object.freeze({
+        element: svg,
+        dispose: () => {
+            clearElement(svg);
+        },
+        isPaused: () => svg.animationsPaused(),
+        pause: () => {
+            svg.pauseAnimations();
+        },
+        resume: () => {
+            svg.unpauseAnimations();
+        },
+    });
 };

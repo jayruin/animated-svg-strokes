@@ -1,10 +1,10 @@
-import type { AnimationOptions, Line, SvgComponents, SvgStrokeComponents, SvgStrokesComponentsInfo } from "./types.js";
+import type { Line, StrokesAnimationOptions, SvgComponents, SvgStrokeComponents, SvgStrokesComponentsInfo } from "./types.js";
 import type { Character } from "../characters/types.js";
 import type { ViewBox } from "../svg/types.js";
 import { svgNS } from "../svg/constants.js";
 import { parseViewBox } from "../svg/view-box.js";
 
-const createBackground = (options: AnimationOptions, viewBox: ViewBox): SVGGElement | null => {
+const createBackground = (options: StrokesAnimationOptions, viewBox: ViewBox): SVGGElement | null => {
     const { includeBackground, backgroundColor } = options;
     if (!includeBackground) {
         return null;
@@ -29,7 +29,7 @@ const createSvgLine = (line: Line, color: string): SVGLineElement => {
     return svgLine;
 };
 
-const createGrid = (options: AnimationOptions, viewBox: ViewBox): SVGGElement | null => {
+const createGrid = (options: StrokesAnimationOptions, viewBox: ViewBox): SVGGElement | null => {
     if (!options.includeGrid) {
         return null;
     }
@@ -96,7 +96,7 @@ const getStrokesComponents = (strokesComponentsInfo: SvgStrokesComponentsInfo): 
     return strokesComponents;
 };
 
-const createPreview = (character: Character, options: AnimationOptions, uniqueId: string): SVGGElement | null => {
+const createPreview = (character: Character, options: StrokesAnimationOptions, uniqueId: string): SVGGElement | null => {
     if (!options.includePreview) {
         return null;
     }
@@ -111,7 +111,7 @@ const createPreview = (character: Character, options: AnimationOptions, uniqueId
     return group;
 };
 
-export const getStrokesSvgBase = (character: Character, options: AnimationOptions, uniqueId: string): SvgComponents => {
+export const getStrokesSvgBase = (character: Character, options: StrokesAnimationOptions, uniqueId: string): SvgComponents => {
     const svg = document.createElementNS(svgNS, "svg");
     svg.setAttribute("xmlns", svgNS);
     svg.setAttributeNS(null, "viewBox", character.viewBox);
@@ -148,4 +148,13 @@ export const getStrokesSvgBase = (character: Character, options: AnimationOption
     });
 
     return { svg, group, strokesComponents };
+};
+
+export const clearElement = (element: Element): void => {
+    while (element.lastChild !== null) {
+        element.removeChild(element.lastChild);
+    }
+    while (element.attributes.length > 0) {
+        element.removeAttribute(element.attributes[0].name);
+    }
 };

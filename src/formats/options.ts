@@ -1,4 +1,4 @@
-import type { AnimationOptions } from "./types.js";
+import type { StrokesAnimationOptions } from "./types.js";
 
 const isValidColor = (color: string): boolean => CSS.supports("color", color)
     && ["currentcolor", "inherit", "initial", "revert", "revert-layer", "unset"]
@@ -32,12 +32,12 @@ const validateNumber = function* (value: number, name: string, range?: NumberRan
     if (isNumber(range?.le) && !(value <= range.le)) yield new RangeError(`${name} is not <= ${range.le}.`);
 };
 
-const validateOptions = (options: AnimationOptions): void => {
+const validateOptions = (options: StrokesAnimationOptions): void => {
     const {
         includeGrid, gridColor, gridRows, gridColumns,
         includeBackground, backgroundColor,
         includePreview, previewColor,
-        strokeColor, pauseRatio, totalStrokeDuration, interactive,
+        strokeColor, pauseRatio, totalStrokeDuration,
     } = options;
 
     const errors: Error[] = [
@@ -55,13 +55,12 @@ const validateOptions = (options: AnimationOptions): void => {
         ...validateColor(strokeColor, "strokeColor"),
         ...validateNumber(pauseRatio, "pauseRatio", { ge: 0, lt: 1 }),
         ...validateNumber(totalStrokeDuration, "totalStrokeDuration", { gt: 0 }),
-        ...validateBoolean(interactive, "interactive"),
     ];
 
     if (errors.length > 0) throw new AggregateError(errors, errors.map((e) => e.message).join(" "));
 };
 
-const defaultOptions: AnimationOptions = Object.freeze({
+const defaultOptions: StrokesAnimationOptions = Object.freeze({
     includeGrid: false,
     gridColor: "#d3d3d3",
     gridRows: 2,
@@ -73,10 +72,9 @@ const defaultOptions: AnimationOptions = Object.freeze({
     strokeColor: "#000000",
     pauseRatio: 0.2,
     totalStrokeDuration: 1,
-    interactive: true,
 });
 
-export const getFullOptions = (partialOptions?: Partial<AnimationOptions>): AnimationOptions => {
+export const getFullOptions = (partialOptions?: Partial<StrokesAnimationOptions>): StrokesAnimationOptions => {
     const options = {
         ...defaultOptions,
         ...Object.fromEntries(

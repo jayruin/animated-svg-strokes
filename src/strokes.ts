@@ -1,4 +1,4 @@
-import type { AnimationOptions, StrokesAnimator, StrokesFormat } from "./formats/types.js";
+import type { StrokesAnimation, StrokesAnimationOptions, StrokesAnimator, StrokesFormat } from "./formats/types.js";
 import type { StrokesLoader, StrokesSource } from "./sources/types.js";
 import { getCodePoint } from "./characters/code-point.js";
 import { getAnimator } from "./formats/factory.js";
@@ -11,13 +11,13 @@ export { getFormats } from "./formats/factory.js";
 export { buildLoader, getParser, getRequester, getSources } from "./sources/factory.js";
 
 interface StrokesRenderer {
-    (characterString: string): Promise<Element>;
+    (characterString: string): Promise<StrokesAnimation>;
 }
 
 interface StrokesRendererFactoryArguments {
     source?: StrokesSource;
     format?: StrokesFormat;
-    options?: Partial<AnimationOptions>;
+    options?: Partial<StrokesAnimationOptions>;
     loader?: StrokesLoader;
     animator?: StrokesAnimator;
 }

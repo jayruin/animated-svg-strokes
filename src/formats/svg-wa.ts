@@ -1,12 +1,12 @@
-import type { AnimationOptions, SvgAnimator, WebAnimationsInfo } from "./types.js";
+import type { StrokesAnimationOptions, StrokesAnimator, WebAnimationsInfo } from "./types.js";
 import type { Character } from "../characters/types.js";
 import { getUniqueId } from "./id.js";
-import { getStrokesSvgBase } from "./svg-base.js";
+import { clearElement, getStrokesSvgBase } from "./svg-base.js";
 import { getPathLength } from "../svg/path.js";
 
 export const FORMAT_SVG_WA = "svg-wa";
 
-const getWebAnimationsInfo = (character: Character, options: AnimationOptions, strokeNumber: number): WebAnimationsInfo => {
+const getWebAnimationsInfo = (character: Character, options: StrokesAnimationOptions, strokeNumber: number): WebAnimationsInfo => {
     const dashKeyframes: Keyframe[] = [];
     const widthKeyframes: Keyframe[] = [];
     const { strokes } = character;
@@ -34,7 +34,7 @@ const getWebAnimationsInfo = (character: Character, options: AnimationOptions, s
     return { dashKeyframes, widthKeyframes, keyframeOptions };
 };
 
-export const animateStrokesSvgWa: SvgAnimator = (character, options) => {
+export const animateStrokesSvgWa: StrokesAnimator = (character, options) => {
     const uniqueId = getUniqueId();
     const { svg, strokesComponents } = getStrokesSvgBase(character, options, uniqueId);
 
@@ -48,19 +48,24 @@ export const animateStrokesSvgWa: SvgAnimator = (character, options) => {
         animations.push(strokeAnimation);
     }
 
-    if (options.interactive) {
-        const togglePause = (): void => {
+    return Object.freeze({
+        element: svg,
+        dispose: () => {
             animations.forEach((a) => {
-                const paused = a.playState === "paused";
-                if (paused) {
-                    a.play();
-                } else {
-                    a.pause();
-                }
+                a.cancel();
             });
-        };
-        svg.addEventListener("click", togglePause);
-    }
-
-    return svg;
+            clearElement(svg);
+        },
+        isPaused: () => animations.every((a) => a.playState === "paused"),
+        pause: () => {
+            animations.forEach((a) => {
+                a.pause();
+            });
+        },
+        resume: () => {
+            animations.forEach((a) => {
+                a.play();
+            });
+        },
+    });
 };

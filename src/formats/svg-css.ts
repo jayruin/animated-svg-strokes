@@ -1,7 +1,7 @@
-import type { AnimationOptions, SvgAnimator } from "./types.js";
+import type { StrokesAnimationOptions, StrokesAnimator } from "./types.js";
 import type { Character } from "../characters/types.js";
 import { getUniqueId } from "./id.js";
-import { getStrokesSvgBase } from "./svg-base.js";
+import { clearElement, getStrokesSvgBase } from "./svg-base.js";
 import { svgNS } from "../svg/constants.js";
 import { getPathLength } from "../svg/path.js";
 
@@ -9,7 +9,7 @@ export const FORMAT_SVG_CSS = "svg-css";
 
 const isKeyframesRule = (rule: unknown): rule is CSSKeyframesRule => rule instanceof CSSKeyframesRule;
 
-const createStyle = (character: Character, strokePathIds: string[], options: AnimationOptions): SVGStyleElement => {
+const createStyle = (character: Character, strokePathIds: string[], options: StrokesAnimationOptions): SVGStyleElement => {
     const { strokes } = character;
     const { pauseRatio, totalStrokeDuration } = options;
     const numberOfStrokes = Math.min(strokes.length, strokePathIds.length);
@@ -58,7 +58,7 @@ const createStyle = (character: Character, strokePathIds: string[], options: Ani
     return style;
 };
 
-export const animateStrokesSvgCss: SvgAnimator = (character, options) => {
+export const animateStrokesSvgCss: StrokesAnimator = (character, options) => {
     const uniqueId = getUniqueId();
     const { svg, group, strokesComponents } = getStrokesSvgBase(character, options, uniqueId);
 
@@ -76,15 +76,21 @@ export const animateStrokesSvgCss: SvgAnimator = (character, options) => {
     const style = createStyle(character, strokePathIds, options);
     group.append(style);
 
-    if (options.interactive) {
-        const togglePause = (): void => {
+    return Object.freeze({
+        element: svg,
+        dispose: () => {
+            clearElement(svg);
+        },
+        isPaused: () => animatedElements.every((e) => e.style.animationPlayState === "paused"),
+        pause: () => {
             animatedElements.forEach((e) => {
-                const paused = e.style.animationPlayState === "paused";
-                e.style.animationPlayState = paused ? "running" : "paused";
+                e.style.animationPlayState = "paused";
             });
-        };
-        svg.addEventListener("click", togglePause);
-    }
-
-    return svg;
+        },
+        resume: () => {
+            animatedElements.forEach((e) => {
+                e.style.animationPlayState = "running";
+            });
+        },
+    });
 };

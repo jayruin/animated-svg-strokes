@@ -42,7 +42,7 @@ export async function main(source, src, dst, error) {
         const render = strokes({ source, format: FORMAT, options });
         const srcElement = document.querySelector(src);
         const char = srcElement.textContent;
-        const outputElement = await render(char);
+        const { element: outputElement } = await render(char);
         const dstElement = document.querySelector(dst);
         clear(dstElement);
         dstElement.appendChild(outputElement);
@@ -95,21 +95,22 @@ Create a wrapper component (replacing URL):
 import { useEffect, useState } from "react";
 
 export function Strokes({ characterString, source, format, options }) {
-    const [element, setElement] = useState(null);
+    const [animation, setAnimation] = useState(null);
 
     useEffect(() => {
         async function renderStrokes() {
-            const { strokes } = await import(URL);
-            const strokesElement = await strokes({ source, format, options })(characterString);
-            setElement(strokesElement);
+            const { strokes } = await import("./strokes.js");
+            const newAnimation = await strokes({ source, format, options })(characterString);
+            setAnimation(newAnimation);
         }
         renderStrokes();
+        return () => animation?.dispose();
     }, []);
 
     return (
-        element === null
-            ? <div>Rendering strokes...</div>
-            : <div ref={node => node?.childElementCount === 0 ? node.append(element) : undefined}></div>
+        animation === null
+            ? <div>Loading...</div>
+            : <div ref={node => node?.childElementCount === 0 ? node.append(animation.element) : undefined}></div>
     )
 }
 ```

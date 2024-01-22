@@ -55,7 +55,7 @@ declare interface StrokesLoaderComponents {
 ### Formats
 `StrokesFormat` is a string constant denoting a supported format. Use the [exported function](#exported-functions) `getFormats` to get supported sources.
 ```typescript
-declare interface AnimationOptions {
+declare interface StrokesAnimationOptions {
     readonly includeGrid: boolean;
     readonly gridColor: string;
     readonly gridRows: number;
@@ -67,11 +67,18 @@ declare interface AnimationOptions {
     readonly strokeColor: string;
     readonly pauseRatio: number;
     readonly totalStrokeDuration: number;
-    readonly interactive: boolean;
+}
+
+declare interface StrokesAnimation {
+    readonly element: Element;
+    readonly dispose: () => void;
+    readonly isPaused: () => boolean;
+    readonly pause: () => void;
+    readonly resume: () => void;
 }
 
 declare interface StrokesAnimator {
-    (character: Character, options: AnimationOptions): Element;
+    (character: Character, options: StrokesAnimationOptions): StrokesAnimation;
 }
 ```
 
@@ -79,7 +86,7 @@ declare interface StrokesAnimator {
 ```typescript
 declare function getSources(): ReadonlySet<StrokesSource>;
 declare function getFormats(): ReadonlySet<StrokesFormat>;
-declare function getFullOptions(partialOptions?: Partial<AnimationOptions>): AnimationOptions;
+declare function getFullOptions(partialOptions?: Partial<StrokesAnimationOptions>): StrokesAnimationOptions;
 
 declare function getLoader(source: StrokesSource): StrokesLoader;
 declare function getAnimator(format: StrokesFormat): StrokesAnimator;
@@ -91,12 +98,12 @@ declare function buildLoader(components: StrokesLoaderComponents): StrokesLoader
 
 
 declare interface StrokesRenderer {
-    (characterString: string): Promise<Element>;
+    (characterString: string): Promise<StrokesAnimation>;
 }
 declare interface StrokesRendererFactoryArguments {
     source?: StrokesSource;
     format?: StrokesFormat;
-    options?: Partial<AnimationOptions>;
+    options?: Partial<StrokesAnimationOptions>;
     loader?: StrokesLoader;
     animator?: StrokesAnimator;
 }

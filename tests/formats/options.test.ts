@@ -4,7 +4,7 @@ import { describe, expect, test } from "vitest";
 
 test("default options are valid", () => {
     const options = getFullOptions();
-    expect(Object.keys(options)).toHaveLength(12);
+    expect(Object.keys(options)).toHaveLength(11);
 });
 
 test("getFullOptions returns frozen options", () => {

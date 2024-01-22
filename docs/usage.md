@@ -4,7 +4,7 @@
 
 ```javascript
 const render = strokes({ source, format, options });
-const element = await render(characterString);
+const { element } = await render(characterString);
 // Add element to DOM
 ```
 
@@ -37,13 +37,37 @@ previewColor|string|#c0c0c0
 strokeColor|string|#000000
 pauseRatio|number|0.2
 totalStrokeDuration|number|1
-interactive|number|true
 
 ## Styling
 
 CSS can be used to style elements. For example, `filter: invert(100%)` can be used for dark-mode compatibility. Width or height can be modified with CSS as well.
 
 If the returned element is an `HTMLCanvasElement`, CSS is NOT recommended for modifying the width or height. Instead, set the `width` or `height` properties on the canvas element directly.
+
+## Controlling Playback
+
+The animation returned from the  `render` function exposes functions for controlling playback.
+
+```javascript
+const render = strokes({ source, format, options });
+const animation = await render(character);
+// toggle state
+if (animation.isPaused()) {
+    animation.resume();
+} else {
+    animation.pause();
+}
+
+// Destructuring is possible as well
+const { element, isPaused, pause, resume } = await render(character);
+element.addEventListener("click", () => {
+    if (isPaused()) {
+        resume();
+    } else {
+        pause();
+    }
+});
+```
 
 ## Advanced
 
@@ -108,16 +132,16 @@ Example: Creating a custom animator which extends existing animator by setting d
 const [width, height] = [360, 360];
 const existingAnimator = getAnimator(format);
 const customAnimator = (character, options) => {
-    const element = existingAnimator(character, options);
-    if (element instanceof HTMLCanvasElement) {
-        element.width = width;
-        element.height = height;
-        element.style.filter = "invert(100%)";
-    } else if (element instanceof SVGSVGElement) {
-        element.style.width = `${width}px`;
-        element.style.height = `${height}px`;
-        element.style.filter = "invert(100%)";
+    const animation = existingAnimator(character, options);
+    if (animation.element instanceof HTMLCanvasElement) {
+        animation.element.width = width;
+        animation.element.height = height;
+        animation.element.style.filter = "invert(100%)";
+    } else if (animation.element instanceof SVGSVGElement) {
+        animation.element.style.width = `${width}px`;
+        animation.element.style.height = `${height}px`;
+        animation.element.style.filter = "invert(100%)";
     }
-    return element;
+    return animation;
 };
 ```

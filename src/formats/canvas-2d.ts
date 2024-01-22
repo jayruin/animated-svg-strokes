@@ -1,4 +1,4 @@
-import type { AnimationOptions, CanvasAnimator, Canvas2dContextAction, Canvas2dLineInfo, Canvas2dStrokeInfo } from "./types.js";
+import type { Canvas2dContextAction, Canvas2dLineInfo, Canvas2dStrokeInfo, StrokesAnimationOptions, StrokesAnimator } from "./types.js";
 import { getPathLength } from "../svg/path.js";
 import { getTransformMatrix } from "../svg/transform.js";
 import { parseViewBox } from "../svg/view-box.js";
@@ -23,7 +23,7 @@ const drawLine = (context: CanvasRenderingContext2D, lineInfo: Canvas2dLineInfo)
     context.restore();
 };
 
-const drawGrid = (context: CanvasRenderingContext2D, options: AnimationOptions): void => {
+const drawGrid = (context: CanvasRenderingContext2D, options: StrokesAnimationOptions): void => {
     if (!options.includeGrid) {
         return;
     }
@@ -46,7 +46,7 @@ const drawGrid = (context: CanvasRenderingContext2D, options: AnimationOptions):
     }
 };
 
-const resetCanvas = (context: CanvasRenderingContext2D, options: AnimationOptions): void => {
+const resetCanvas = (context: CanvasRenderingContext2D, options: StrokesAnimationOptions): void => {
     const { includeBackground, backgroundColor } = options;
     context.save();
     if (includeBackground) {
@@ -79,7 +79,7 @@ const drawStroke = (context: CanvasRenderingContext2D, canvasStrokeInfo: Canvas2
     context.restore();
 };
 
-export const animateStrokesCanvas2d: CanvasAnimator = (character, options) => {
+export const animateStrokesCanvas2d: StrokesAnimator = (character, options) => {
     const { strokes, transform, viewBox } = character;
     const { strokeColor, pauseRatio, totalStrokeDuration } = options;
     const parsedViewBox = parseViewBox(viewBox);
@@ -104,6 +104,7 @@ export const animateStrokesCanvas2d: CanvasAnimator = (character, options) => {
     if (context === null) {
         throw new Error("Cannot get 2d context from canvas.");
     }
+    let disposed = false;
     let previousTimestamp: number | null = null;
     let elapsed = 0;
     let paused = false;
@@ -111,6 +112,7 @@ export const animateStrokesCanvas2d: CanvasAnimator = (character, options) => {
     const numberOfStrokes = strokes.length;
     const totalDurationMs = totalStrokeDurationMs * numberOfStrokes;
     const draw = (timestamp: number): void => {
+        if (disposed) return;
         if (paused) {
             previousTimestamp = timestamp;
             window.requestAnimationFrame(draw);
@@ -147,11 +149,18 @@ export const animateStrokesCanvas2d: CanvasAnimator = (character, options) => {
         }
     };
     document.addEventListener("visibilitychange", reset);
-    if (options.interactive) {
-        const togglePause = (): void => {
-            paused = !paused;
-        };
-        canvas.addEventListener("click", togglePause);
-    }
-    return canvas;
+    return Object.freeze({
+        element: canvas,
+        dispose: () => {
+            disposed = true;
+            document.removeEventListener("visibilitychange", reset);
+        },
+        isPaused: () => paused,
+        pause: () => {
+            paused = true;
+        },
+        resume: () => {
+            paused = false;
+        },
+    });
 };

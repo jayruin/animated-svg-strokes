@@ -11,19 +11,11 @@ export type SvgFormat = typeof FORMAT_SVG_CSS | typeof FORMAT_SVG_SMIL | typeof 
 
 export type StrokesFormat = CanvasFormat | SvgFormat;
 
-export interface CanvasAnimator {
-    (character: Character, options: AnimationOptions): HTMLCanvasElement;
-}
-
-export interface SvgAnimator {
-    (character: Character, options: AnimationOptions): SVGSVGElement;
-}
-
 export interface StrokesAnimator {
-    (character: Character, options: AnimationOptions): Element;
+    (character: Character, options: StrokesAnimationOptions): StrokesAnimation;
 }
 
-export interface AnimationOptions {
+export interface StrokesAnimationOptions {
     readonly includeGrid: boolean;
     readonly gridColor: string;
     readonly gridRows: number;
@@ -35,7 +27,14 @@ export interface AnimationOptions {
     readonly strokeColor: string;
     readonly pauseRatio: number;
     readonly totalStrokeDuration: number;
-    readonly interactive: boolean;
+}
+
+export interface StrokesAnimation {
+    readonly element: Element;
+    readonly dispose: () => void;
+    readonly isPaused: () => boolean;
+    readonly pause: () => void;
+    readonly resume: () => void;
 }
 
 export interface Point {
