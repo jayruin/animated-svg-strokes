@@ -42,7 +42,7 @@ totalStrokeDuration|number|1
 
 CSS can be used to style elements. For example, `filter: invert(100%)` can be used for dark-mode compatibility. Width or height can be modified with CSS as well.
 
-If the returned element is an `HTMLCanvasElement`, CSS is NOT recommended for modifying the width or height. Instead, set the `width` or `height` properties on the canvas element directly.
+Normally, using CSS to modify the width or height of any `HTMLCanvasElement` is NOT recommended as the canvas is treated as a raster graphic instead of a vector graphic. Instead, the `width` or `height` properties on the canvas element should be set directly. This has been taken into account and returned canvas elements automatically have a `ResizeObserver` attached, which will automatically adjust the `width` and `height` properly.
 
 ## Controlling Playback
 

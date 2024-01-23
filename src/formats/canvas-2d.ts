@@ -149,11 +149,21 @@ export const animateStrokesCanvas2d: StrokesAnimator = (character, options) => {
         }
     };
     document.addEventListener("visibilitychange", reset);
+    const resizeObserver = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+            if (entry.target instanceof HTMLCanvasElement) {
+                entry.target.width = entry.contentBoxSize[0].inlineSize;
+                entry.target.height = entry.contentBoxSize[0].blockSize;
+            }
+        }
+    });
+    resizeObserver.observe(canvas);
     return Object.freeze({
         element: canvas,
         dispose: () => {
             disposed = true;
             document.removeEventListener("visibilitychange", reset);
+            resizeObserver.disconnect();
         },
         isPaused: () => paused,
         pause: () => {
