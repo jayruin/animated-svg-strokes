@@ -11,6 +11,8 @@ function getCounter() {
 const sources = Array.from(getSources()).reverse();
 const formats = Array.from(getFormats()).reverse();
 
+const animations = new Map();
+
 const animationOptions = { totalStrokeDuration: 0.5 };
 
 const characterInput = document.getElementById("character-input");
@@ -55,7 +57,8 @@ function addSourceOutputs(source) {
 }
 function addSource(source) {
     addSourceCheckbox(source);
-    addSourceOutputs(source)
+    addSourceOutputs(source);
+    animations.set(source, []);
 }
 
 for (const source of sources) {
@@ -74,10 +77,11 @@ for (const format of formats) {
 }
 
 let draggedElement = null;
-function renderCharacter(character, source, characterStrokes) {
-    if (characterStrokes === null) {
+function renderCharacter(character, source, animation) {
+    if (animation === null) {
         return;
     }
+    const characterStrokes = animation.element;
     characterStrokes.classList.add("character-strokes");
     const characterStrokesContainer = document.createElement("div");
     characterStrokesContainer.draggable = true;
@@ -86,7 +90,11 @@ function renderCharacter(character, source, characterStrokes) {
     characterStrokesContainer.append(characterStrokes);
     characterStrokesContainer.addEventListener("click", event => {
         event.preventDefault();
-        characterStrokes.dispatchEvent(new Event("click"));
+        if (animation.isPaused()) {
+            animation.resume();
+        } else {
+            animation.pause();
+        }
     });
     characterStrokesContainer.addEventListener("dragstart", event => draggedElement = event.target);
     characterStrokesContainer.addEventListener("dragover", event => {
@@ -95,10 +103,8 @@ function renderCharacter(character, source, characterStrokes) {
         const draggedIdValid = draggedIdParts.length === 5 && draggedIdParts[0] === "character" && draggedIdParts[1] === "strokes";
         const targetIdValid = targetIdParts.length === 5 && targetIdParts[0] === "character" && targetIdParts[1] === "strokes";
         const draggedCharacterSource = draggedIdParts[2];
-        const draggedCharacter = draggedIdParts[3];
         const targetCharacterSource = targetIdParts[2];
-        const targetCharacter = targetIdParts[3];
-        if (!draggedIdValid || !targetIdValid || draggedCharacterSource !== targetCharacterSource || draggedCharacter === targetCharacter) {
+        if (!draggedIdValid || !targetIdValid || draggedCharacterSource !== targetCharacterSource || event.target === draggedElement) {
             return;
         }
         event.preventDefault();
@@ -111,6 +117,7 @@ function renderCharacter(character, source, characterStrokes) {
     });
     characterStrokesContainer.addEventListener("dragend", () => draggedElement = null);
     document.getElementById(`${source}-outputs`).prepend(characterStrokesContainer);
+    animations.get(source).push(animation);
 }
 
 renderButton.addEventListener("click", async () => {
@@ -123,8 +130,8 @@ renderButton.addEventListener("click", async () => {
     const outputs = await Promise.all(promises.values());
     let i = 0;
     for (const source of sources) {
-        const characterStrokes = outputs[i];
-        renderCharacter(character, source, characterStrokes);
+        const animation = outputs[i];
+        renderCharacter(character, source, animation);
         i += 1;
     }
 });
@@ -150,6 +157,15 @@ clearButton.addEventListener("drop", event => {
         return;
     }
     draggedElement.remove();
+    const source = idParts[2];
+    const animationElement = draggedElement.querySelector(".character-strokes");
+    const sourceAnimations = animations.get(source);
+    const index = sourceAnimations.findIndex(a => a.element === animationElement);
+    if (index > -1) {
+        const animation = sourceAnimations[index];
+        animation.dispose();
+        sourceAnimations.splice(index, 1);
+    }
 });
 
 let isDark = false;
