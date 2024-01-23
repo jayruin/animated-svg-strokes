@@ -113,12 +113,7 @@ export const animateStrokesCanvas2d: StrokesAnimator = (character, options) => {
     const totalDurationMs = totalStrokeDurationMs * numberOfStrokes;
     const draw = (timestamp: number): void => {
         if (disposed) return;
-        if (paused) {
-            previousTimestamp = timestamp;
-            window.requestAnimationFrame(draw);
-            return;
-        }
-        if (previousTimestamp === null) {
+        if (previousTimestamp === null || paused) {
             previousTimestamp = timestamp;
         }
         elapsed += timestamp - previousTimestamp;
