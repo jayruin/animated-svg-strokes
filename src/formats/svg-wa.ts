@@ -49,6 +49,9 @@ export const animateStrokesSvgWa: StrokesAnimator = (character, options) => {
     }
 
     return Object.freeze({
+        codePoint: character.codePoint,
+        source: character.source,
+        format: FORMAT_SVG_WA,
         element: svg,
         dispose: () => {
             animations.forEach((a) => {

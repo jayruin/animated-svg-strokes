@@ -83,7 +83,7 @@ See the [API Reference](api-reference.md) for the exact signatures of loaders an
 
 A loader can be constructed using `buildLoader({ source, converter, requester, parser })`.
 
-- `source` is any string value, an existing source can be passed.
+- `source` is any string value. Existing sources should not be used to avoid conflicts.
 - `converter` (optional) is used to convert code points.
     - There are no built-in converters used or included.
     - Can be used to always render simplified characters.

@@ -30,6 +30,9 @@ export interface StrokesAnimationOptions {
 }
 
 export interface StrokesAnimation {
+    readonly codePoint: number;
+    readonly source: string;
+    readonly format: string;
     readonly element: Element;
     readonly dispose: () => void;
     readonly isPaused: () => boolean;

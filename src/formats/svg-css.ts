@@ -77,6 +77,9 @@ export const animateStrokesSvgCss: StrokesAnimator = (character, options) => {
     group.append(style);
 
     return Object.freeze({
+        codePoint: character.codePoint,
+        source: character.source,
+        format: FORMAT_SVG_CSS,
         element: svg,
         dispose: () => {
             clearElement(svg);

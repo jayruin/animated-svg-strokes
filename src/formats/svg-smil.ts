@@ -92,6 +92,9 @@ export const animateStrokesSvgSmil: StrokesAnimator = (character, options) => {
     }
 
     return Object.freeze({
+        codePoint: character.codePoint,
+        source: character.source,
+        format: FORMAT_SVG_SMIL,
         element: svg,
         dispose: () => {
             clearElement(svg);
