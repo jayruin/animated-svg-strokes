@@ -140,6 +140,9 @@ clearButton.addEventListener("click", () => {
     for (const source of sources) {
         if (document.getElementById(`${source}-checked`).checked) {
             clear(document.getElementById(`${source}-outputs`));
+            const sourceAnimations = animations.get(source);
+            sourceAnimations.forEach(a => a.dispose());
+            sourceAnimations.splice(0, sourceAnimations.length);
         }
     }
 });
