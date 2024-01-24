@@ -70,12 +70,12 @@ label>input[type="checkbox"]:checked+div {
     justify-items: center;
 }
 
-div.strokes-container>div.character-strokes-container {
+div.animations-container>div.animation-container {
     width: 100%;
     height: auto;
 }
 
-div.strokes-container>div.character-strokes-container>.character-strokes {
+div.animations-container>div.animation-container>.animation {
     width: 100%;
     height: auto;
     border: 1px solid rgb(0, 0, 0);
