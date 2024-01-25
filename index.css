@@ -3,6 +3,11 @@
     --background-color: white;
 }
 
+body * {
+    box-sizing: border-box;
+    display: block;
+}
+
 html {
     color: var(--color);
     background-color: var(--background-color);
@@ -29,7 +34,7 @@ html {
     flex: none;
 }
 
-.options,
+.configuration,
 .controls {
     color: var(--color);
     background-color: var(--background-color);
@@ -39,10 +44,9 @@ html {
     font-size: 5lvh;
     width: 100%;
     display: block;
-    box-sizing: border-box;
 }
 
-.options {
+.configuration {
     height: calc(5lvh + 1rem);
 }
 
@@ -62,7 +66,6 @@ label>input[type="checkbox"]:checked+div {
 }
 
 #character-input {
-    box-sizing: border-box;
     width: 12lvh;
 }
 
@@ -71,14 +74,19 @@ label>input[type="checkbox"]:checked+div {
     justify-items: center;
 }
 
+div.errors-container>div.error {
+    width: 100%;
+    border: 1px solid var(--color);
+    text-align: center;
+    font-size: 2lvh;
+}
+
 div.animations-container>div.animation-container {
     width: 100%;
-    height: auto;
 }
 
 div.animations-container>div.animation-container>.animation {
     width: 100%;
-    height: auto;
     border: 1px solid rgb(0, 0, 0);
     pointer-events: none;
 }
