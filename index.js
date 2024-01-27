@@ -18,6 +18,6 @@ setAnimationOptions(getFullOptions());
 
 setupTrashButton(document.getElementById("trash-button"));
 
-setupRenderButton(document.getElementById("render-button"), document.getElementById("character-input"), strokes);
+setupRenderButton(document.getElementById("render-button"), strokes);
 
 setupTheme(document.getElementById("toggle-theme-button"));
