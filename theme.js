@@ -22,6 +22,7 @@ function renderTheme() {
     root.style.setProperty("--color", color);
     root.style.setProperty("--background-color", backgroundColor);
     getAllSources().map(source => getOutputsContainer(source)).forEach(container => container.style.filter = filter);
+    document.querySelectorAll("img").forEach(i => i.style.filter = filter);
 }
 
 function prefersDarkSchemeQuery() {

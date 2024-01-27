@@ -27,6 +27,7 @@ function addSourceCheckbox(source) {
     input.type = "checkbox";
     input.checked = true;
     input.id = getSourceCheckboxId(source);
+    input.classList.add("hidden");
     label.append(input);
     const text = document.createElement("div");
     text.append(source);

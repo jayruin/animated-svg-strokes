@@ -10,10 +10,11 @@
 
 <body>
     <div class="flex-row">
-        <div class="flex-none">
+        <div class="flex-item">
             <input type="text" id="character-input" minlength="1" maxlength="1" class="configuration" />
         </div>
-        <div class="flex-item">
+
+        <div class="flex-item2">
             <select id="strokes-format" class="configuration">
             </select>
         </div>
@@ -24,13 +25,114 @@
 
     <div class="flex-row">
         <div class="flex-item">
-            <button id="render-button" class="controls">🖌</button>
+            <button id="toggle-options-button" class="controls flex-row">
+                <img class="flex-item" src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/svgs/solid/gear.svg" />
+            </button>
         </div>
         <div class="flex-item">
-            <button id="trash-button" class="controls">🗑</button>
+            <button id="toggle-theme-button" class="controls flex-row">
+                <img class="flex-item" src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/svgs/solid/circle-half-stroke.svg" />
+            </button>
+        </div>
+    </div>
+
+    <div id="options-container" class="hidden">
+        <div class="flex-row configuration">
+            <img class="flex-item" src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/svgs/solid/table-cells-large.svg" />
+            <div class="flex-item">
+                <input id="include-grid-input" type="checkbox" class="configuration" />
+            </div>
+        </div>
+    
+        <div class="flex-row configuration">
+            <img class="flex-item" src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/svgs/solid/table-cells-large.svg" />
+            <img class="flex-item" src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/svgs/solid/palette.svg" />
+            <div class="flex-item2">
+                <input id="grid-color-input" type="color" class="configuration" />
+            </div>
+        </div>
+    
+        <div class="flex-row configuration">
+            <img class="flex-item" src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/svgs/solid/table-cells-large.svg" />
+            <img class="flex-item" src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/svgs/solid/ruler-horizontal.svg" />
+            <div class="flex-item2">
+                <input id="grid-rows-input" type="number" class="configuration" />
+            </div>
+        </div>
+    
+        <div class="flex-row configuration">
+            <img class="flex-item" src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/svgs/solid/table-cells-large.svg" />
+            <img class="flex-item" src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/svgs/solid/ruler-vertical.svg" />
+            <div class="flex-item2">
+                <input id="grid-columns-input" type="number" class="configuration" />
+            </div>
+        </div>
+    
+        <div class="flex-row configuration">
+            <img class="flex-item" src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/svgs/solid/fill-drip.svg" />
+            <div class="flex-item">
+                <input id="include-background-input" type="checkbox" class="configuration" />
+            </div>
+        </div>
+    
+        <div class="flex-row configuration">
+            <img class="flex-item" src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/svgs/solid/fill-drip.svg" />
+            <img class="flex-item" src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/svgs/solid/palette.svg" />
+            <div class="flex-item2">
+                <input id="background-color-input" type="color" class="configuration" />
+            </div>
+        </div>
+
+        <div class="flex-row configuration">
+            <img class="flex-item" src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/svgs/solid/pencil.svg" />
+            <div class="flex-item">
+                <input id="include-preview-input" type="checkbox" class="configuration" />
+            </div>
+        </div>
+    
+        <div class="flex-row configuration">
+            <img class="flex-item" src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/svgs/solid/pencil.svg" />
+            <img class="flex-item" src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/svgs/solid/palette.svg" />
+            <div class="flex-item2">
+                <input id="preview-color-input" type="color" class="configuration" />
+            </div>
+        </div>
+
+        <div class="flex-row configuration">
+            <img class="flex-item" src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/svgs/solid/paintbrush.svg" />
+            <img class="flex-item" src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/svgs/solid/palette.svg" />
+            <div class="flex-item2">
+                <input id="stroke-color-input" type="color" class="configuration" />
+            </div>
+        </div>
+
+        <div class="flex-row configuration">
+            <img class="flex-item" src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/svgs/solid/pause.svg" />
+            <img class="flex-item" src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/svgs/solid/percent.svg" />
+            <div class="flex-item2">
+                <input id="pause-ratio-input" type="number" class="configuration" />
+            </div>
+        </div>
+
+        <div class="flex-row configuration">
+            <img class="flex-item" src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/svgs/solid/paintbrush.svg" />
+            <img class="flex-item" src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/svgs/solid/clock.svg" />
+            <div class="flex-item2">
+                <input id="total-stroke-duration-input" type="number" class="configuration" />
+            </div>
+        </div>
+    </div>
+
+    <div class="flex-row">
+        <div class="flex-item">
+            <button id="render-button" class="controls flex-row">
+                <img class="flex-item" src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/svgs/solid/pen-to-square.svg" />
+            </button>
         </div>
         <div class="flex-item">
-            <button id="toggle-theme-button" class="controls">◐</button>
+            <button id="trash-button" class="controls flex-row">
+                <img class="flex-item" src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/svgs/solid/trash-can.svg" />
+            </button>
         </div>
     </div>
 

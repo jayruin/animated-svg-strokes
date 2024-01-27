@@ -26,12 +26,24 @@ html {
     flex-direction: row;
 }
 
-.flex-item {
-    flex: 1;
+.flex-center {
+    align-items: center;
 }
 
 .flex-none {
     flex: none;
+}
+
+.flex-item {
+    flex: 1;
+}
+
+.flex-item2 {
+    flex: 2;
+}
+
+img {
+    height: 100%;
 }
 
 .configuration,
@@ -43,7 +55,6 @@ html {
     text-align: center;
     font-size: 5lvh;
     width: 100%;
-    display: block;
 }
 
 .configuration {
@@ -51,27 +62,24 @@ html {
 }
 
 .controls {
-    color: transparent;
-    text-shadow: 0 0 0 var(--color);
     height: 10lvh;
+    padding: 1rem;
 }
 
-label>input[type="checkbox"] {
-    display: none;
+.configuration input.configuration {
+    font-size: 5lvh;
+    width: 100%;
+    height: 100%;
+    margin: 0;
 }
 
-label>input[type="checkbox"]:checked+div {
+label.configuration>input[type="checkbox"].hidden:checked+div {
     font-weight: 900;
     text-transform: uppercase;
 }
 
-#character-input {
-    width: 12lvh;
-}
-
-.flex-center {
-    align-items: center;
-    justify-items: center;
+.hidden {
+    display: none;
 }
 
 div.errors-container>div.error {
