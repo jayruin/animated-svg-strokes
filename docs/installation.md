@@ -71,7 +71,7 @@ function clear(element) {
 ```
 
 Then within your card, add the following (replacing `CHAR` and `SOURCE`):
-```
+```html
 <div id="char">CHAR</div>
 <div class="strokes-output">Rendering strokes...</div>
 <div id="error"></div>
