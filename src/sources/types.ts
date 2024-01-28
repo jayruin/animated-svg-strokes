@@ -1,8 +1,4 @@
-import type { SOURCE_JA } from "./ja.js";
-import type { SOURCE_ZH } from "./zh.js";
 import type { Character, CharacterSvgData } from "../characters/types.js";
-
-export type StrokesSource = typeof SOURCE_JA | typeof SOURCE_ZH;
 
 export interface StrokesConverter {
     (codePoint: number): Promise<number>;
@@ -16,13 +12,13 @@ export interface StrokesParser {
     (response: Response): Promise<CharacterSvgData>;
 }
 
-export interface StrokesLoader {
-    (codePoint: number): Promise<Character>;
-}
-
-export interface StrokesLoaderComponents {
-    source: StrokesSource;
+export interface StrokesSourceComponents {
+    source: string;
     converter?: StrokesConverter;
     requester: StrokesRequester;
     parser: StrokesParser;
+}
+
+export interface StrokesSourceHandler {
+    (codePoint: number): Promise<Character>;
 }

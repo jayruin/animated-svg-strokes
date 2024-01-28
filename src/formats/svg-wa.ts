@@ -1,12 +1,12 @@
 import type { StrokesAnimationOptions, StrokesAnimator, WebAnimationsInfo } from "./types.js";
-import type { Character } from "../characters/types.js";
+import type { CharacterSvgData } from "../characters/types.js";
 import { getUniqueId } from "./id.js";
 import { clearElement, getStrokesSvgBase } from "./svg-base.js";
 import { getPathLength } from "../svg/path.js";
 
 export const FORMAT_SVG_WA = "svg-wa";
 
-const getWebAnimationsInfo = (character: Character, options: StrokesAnimationOptions, strokeNumber: number): WebAnimationsInfo => {
+const getWebAnimationsInfo = (character: CharacterSvgData, options: StrokesAnimationOptions, strokeNumber: number): WebAnimationsInfo => {
     const dashKeyframes: Keyframe[] = [];
     const widthKeyframes: Keyframe[] = [];
     const { strokes } = character;
@@ -49,9 +49,6 @@ export const animateStrokesSvgWa: StrokesAnimator = (character, options) => {
     }
 
     return Object.freeze({
-        codePoint: character.codePoint,
-        source: character.source,
-        format: FORMAT_SVG_WA,
         element: svg,
         dispose: () => {
             animations.forEach((a) => {

@@ -156,9 +156,6 @@ export const animateStrokesCanvas2d: StrokesAnimator = (character, options) => {
     });
     resizeObserver.observe(canvas);
     return Object.freeze({
-        codePoint: character.codePoint,
-        source: character.source,
-        format: FORMAT_CANVAS_2D,
         element: canvas,
         dispose: () => {
             disposed = true;

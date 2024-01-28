@@ -1,5 +1,5 @@
 import type { StrokesAnimationOptions, StrokesAnimator } from "./types.js";
-import type { Character } from "../characters/types.js";
+import type { CharacterSvgData } from "../characters/types.js";
 import { getUniqueId } from "./id.js";
 import { clearElement, getStrokesSvgBase } from "./svg-base.js";
 import { svgNS } from "../svg/constants.js";
@@ -9,7 +9,7 @@ export const FORMAT_SVG_CSS = "svg-css";
 
 const isKeyframesRule = (rule: unknown): rule is CSSKeyframesRule => rule instanceof CSSKeyframesRule;
 
-const createStyle = (character: Character, strokePathIds: string[], options: StrokesAnimationOptions): SVGStyleElement => {
+const createStyle = (character: CharacterSvgData, strokePathIds: string[], options: StrokesAnimationOptions): SVGStyleElement => {
     const { strokes } = character;
     const { pauseRatio, totalStrokeDuration } = options;
     const numberOfStrokes = Math.min(strokes.length, strokePathIds.length);
@@ -67,7 +67,7 @@ export const animateStrokesSvgCss: StrokesAnimator = (character, options) => {
     for (let strokeNumber = 0; strokeNumber < character.strokes.length; strokeNumber += 1) {
         const strokeComponents = strokesComponents[strokeNumber];
 
-        const strokePathId = `strokePath-${character.codePoint}-${character.source}-${strokeNumber}-${uniqueId}`;
+        const strokePathId = `strokePath-${strokeNumber}-${uniqueId}`;
         strokePathIds.push(strokePathId);
         strokeComponents.strokePath.setAttributeNS(null, "id", strokePathId);
         animatedElements.push(strokeComponents.strokePath);
@@ -77,9 +77,6 @@ export const animateStrokesSvgCss: StrokesAnimator = (character, options) => {
     group.append(style);
 
     return Object.freeze({
-        codePoint: character.codePoint,
-        source: character.source,
-        format: FORMAT_SVG_CSS,
         element: svg,
         dispose: () => {
             clearElement(svg);

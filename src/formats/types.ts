@@ -1,18 +1,8 @@
-import type { FORMAT_CANVAS_2D } from "./canvas-2d.js";
-import type { FORMAT_SVG_CSS } from "./svg-css.js";
-import type { FORMAT_SVG_SMIL } from "./svg-smil.js";
-import type { FORMAT_SVG_WA } from "./svg-wa.js";
-import type { Character } from "../characters/types.js";
+import type { Character, CharacterSvgData } from "../characters/types.js";
 import type { ViewBox } from "../svg/types.js";
 
-export type CanvasFormat = typeof FORMAT_CANVAS_2D;
-
-export type SvgFormat = typeof FORMAT_SVG_CSS | typeof FORMAT_SVG_SMIL | typeof FORMAT_SVG_WA;
-
-export type StrokesFormat = CanvasFormat | SvgFormat;
-
 export interface StrokesAnimator {
-    (character: Character, options: StrokesAnimationOptions): StrokesAnimation;
+    (character: CharacterSvgData, options: StrokesAnimationOptions): StrokesAnimation;
 }
 
 export interface StrokesAnimationOptions {
@@ -30,14 +20,26 @@ export interface StrokesAnimationOptions {
 }
 
 export interface StrokesAnimation {
-    readonly codePoint: number;
-    readonly source: string;
-    readonly format: string;
     readonly element: Element;
     readonly dispose: () => void;
     readonly isPaused: () => boolean;
     readonly pause: () => void;
     readonly resume: () => void;
+}
+
+export interface StrokesCharacterAnimation extends StrokesAnimation {
+    readonly codePoint: number;
+    readonly source: string;
+    readonly format: string;
+}
+
+export interface StrokesFormatComponents {
+    readonly format: string;
+    readonly animator: StrokesAnimator;
+}
+
+export interface StrokesFormatHandler {
+    (character: Character, options: StrokesAnimationOptions): StrokesCharacterAnimation;
 }
 
 export interface Point {
@@ -71,7 +73,7 @@ export interface Canvas2dContextAction {
 }
 
 export interface SvgStrokesComponentsInfo {
-    readonly character: Character;
+    readonly character: CharacterSvgData;
     readonly strokeColor: string;
     readonly uniqueId: string;
     readonly isStatic: boolean;

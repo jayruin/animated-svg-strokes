@@ -1,5 +1,5 @@
 import type { StrokesAnimationOptions, StrokesAnimator } from "./types.js";
-import type { Character } from "../characters/types.js";
+import type { CharacterSvgData } from "../characters/types.js";
 import { getUniqueId } from "./id.js";
 import { clearElement, getStrokesSvgBase } from "./svg-base.js";
 import { svgNS } from "../svg/constants.js";
@@ -7,7 +7,7 @@ import { getPathLength } from "../svg/path.js";
 
 export const FORMAT_SVG_SMIL = "svg-smil";
 
-const animateStrokeDasharray = (character: Character, options: StrokesAnimationOptions, strokeNumber: number): SVGAnimateElement => {
+const animateStrokeDasharray = (character: CharacterSvgData, options: StrokesAnimationOptions, strokeNumber: number): SVGAnimateElement => {
     const { strokes } = character;
     const { pauseRatio, totalStrokeDuration } = options;
     const { strokePath } = strokes[strokeNumber];
@@ -44,7 +44,7 @@ const animateStrokeDasharray = (character: Character, options: StrokesAnimationO
     return animate;
 };
 
-const animateStrokeWidth = (character: Character, options: StrokesAnimationOptions, strokeNumber: number): SVGAnimateElement => {
+const animateStrokeWidth = (character: CharacterSvgData, options: StrokesAnimationOptions, strokeNumber: number): SVGAnimateElement => {
     const { strokes } = character;
     const { pauseRatio, totalStrokeDuration } = options;
     const numberOfStrokes = strokes.length;
@@ -92,9 +92,6 @@ export const animateStrokesSvgSmil: StrokesAnimator = (character, options) => {
     }
 
     return Object.freeze({
-        codePoint: character.codePoint,
-        source: character.source,
-        format: FORMAT_SVG_SMIL,
         element: svg,
         dispose: () => {
             clearElement(svg);

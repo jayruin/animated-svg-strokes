@@ -71,17 +71,16 @@ element.addEventListener("click", () => {
 
 ## Advanced
 
-If the built-in sources or formats are not enough, you can pass a custom loader or animator respectively.
+If the built-in sources or formats are not enough, you can register a custom one.
 
+See the [API Reference](api-reference.md) for the exact signatures of source and format components.
+
+### Custom Source
+
+A custom source can be registered using
 ```javascript
-const render = strokes({ loader, animator, options });
+registerSource({ source, converter, requester, parser });
 ```
-
-See the [API Reference](api-reference.md) for the exact signatures of loaders and animators.
-
-### Custom loader
-
-A loader can be constructed using `buildLoader({ source, converter, requester, parser })`.
 
 - `source` is any string value. Existing sources should not be used to avoid conflicts.
 - `converter` (optional) is used to convert code points.
@@ -89,11 +88,14 @@ A loader can be constructed using `buildLoader({ source, converter, requester, p
     - Can be used to always render simplified characters.
     - Convert from string to code point using `String.prototype.codePointAt()` and code point to string using `String.fromCodePoint()`.
 - `requester` takes a code point and returns a `Response` object.
-    - Built-in requesters can be retrieved using `getRequester(source)`.
     - Can be used to point to a backup repo if primary repo hosting the data is down.
 - `parser` takes a `Response` object and returns the SVG data for that code point.
-    - Built-in parsers can be retrieved using `getParser(source)`.
     - Can be used to modify the stroke width or the stroke/clip paths.
+
+Existing converters/requesters/parsers can be retrieved using:
+```javascript
+const { converter, requester, parser } = getSourceComponents(source);
+```
 
 Example: Creating a custom requester:
 
@@ -109,7 +111,7 @@ const customRequester = async (codePoint) => {
 Example: Creating a custom parser which extends existing parser by doubling the stroke width:
 
 ```javascript
-const existingParser = getParser(source);
+const { parser: existingParser } = getSourceComponents(source);
 const customParser = async (response) => {
     const { strokes, transform, viewBox } = await existingParser(response);
     const newStrokes = strokes.map(s => {
@@ -119,9 +121,17 @@ const customParser = async (response) => {
 };
 ```
 
-### Custom Animator
+### Custom Formats
 
-Built-in animators can be retrieved using `getAnimator(format)`.
+A custom format can be registered using
+```javascript
+registerFormat({ format, animator });
+```
+
+Built-in animators can be retrieved using:
+```javascript
+const { animator } = getFormatComponents(format);
+```
 
 - Can provide new implementation such as GIF or WebGL
 - Can add default styling
@@ -130,7 +140,7 @@ Example: Creating a custom animator which extends existing animator by setting d
 
 ```javascript
 const [width, height] = [360, 360];
-const existingAnimator = getAnimator(format);
+const { animator: existingAnimator } = getAnimator(format);
 const customAnimator = (character, options) => {
     const animation = existingAnimator(character, options);
     if (animation.element instanceof HTMLCanvasElement) {

@@ -1,20 +1,33 @@
-import type { StrokesAnimator, StrokesFormat } from "./types.js";
+import type { StrokesFormatComponents, StrokesFormatHandler } from "./types.js";
 import { FORMAT_CANVAS_2D, animateStrokesCanvas2d } from "./canvas-2d.js";
 import { FORMAT_SVG_CSS, animateStrokesSvgCss } from "./svg-css.js";
 import { FORMAT_SVG_SMIL, animateStrokesSvgSmil } from "./svg-smil.js";
 import { FORMAT_SVG_WA, animateStrokesSvgWa } from "./svg-wa.js";
 
-const formats: ReadonlyMap<StrokesFormat, StrokesAnimator> = new Map<StrokesFormat, StrokesAnimator>([
-    [FORMAT_CANVAS_2D, animateStrokesCanvas2d],
-    [FORMAT_SVG_CSS, animateStrokesSvgCss],
-    [FORMAT_SVG_SMIL, animateStrokesSvgSmil],
-    [FORMAT_SVG_WA, animateStrokesSvgWa],
-]);
+const formats: Map<string, StrokesFormatComponents> = new Map<string, StrokesFormatComponents>();
 
-export const getFormats = (): ReadonlySet<StrokesFormat> => Object.freeze(new Set<StrokesFormat>(formats.keys()));
+export const getFormats = (): ReadonlySet<string> => Object.freeze(new Set<string>(formats.keys()));
 
-export const getAnimator = (format: StrokesFormat): StrokesAnimator => {
-    const animate = formats.get(format);
-    if (typeof animate === "undefined") throw new Error("Unsupported format.");
-    return animate;
+export const getFormatComponents = (format: string): StrokesFormatComponents => {
+    const components = formats.get(format);
+    if (typeof components === "undefined") throw new Error("Unsupported format.");
+    return components;
+};
+
+export const registerFormat = (components: StrokesFormatComponents): void => {
+    formats.set(components.format, components);
+};
+
+registerFormat({ format: FORMAT_CANVAS_2D, animator: animateStrokesCanvas2d });
+registerFormat({ format: FORMAT_SVG_CSS, animator: animateStrokesSvgCss });
+registerFormat({ format: FORMAT_SVG_SMIL, animator: animateStrokesSvgSmil });
+registerFormat({ format: FORMAT_SVG_WA, animator: animateStrokesSvgWa });
+
+export const getFormatHandler = (format: string): StrokesFormatHandler => {
+    const { animator } = getFormatComponents(format);
+    const formatHandler: StrokesFormatHandler = (character, options) => {
+        const { codePoint, source, strokes, transform, viewBox } = character;
+        return { ...animator({ strokes, transform, viewBox }, options), codePoint, source, format };
+    };
+    return formatHandler;
 };

@@ -1,5 +1,5 @@
 import type { Line, StrokesAnimationOptions, SvgComponents, SvgStrokeComponents, SvgStrokesComponentsInfo } from "./types.js";
-import type { Character } from "../characters/types.js";
+import type { CharacterSvgData } from "../characters/types.js";
 import type { ViewBox } from "../svg/types.js";
 import { svgNS } from "../svg/constants.js";
 import { parseViewBox } from "../svg/view-box.js";
@@ -69,8 +69,6 @@ const getStrokesComponents = (strokesComponentsInfo: SvgStrokesComponentsInfo): 
             const clipPathId = [
                 "clipPath",
                 ...isStatic ? ["static"] : [],
-                character.codePoint.toString(),
-                character.source,
                 strokeNumber.toString(),
                 uniqueId,
             ].join("-");
@@ -96,7 +94,7 @@ const getStrokesComponents = (strokesComponentsInfo: SvgStrokesComponentsInfo): 
     return strokesComponents;
 };
 
-const createPreview = (character: Character, options: StrokesAnimationOptions, uniqueId: string): SVGGElement | null => {
+const createPreview = (character: CharacterSvgData, options: StrokesAnimationOptions, uniqueId: string): SVGGElement | null => {
     if (!options.includePreview) {
         return null;
     }
@@ -111,7 +109,7 @@ const createPreview = (character: Character, options: StrokesAnimationOptions, u
     return group;
 };
 
-export const getStrokesSvgBase = (character: Character, options: StrokesAnimationOptions, uniqueId: string): SvgComponents => {
+export const getStrokesSvgBase = (character: CharacterSvgData, options: StrokesAnimationOptions, uniqueId: string): SvgComponents => {
     const svg = document.createElementNS(svgNS, "svg");
     svg.setAttribute("xmlns", svgNS);
     svg.setAttributeNS(null, "viewBox", character.viewBox);

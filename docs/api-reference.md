@@ -12,18 +12,16 @@ declare interface Stroke {
     readonly strokeWidth: number;
 }
 
-declare interface CharacterIdentifiers {
-    readonly codePoint: number;
-    readonly source: string;
-}
-
 declare interface CharacterSvgData {
     readonly strokes: readonly Stroke[];
     readonly transform: string | null;
     readonly viewBox: string;
 }
 
-declare interface Character extends CharacterIdentifiers, CharacterSvgData {}
+declare interface Character extends CharacterSvgData {
+    readonly codePoint: number;
+    readonly source: string;
+}
 ```
 
 ### Sources
@@ -40,12 +38,8 @@ declare interface StrokesParser {
     (response: Response): Promise<CharacterSvgData>;
 }
 
-declare interface StrokesLoader {
-    (codePoint: number): Promise<Character>;
-}
-
-declare interface StrokesLoaderComponents {
-    source: StrokesSource;
+declare interface StrokesSourceComponents {
+    source: string;
     converter?: StrokesConverter;
     requester: StrokesRequester;
     parser: StrokesParser;
@@ -53,7 +47,7 @@ declare interface StrokesLoaderComponents {
 ```
 
 ### Formats
-`StrokesFormat` is a string constant denoting a supported format. Use the [exported function](#exported-functions) `getFormats` to get supported sources.
+Use the [exported function](#exported-functions) `getFormats` to get supported formats.
 ```typescript
 declare interface StrokesAnimationOptions {
     readonly includeGrid: boolean;
@@ -70,9 +64,6 @@ declare interface StrokesAnimationOptions {
 }
 
 declare interface StrokesAnimation {
-    readonly codePoint: number;
-    readonly source: string;
-    readonly format: string;
     readonly element: Element;
     readonly dispose: () => void;
     readonly isPaused: () => boolean;
@@ -81,34 +72,40 @@ declare interface StrokesAnimation {
 }
 
 declare interface StrokesAnimator {
-    (character: Character, options: StrokesAnimationOptions): StrokesAnimation;
+    (character: CharacterSvgData, options: StrokesAnimationOptions): StrokesAnimation;
+}
+
+declare interface StrokesFormatComponents {
+    readonly format: string;
+    readonly animator: StrokesAnimator;
 }
 ```
 
 ## Exported Functions
 ```typescript
-declare function getSources(): ReadonlySet<StrokesSource>;
-declare function getFormats(): ReadonlySet<StrokesFormat>;
+declare function getSources(): ReadonlySet<string>;
+declare function getSourceComponents(source: string);
+declare function registerSource = (components: StrokesSourceComponents): void;
+
+declare function getFormats(): ReadonlySet<string>;
+declare function getFormatComponents(format: string): StrokesFormatComponents;
+declare function registerFormat(components: StrokesFormatComponents): void;
+
 declare function getFullOptions(partialOptions?: Partial<StrokesAnimationOptions>): StrokesAnimationOptions;
 
-declare function getLoader(source: StrokesSource): StrokesLoader;
-declare function getAnimator(format: StrokesFormat): StrokesAnimator;
 
-declare function getRequester(source: StrokesSource): StrokesRequester;
-declare function getParser(source: StrokesSource): StrokesParser;
-declare function buildLoader(components: StrokesLoaderComponents): StrokesLoader;
-
-
-
+declare interface StrokesCharacterAnimation extends StrokesAnimation {
+    readonly codePoint: number;
+    readonly source: string;
+    readonly format: string;
+}
 declare interface StrokesRenderer {
-    (characterString: string): Promise<StrokesAnimation>;
+    (characterString: string): Promise<StrokesCharacterAnimation>;
 }
 declare interface StrokesRendererFactoryArguments {
-    source?: StrokesSource;
-    format?: StrokesFormat;
+    source: string;
+    format: string;
     options?: Partial<StrokesAnimationOptions>;
-    loader?: StrokesLoader;
-    animator?: StrokesAnimator;
 }
 declare function strokes(args: StrokesRendererFactoryArguments): StrokesRenderer;
 ```
