@@ -1,67 +1,94 @@
+import { searchParams } from "./url-snapshot.js";
+
 const hiddenClass = "hidden";
 
-function getCheckboxHandler(...elements) {
-    return e => elements.forEach(i => {
-        const container = i.parentElement.parentElement;
-        e.target.checked ? container.classList.remove(hiddenClass) : container.classList.add(hiddenClass);
-    });
+function parseSearchParamBoolean(value) {
+    if (value === "true") return true;
+    if (value === "false") return false;
+    return null;
 }
 
-const includeGridInput = document.getElementById("include-grid-input");
-const gridColorInput = document.getElementById("grid-color-input");
-const gridRowsInput = document.getElementById("grid-rows-input");
-const gridColumnsInput = document.getElementById("grid-columns-input");
-includeGridInput.addEventListener("input", getCheckboxHandler(gridColorInput, gridRowsInput, gridColumnsInput));
+function parseSearchParamColor(value) {
+    if (/^[0-9a-f]{6}$/.test(value)) return `#${value}`;
+    return null;
+}
 
-const includeBackgroundInput = document.getElementById("include-background-input");
-const backgroundColorInput = document.getElementById("background-color-input");
-includeBackgroundInput.addEventListener("input", getCheckboxHandler(backgroundColorInput));
+function parseSearchParamNumber(value) {
+    if (value === null) return null;
+    const parsed = parseFloat(value.replace("_", "."));
+    if (!isNaN(parsed) && isFinite(parsed)) return parsed;
+    return null;
+}
 
-const includePreviewInput = document.getElementById("include-preview-input");
-const previewColorInput = document.getElementById("preview-color-input");
-includePreviewInput.addEventListener("input", getCheckboxHandler(previewColorInput));
+function propertyNameToKey(propertyName) {
+    return propertyName.split(/([A-Z][a-z0-9]+)/)
+        .filter(s => s.length > 0)
+        .map(s => s.toLowerCase())
+        .join("-");
+}
 
-const strokeColorInput = document.getElementById("stroke-color-input");
-const pauseRatioInput = document.getElementById("pause-ratio-input");
-const totalStrokeDurationInput = document.getElementById("total-stroke-duration-input");
+const propertiesKeysInputs = [];
+
+export function setupAnimationOptions(defaultOptions) {
+    const propertyNames = Object.keys(defaultOptions);
+    for (const propertyName of propertyNames) {
+        const key = propertyNameToKey(propertyName);
+        const input = document.getElementById(`${key}-input`);
+        propertiesKeysInputs.push([propertyName, key, input]);
+    }
+
+    for (const [propertyName, key, input] of propertiesKeysInputs) {
+        let inputHandler = null;
+        switch (input.type) {
+            case "checkbox":
+                inputHandler = e => searchParams.set(key, e.target.checked.toString());
+                input.checked = parseSearchParamBoolean(searchParams.get(key)) ?? defaultOptions[propertyName];
+                break;
+            case "color":
+                inputHandler = e => searchParams.set(key, e.target.value.slice(1));
+                input.value = parseSearchParamColor(searchParams.get(key)) ?? defaultOptions[propertyName];
+                break;
+            case "number":
+                inputHandler = e => searchParams.set(key, e.target.value.replace(".", "_"));
+                input.value = parseSearchParamNumber(searchParams.get(key)) ?? defaultOptions[propertyName];
+                break;
+        }
+        if (inputHandler !== null) {
+            input.addEventListener("input", inputHandler);
+        }
+        const keyParts = key.split("-");
+        if (keyParts[0] === "include" && input.type === "checkbox") {
+            const elementsToToggle = propertiesKeysInputs.filter(([,k,]) => {
+                const kParts = k.split("-");
+                return keyParts.slice(1).every(p => kParts.includes(p)) && k !== key;
+            }).map(([,,i]) => i);
+            if (elementsToToggle.length > 0) {
+                input.addEventListener("input", e => elementsToToggle.forEach(i => {
+                    const container = i.parentElement.parentElement;
+                    e.target.checked ? container.classList.remove(hiddenClass) : container.classList.add(hiddenClass);
+                }));
+            }
+        }
+        input.dispatchEvent(new Event("input"));
+    }
+}
 
 export function getAnimationOptions() {
-    return {
-        includeGrid: includeGridInput.checked,
-        gridColor: gridColorInput.value,
-        gridRows: parseInt(gridRowsInput.value),
-        gridColumns: parseInt(gridColumnsInput.value),
-
-        includeBackground: includeBackgroundInput.checked,
-        backgroundColor: backgroundColorInput.value,
-
-        includePreview: includePreviewInput.checked,
-        previewColor: previewColorInput.value,
-
-        strokeColor: strokeColorInput.value,
-        pauseRatio: parseFloat(pauseRatioInput.value),
-        totalStrokeDuration: parseFloat(totalStrokeDurationInput.value),
-    };
-}
-
-export function setAnimationOptions(options) {
-    includeGridInput.checked = options.includeGrid;
-    includeGridInput.dispatchEvent(new Event("input"));
-    gridColorInput.value = options.gridColor;
-    gridRowsInput.value = options.gridRows;
-    gridColumnsInput.value = options.gridColumns;
-
-    includeBackgroundInput.checked = options.includeBackground;
-    includeBackgroundInput.dispatchEvent(new Event("input"));
-    backgroundColorInput.value = options.backgroundColor;
-
-    includePreviewInput.checked = options.includePreview;
-    includePreviewInput.dispatchEvent(new Event("input"));
-    previewColorInput.value = options.previewColor;
-
-    strokeColorInput.value = options.strokeColor;
-    pauseRatioInput.value = options.pauseRatio;
-    totalStrokeDurationInput.value = options.totalStrokeDuration;
+    const result = {};
+    for (const [propertyName,,input] of propertiesKeysInputs) {
+        switch (input.type) {
+            case "checkbox":
+                result[propertyName] = input.checked;
+                break;
+            case "color":
+                result[propertyName] = input.value;
+                break;
+            case "number":
+                result[propertyName] = parseFloat(input.value);
+                break;
+        }
+    }
+    return result;
 }
 
 const toggleOptionsButton = document.getElementById("toggle-options-button");

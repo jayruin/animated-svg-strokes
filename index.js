@@ -5,7 +5,7 @@ import { strokes, getSources, getFormats, getFullOptions } from "https://cdn.jsd
 import { setupSources } from "./sources.js";
 import { setupFormats } from "./formats.js";
 
-import { setAnimationOptions } from "./options.js";
+import { setupAnimationOptions } from "./options.js";
 
 import { setupRenderButton } from "./render-button.js";
 import { setupTrashButton } from "./trash-button.js";
@@ -14,7 +14,7 @@ import { setupTheme } from "./theme.js";
 setupSources(Array.from(getSources()).reverse());
 setupFormats(Array.from(getFormats()).reverse());
 
-setAnimationOptions(getFullOptions());
+setupAnimationOptions(getFullOptions());
 
 setupTrashButton(document.getElementById("trash-button"));
 
