@@ -2,6 +2,14 @@
 
 The latest version of the library is available as a module on the `dist` branch and also available on [jsDelivr](https://cdn.jsdelivr.net/gh/jayruin/strokes@dist/strokes.js).
 
+The following modules are included:
+- `strokes.js`: library with some sources and all formats included
+- `strokes-core.js`: library with no sources or formats included
+- individual sources ending in `.source.js`
+- individual formats ending in `.format.js`
+
+It is recommended to use `strokes.js`. To customize the module, read the [strokes-core](#strokes-core) section.
+
 ## Script
 
 If using modules, mark the calling script with `type="module"`:
@@ -113,4 +121,19 @@ export function Strokes({ characterString, source, format, options }) {
             : <div ref={node => node?.childElementCount === 0 ? node.append(animation.element) : undefined}></div>
     )
 }
+```
+
+## strokes-core
+
+If you need a select few sources/formats or extra sources/formats not provided in the `strokes.js` module, then it may be better to use `strokes-core.js` and load/register individual sources/formats:
+
+```javascript
+import { strokes, registerSource, registerFormat } from "/url/to/strokes-core.js";
+import * as source from "/url/to/source.js";
+import * as format from "/url/to/format.js";
+
+registerSource(source);
+registerFormat(format);
+
+// use strokes
 ```

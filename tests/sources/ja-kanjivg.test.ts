@@ -1,4 +1,4 @@
-import { parser } from "./ja-kanjivg.js";
+import { parser } from "./ja-kanjivg.source.js";
 import { $23383svg } from "./ja-kanjivg.data.js";
 import { blobify } from "../test-utils.js";
 

@@ -5,7 +5,7 @@ import { clearElement, getStrokesSvgBase } from "./svg-base.js";
 import { svgNS } from "../svg/constants.js";
 import { getPathLength } from "../svg/path.js";
 
-export const FORMAT_SVG_CSS = "svg-css";
+export const format = "svg-css";
 
 const isKeyframesRule = (rule: unknown): rule is CSSKeyframesRule => rule instanceof CSSKeyframesRule;
 
@@ -58,7 +58,7 @@ const createStyle = (character: CharacterSvgData, strokePathIds: string[], optio
     return style;
 };
 
-export const animateStrokesSvgCss: StrokesAnimator = (character, options) => {
+export const animator: StrokesAnimator = (character, options) => {
     const uniqueId = getUniqueId();
     const { svg, group, strokesComponents } = getStrokesSvgBase(character, options, uniqueId);
 

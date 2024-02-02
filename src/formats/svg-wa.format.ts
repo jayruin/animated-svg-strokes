@@ -4,7 +4,7 @@ import { getUniqueId } from "./id.js";
 import { clearElement, getStrokesSvgBase } from "./svg-base.js";
 import { getPathLength } from "../svg/path.js";
 
-export const FORMAT_SVG_WA = "svg-wa";
+export const format = "svg-wa";
 
 const getWebAnimationsInfo = (character: CharacterSvgData, options: StrokesAnimationOptions, strokeNumber: number): WebAnimationsInfo => {
     const dashKeyframes: Keyframe[] = [];
@@ -34,7 +34,7 @@ const getWebAnimationsInfo = (character: CharacterSvgData, options: StrokesAnima
     return { dashKeyframes, widthKeyframes, keyframeOptions };
 };
 
-export const animateStrokesSvgWa: StrokesAnimator = (character, options) => {
+export const animator: StrokesAnimator = (character, options) => {
     const uniqueId = getUniqueId();
     const { svg, strokesComponents } = getStrokesSvgBase(character, options, uniqueId);
 

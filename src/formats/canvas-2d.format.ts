@@ -3,7 +3,7 @@ import { getPathLength } from "../svg/path.js";
 import { getTransformMatrix } from "../svg/transform.js";
 import { parseViewBox } from "../svg/view-box.js";
 
-export const FORMAT_CANVAS_2D = "canvas-2d";
+export const format = "canvas-2d";
 
 const getContextTransform = (transform: string): Canvas2dContextAction => {
     const { a, b, c, d, e, f } = getTransformMatrix(transform);
@@ -79,7 +79,7 @@ const drawStroke = (context: CanvasRenderingContext2D, canvasStrokeInfo: Canvas2
     context.restore();
 };
 
-export const animateStrokesCanvas2d: StrokesAnimator = (character, options) => {
+export const animator: StrokesAnimator = (character, options) => {
     const { strokes, transform, viewBox } = character;
     const { strokeColor, pauseRatio, totalStrokeDuration } = options;
     const parsedViewBox = parseViewBox(viewBox);

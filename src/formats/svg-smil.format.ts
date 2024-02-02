@@ -5,7 +5,7 @@ import { clearElement, getStrokesSvgBase } from "./svg-base.js";
 import { svgNS } from "../svg/constants.js";
 import { getPathLength } from "../svg/path.js";
 
-export const FORMAT_SVG_SMIL = "svg-smil";
+export const format = "svg-smil";
 
 const animateStrokeDasharray = (character: CharacterSvgData, options: StrokesAnimationOptions, strokeNumber: number): SVGAnimateElement => {
     const { strokes } = character;
@@ -80,7 +80,7 @@ const animateStrokeWidth = (character: CharacterSvgData, options: StrokesAnimati
     return animate;
 };
 
-export const animateStrokesSvgSmil: StrokesAnimator = (character, options) => {
+export const animator: StrokesAnimator = (character, options) => {
     const uniqueId = getUniqueId();
     const { svg, strokesComponents } = getStrokesSvgBase(character, options, uniqueId);
 

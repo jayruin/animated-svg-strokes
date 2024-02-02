@@ -1,8 +1,4 @@
 import type { StrokesFormatComponents, StrokesFormatHandler } from "./types.js";
-import { FORMAT_CANVAS_2D, animateStrokesCanvas2d } from "./canvas-2d.js";
-import { FORMAT_SVG_CSS, animateStrokesSvgCss } from "./svg-css.js";
-import { FORMAT_SVG_SMIL, animateStrokesSvgSmil } from "./svg-smil.js";
-import { FORMAT_SVG_WA, animateStrokesSvgWa } from "./svg-wa.js";
 
 const formats: Map<string, StrokesFormatComponents> = new Map<string, StrokesFormatComponents>();
 
@@ -17,11 +13,6 @@ export const getFormatComponents = (format: string): StrokesFormatComponents => 
 export const registerFormat = (components: StrokesFormatComponents): void => {
     formats.set(components.format, components);
 };
-
-registerFormat({ format: FORMAT_CANVAS_2D, animator: animateStrokesCanvas2d });
-registerFormat({ format: FORMAT_SVG_CSS, animator: animateStrokesSvgCss });
-registerFormat({ format: FORMAT_SVG_SMIL, animator: animateStrokesSvgSmil });
-registerFormat({ format: FORMAT_SVG_WA, animator: animateStrokesSvgWa });
 
 export const getFormatHandler = (format: string): StrokesFormatHandler => {
     const { animator } = getFormatComponents(format);

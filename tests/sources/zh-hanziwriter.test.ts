@@ -1,4 +1,4 @@
-import { parser } from "./zh-hanziwriter.js";
+import { parser } from "./zh-hanziwriter.source.js";
 import { $23383json } from "./zh-hanziwriter.data.js";
 import { blobify } from "../test-utils.js";
 
