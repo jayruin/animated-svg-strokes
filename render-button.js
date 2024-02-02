@@ -8,7 +8,9 @@ import { addError } from "./errors.js";
 export function setupRenderButton(renderButton, rendererFactory) {
     async function renderSourceCharacter(character, source, options) {
         const render = rendererFactory({ source, format: getSelectedFormat(), options });
-        return await render(character);
+        const animation = await render(character);
+        animation.pause();
+        return animation;
     }
 
     renderButton.addEventListener("click", async () => {
@@ -24,6 +26,7 @@ export function setupRenderButton(renderButton, rendererFactory) {
             const results = await Promise.allSettled(promises);
             results.forEach((r, i) => {
                 if (r.status === "fulfilled") {
+                    r.value.resume();
                     addAnimation(r.value);
                 } else if (r.status === "rejected") {
                     addError(r.reason, sources[i]);
