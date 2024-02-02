@@ -5,8 +5,8 @@
     "@typescript-eslint/eslint-plugin": "6.20.0",
     "@typescript-eslint/parser": "6.20.0",
     "@vitest/browser": "1.2.2",
+    "esbuild": "0.20.0",
     "eslint": "8.56.0",
-    "parcel": "2.11.0",
     "playwright": "1.41.2",
     "typescript": "5.3.3",
     "vitest": "1.2.2"
@@ -18,31 +18,8 @@
     "style": "eslint src tests --no-eslintrc --config .eslintrc.styles.json",
     "format": "eslint src tests --no-eslintrc --config .eslintrc.styles.json --fix",
     "test": "node scripts/run-tests.js",
-    "build": "parcel build --target strokes && parcel build --target sources",
+    "build": "node esbuild.config.js",
     "reset": "git clean -fdx",
     "update": "node scripts/rm.js node_modules pnpm-lock.yaml && pnpm update --latest && node scripts/install-browsers.js && node scripts/encode-test-data.js"
-  },
-  "targets": {
-    "strokes": {
-      "context": "browser",
-      "distDir": "dist",
-      "isLibrary": true,
-      "optimize": true,
-      "outputFormat": "esmodule",
-      "source": "src/strokes.ts",
-      "sourceMap": false
-    },
-    "sources": {
-      "context": "browser",
-      "distDir": "dist",
-      "isLibrary": true,
-      "optimize": true,
-      "outputFormat": "esmodule",
-      "source": [
-        "src/sources/ja-kanjivg.ts",
-        "src/sources/zh-hanziwriter.ts"
-      ],
-      "sourceMap": false
-    }
   }
 }
