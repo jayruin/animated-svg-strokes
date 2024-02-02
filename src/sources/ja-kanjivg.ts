@@ -3,9 +3,9 @@ import type { Stroke } from "../characters/types.js";
 import { strictFetch } from "./http.js";
 import { svgMediaType } from "../svg/constants.js";
 
-export const SOURCE_JA = "ja";
+export const source = "ja-kanjivg";
 
-export const jaRequest: StrokesRequester = async (codePoint) => {
+export const requester: StrokesRequester = async (codePoint) => {
     const characterCode = codePoint.toString(16).padStart(5, "0");
     const characterFile = `${characterCode}.svg`;
     const url = `https://cdn.jsdelivr.net/gh/KanjiVG/kanjivg/kanji/${characterFile}`;
@@ -13,7 +13,7 @@ export const jaRequest: StrokesRequester = async (codePoint) => {
     return response;
 };
 
-export const jaParse: StrokesParser = async (response) => {
+export const parser: StrokesParser = async (response) => {
     const data = await response.text();
     const xmlDocument: XMLDocument = new DOMParser().parseFromString(data, svgMediaType);
     const viewBox = xmlDocument.querySelector("svg")?.getAttribute("viewBox");

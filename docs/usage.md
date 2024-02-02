@@ -12,10 +12,19 @@ All supported sources and formats can be retrieved by calling `getSources()` and
 
 ## Sources
 
-- `ja` - Data from [KanjiVG](https://github.com/KanjiVG/kanjivg).
-- `zh` - Data from [Hanzi Writer Data](https://github.com/chanind/hanzi-writer-data) which is based on data from [Make Me A Hanzi](https://github.com/skishore/makemeahanzi).
+By default, sources are not included. They are included in the dist and releases and can be [registered](#custom-source).
+
+- `ja-kanjivg` - Data from [KanjiVG](https://github.com/KanjiVG/kanjivg).
+- `zh-hanziwriter` - Data from [Hanzi Writer Data](https://github.com/chanind/hanzi-writer-data) which is based on data from [Make Me A Hanzi](https://github.com/skishore/makemeahanzi).
+
+However, for convenience, a select number of sources are aliased and included. These aliases should NOT be assumed to be stable.
+
+- `ja`: `ja-kanjivg`
+- `zh`: `zh-hanziwriter`
 
 ## Formats
+
+All formats listed below are included by default:
 
 - `canvas-2d` - Canvas using the [CanvasRenderingContext2D API](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D).
 - `svg-css` - Animated SVG using [CSS animations](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animations/Using_CSS_animations).

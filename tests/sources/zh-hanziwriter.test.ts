@@ -1,5 +1,5 @@
-import { zhParse } from "./zh.js";
-import { $23383json } from "./zh.data.js";
+import { parser } from "./zh-hanziwriter.js";
+import { $23383json } from "./zh-hanziwriter.data.js";
 import { blobify } from "../test-utils.js";
 
 import { expect, test } from "vitest";
@@ -46,6 +46,6 @@ test.each([
 ])("zh parser handles %s", async (_, base64String, expected) => {
     const blob = blobify(base64String);
     const response = new Response(blob);
-    const character = await zhParse(response);
+    const character = await parser(response);
     expect(character).toEqual(expected);
 });

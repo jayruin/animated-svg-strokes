@@ -2,7 +2,7 @@ import type { StrokesParser, StrokesRequester } from "./types.js";
 import type { Stroke } from "../characters/types.js";
 import { strictFetch } from "./http.js";
 
-export const SOURCE_ZH = "zh";
+export const source = "zh-hanziwriter";
 
 interface HanziWriterData {
     strokes: string[];
@@ -11,14 +11,14 @@ interface HanziWriterData {
 
 const isDataValid = (data: unknown): data is HanziWriterData => typeof data === "object" && data !== null && "strokes" in data && "medians" in data;
 
-export const zhRequest: StrokesRequester = async (codePoint) => {
+export const requester: StrokesRequester = async (codePoint) => {
     const characterString = String.fromCodePoint(codePoint);
     const url = `https://cdn.jsdelivr.net/npm/hanzi-writer-data/${characterString}.json`;
     const response = await strictFetch(url);
     return response;
 };
 
-export const zhParse: StrokesParser = async (response) => {
+export const parser: StrokesParser = async (response) => {
     const data: unknown = await response.json();
     if (!isDataValid(data)) {
         throw new Error("Data is invalid.");

@@ -1,5 +1,5 @@
-import { jaParse } from "./ja.js";
-import { $23383svg } from "./ja.data.js";
+import { parser } from "./ja-kanjivg.js";
+import { $23383svg } from "./ja-kanjivg.data.js";
 import { blobify } from "../test-utils.js";
 
 import { expect, test } from "vitest";
@@ -46,6 +46,6 @@ test.each([
 ])("ja parser handles %s", async (_, base64String, expected) => {
     const blob = blobify(base64String);
     const response = new Response(blob);
-    const character = await jaParse(response);
+    const character = await parser(response);
     expect(character).toEqual(expected);
 });

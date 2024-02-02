@@ -18,7 +18,7 @@
     "style": "eslint src tests --no-eslintrc --config .eslintrc.styles.json",
     "format": "eslint src tests --no-eslintrc --config .eslintrc.styles.json --fix",
     "test": "node scripts/run-tests.js",
-    "build": "parcel build",
+    "build": "parcel build --target strokes && parcel build --target sources",
     "reset": "git clean -fdx",
     "update": "node scripts/rm.js node_modules pnpm-lock.yaml && pnpm update --latest && node scripts/install-browsers.js && node scripts/encode-test-data.js"
   },
@@ -30,6 +30,15 @@
       "optimize": true,
       "outputFormat": "esmodule",
       "source": "src/strokes.ts",
+      "sourceMap": false
+    },
+    "sources": {
+      "context": "browser",
+      "distDir": "dist",
+      "isLibrary": true,
+      "optimize": true,
+      "outputFormat": "esmodule",
+      "source": ["src/sources/ja-kanjivg.ts", "src/sources/zh-hanziwriter.ts"],
       "sourceMap": false
     }
   }

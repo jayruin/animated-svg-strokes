@@ -1,6 +1,6 @@
 import type { StrokesSourceComponents, StrokesSourceHandler } from "./types.js";
-import { SOURCE_JA, jaParse, jaRequest } from "./ja.js";
-import { SOURCE_ZH, zhParse, zhRequest } from "./zh.js";
+import * as jaKanjivg from "./ja-kanjivg.js";
+import * as zhHanziwriter from "./zh-hanziwriter.js";
 
 const sources: Map<string, StrokesSourceComponents> = new Map<string, StrokesSourceComponents>();
 
@@ -16,8 +16,8 @@ export const registerSource = (components: StrokesSourceComponents): void => {
     sources.set(components.source, components);
 };
 
-registerSource({ source: SOURCE_JA, requester: jaRequest, parser: jaParse });
-registerSource({ source: SOURCE_ZH, requester: zhRequest, parser: zhParse });
+registerSource({ ...jaKanjivg, source: "ja" });
+registerSource({ ...zhHanziwriter, source: "zh" });
 
 export const getSourceHandler = (source: string): StrokesSourceHandler => {
     const { converter, requester, parser } = getSourceComponents(source);
