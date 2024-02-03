@@ -1,4 +1,5 @@
 import type { StrokesParser, StrokesRequester } from "./types.js";
+import { extractNumbers } from "./extract.js";
 import { strictFetch } from "./http.js";
 import { svgMediaType } from "../svg/constants.js";
 
@@ -27,6 +28,16 @@ export const parser: StrokesParser = async (response) => {
         throw new Error("Cannot get strokeWidth.");
     }
     const strokes = Array.from(xmlDocument.querySelectorAll<SVGPathElement>("path[clip-path]"))
+        .sort((firstEl, secondEl) => {
+            const [firstNum, secondNum] = [firstEl, secondEl].map((el) => {
+                const text = el.getAttribute("clip-path");
+                if (text === null) {
+                    throw new Error("Cannot get clip-path.");
+                }
+                return extractNumbers(text)[1];
+            });
+            return firstNum - secondNum;
+        })
         .map((element) => {
             const strokePath = element.getAttribute("d");
             if (strokePath === null) {

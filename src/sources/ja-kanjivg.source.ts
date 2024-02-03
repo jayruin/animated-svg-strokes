@@ -1,5 +1,6 @@
 import type { StrokesParser, StrokesRequester } from "./types.js";
 import type { Stroke } from "../characters/types.js";
+import { extractNumbers } from "./extract.js";
 import { strictFetch } from "./http.js";
 import { svgMediaType } from "../svg/constants.js";
 
@@ -33,7 +34,7 @@ export const parser: StrokesParser = async (response) => {
                 if (id === null) {
                     throw new Error("Cannot get id.");
                 }
-                return parseInt(id.substring(id.indexOf("-s")), 10);
+                return extractNumbers(id)[1];
             });
             return firstNum - secondNum;
         })
