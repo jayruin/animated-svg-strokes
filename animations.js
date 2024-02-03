@@ -25,6 +25,7 @@ export function addAnimation(animation) {
     if (animation === null) {
         return;
     }
+    animation.resume();
     const animationElement = animation.element;
     animationElement.classList.add("animation");
     const animationContainer = document.createElement("div");

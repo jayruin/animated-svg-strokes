@@ -26,7 +26,6 @@ export function setupRenderButton(renderButton, rendererFactory) {
             const results = await Promise.allSettled(promises);
             results.forEach((r, i) => {
                 if (r.status === "fulfilled") {
-                    r.value.resume();
                     addAnimation(r.value);
                 } else if (r.status === "rejected") {
                     addError(r.reason, sources[i]);
