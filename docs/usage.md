@@ -12,10 +12,15 @@ All supported sources and formats can be retrieved by calling `getSources()` and
 
 ## Sources
 
-By default, sources are not included. They are included in the dist and releases and can be [registered](#custom-source).
+By default, sources are not included. They are included in the dist branch and releases and can be [registered](#custom-source).
 
 - `ja-kanjivg` - Data from [KanjiVG](https://github.com/KanjiVG/kanjivg).
 - `zh-hanziwriter` - Data from [Hanzi Writer Data](https://github.com/chanind/hanzi-writer-data) which is based on data from [Make Me A Hanzi](https://github.com/skishore/makemeahanzi).
+- Data from [animCJK](https://github.com/parsimonhi/animCJK).
+    - `ja-animcjk`
+    - `ko-animcjk`
+    - `zhHans-animcjk`
+    - `zhHant-animcjk`
 
 However, for convenience, a select number of sources are aliased and included. These aliases should NOT be assumed to be stable.
 
