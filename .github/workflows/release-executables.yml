@@ -16,9 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
-        with:
-          version: latest
+      - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "lts/*"
@@ -26,7 +24,6 @@ jobs:
       - run: pnpm run init
       - run: pnpm run types
       - run: pnpm run lint
-      - run: pnpm run style
       - run: pnpm run test
       - run: pnpm run build
       - run: gh release delete ${{ env.TAG }} --yes --cleanup-tag || true

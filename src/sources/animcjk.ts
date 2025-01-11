@@ -49,8 +49,8 @@ export const parser: StrokesParser = async (response) => {
                         .replace("url", "")
                         .replace("(", "")
                         .replace(")", "")
-                        .replace("#", "")
-                )?.querySelector("use")?.getAttributeNS(xlinkNS, "href")?.replace("#", "") ?? ""
+                        .replace("#", ""),
+                )?.querySelector("use")?.getAttributeNS(xlinkNS, "href")?.replace("#", "") ?? "",
             )?.getAttribute("d");
             if (clipPath === null || typeof clipPath === "undefined") {
                 throw new Error("Cannot get clipPath.");

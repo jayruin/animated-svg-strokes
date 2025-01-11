@@ -79,7 +79,7 @@ export const getFullOptions = (partialOptions?: Partial<StrokesAnimationOptions>
         ...defaultOptions,
         ...Object.fromEntries(
             Object.entries(partialOptions ?? {})
-                .filter(([k, v]: [string, unknown]) => k in defaultOptions && typeof v !== "undefined" && v !== null)
+                .filter(([k, v]: [string, unknown]) => k in defaultOptions && typeof v !== "undefined" && v !== null),
         ),
     };
     validateOptions(options);

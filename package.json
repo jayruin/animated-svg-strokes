@@ -1,25 +1,24 @@
 {
   "type": "module",
   "devDependencies": {
-    "@stylistic/eslint-plugin": "1.5.4",
-    "@typescript-eslint/eslint-plugin": "6.20.0",
-    "@typescript-eslint/parser": "6.20.0",
-    "@vitest/browser": "1.2.2",
-    "esbuild": "0.20.0",
-    "eslint": "8.56.0",
-    "playwright": "1.41.2",
-    "typescript": "5.3.3",
-    "vitest": "1.2.2"
+    "@eslint/js": "9.18.0",
+    "@stylistic/eslint-plugin": "2.12.1",
+    "@vitest/browser": "2.1.8",
+    "esbuild": "0.24.2",
+    "eslint": "9.18.0",
+    "playwright": "1.49.1",
+    "typescript": "5.7.3",
+    "typescript-eslint": "8.19.1",
+    "vitest": "2.1.8"
   },
   "scripts": {
     "init": "pnpm install --frozen-lockfile && node scripts/install-browsers.js && node scripts/encode-test-data.js",
     "types": "tsc --noEmit",
     "lint": "eslint src tests",
-    "style": "eslint src tests --no-eslintrc --config .eslintrc.styles.json",
-    "format": "eslint src tests --no-eslintrc --config .eslintrc.styles.json --fix",
     "test": "node scripts/run-tests.js",
     "build": "node esbuild.config.js",
     "reset": "git clean -fdx",
-    "update": "node scripts/rm.js node_modules pnpm-lock.yaml && pnpm update --latest && node scripts/install-browsers.js && node scripts/encode-test-data.js"
-  }
+    "update": "node scripts/rm.js node_modules pnpm-lock.yaml && corepack use pnpm@* && pnpm update --latest && node scripts/install-browsers.js && node scripts/encode-test-data.js"
+  },
+  "packageManager": "pnpm@10.0.0+sha512.b8fef5494bd3fe4cbd4edabd0745df2ee5be3e4b0b8b08fa643aa3e4c6702ccc0f00d68fa8a8c9858a735a0032485a44990ed2810526c875e416f001b17df12b"
 }
