@@ -84,7 +84,7 @@ declare interface StrokesFormatComponents {
 ## Exported Functions
 ```typescript
 declare function getSources(): ReadonlySet<string>;
-declare function getSourceComponents(source: string);
+declare function getSourceComponents(source: string): StrokesSourceComponents;
 declare function registerSource = (components: StrokesSourceComponents): void;
 
 declare function getFormats(): ReadonlySet<string>;
